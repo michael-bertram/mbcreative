@@ -1,26 +1,123 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
+import { ArrowRight } from "lucide-react";
+import { ProjectCard } from "@/components/project-card";
+import { profile, projects, techStack } from "@/data/portfolio";
 
 export const Route = createFileRoute("/")({
+  head: () => ({
+    meta: [
+      { title: `${profile.name} — ${profile.role}` },
+      {
+        name: "description",
+        content: profile.tagline,
+      },
+      { property: "og:title", content: `${profile.name} — ${profile.role}` },
+      { property: "og:description", content: profile.tagline },
+    ],
+  }),
   component: Index,
 });
 
-// IMPORTANT: Replace this placeholder. For sites with multiple pages (About, Services, Contact, etc.),
-// create separate route files (about.tsx, services.tsx, contact.tsx) — don't put all pages in this file.
-function PlaceholderIndex() {
+function Index() {
+  const featured = projects.filter((p) => p.featured).slice(0, 3);
+
   return (
-    <div
-      className="flex min-h-screen items-center justify-center"
-      style={{ backgroundColor: "#fcfbf8" }}
-    >
-      <img
-        data-lovable-blank-page-placeholder="REMOVE_THIS"
-        src="https://cdn.gpteng.co/blank-app-v1.svg"
-        alt="Your app will live here!"
-      />
+    <div>
+      {/* Hero */}
+      <section
+        className="relative overflow-hidden"
+        style={{ backgroundImage: "var(--gradient-hero)" }}
+      >
+        <div className="mx-auto w-full max-w-6xl px-6 py-24 sm:py-32 lg:py-40">
+          <p className="mb-6 inline-flex items-center gap-2 rounded-full border border-border bg-secondary/40 px-3 py-1 text-xs text-muted-foreground">
+            <span className="h-1.5 w-1.5 rounded-full bg-primary" />
+            Available for new projects
+          </p>
+          <h1 className="font-display text-4xl font-bold tracking-tight text-foreground sm:text-6xl lg:text-7xl">
+            {profile.name}.
+            <br />
+            <span className="bg-gradient-to-r from-primary to-[oklch(0.78_0.20_300)] bg-clip-text text-transparent">
+              {profile.role}.
+            </span>
+          </h1>
+          <p className="mt-6 max-w-2xl text-lg text-muted-foreground sm:text-xl">
+            {profile.tagline}
+          </p>
+          <div className="mt-10 flex flex-wrap items-center gap-3">
+            <Link
+              to="/projects"
+              className="inline-flex items-center gap-2 rounded-md bg-primary px-5 py-2.5 text-sm font-medium text-primary-foreground transition-transform hover:-translate-y-0.5"
+            >
+              View projects <ArrowRight className="h-4 w-4" />
+            </Link>
+            <Link
+              to="/contact"
+              className="inline-flex items-center gap-2 rounded-md border border-border bg-transparent px-5 py-2.5 text-sm font-medium text-foreground transition-colors hover:bg-secondary"
+            >
+              Get in touch
+            </Link>
+          </div>
+        </div>
+      </section>
+
+      {/* Tech strip */}
+      <section className="border-y border-border bg-card/30">
+        <div className="mx-auto w-full max-w-6xl px-6 py-6">
+          <div className="flex flex-wrap items-center justify-center gap-x-8 gap-y-2">
+            {techStack.map((t) => (
+              <span key={t} className="text-sm text-muted-foreground">
+                {t}
+              </span>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Featured */}
+      <section className="mx-auto w-full max-w-6xl px-6 py-20 sm:py-24">
+        <div className="mb-10 flex items-end justify-between gap-4">
+          <div>
+            <h2 className="font-display text-3xl font-bold tracking-tight text-foreground sm:text-4xl">
+              Featured work
+            </h2>
+            <p className="mt-2 text-muted-foreground">A few things I&apos;ve shipped recently.</p>
+          </div>
+          <Link
+            to="/projects"
+            className="hidden items-center gap-1 text-sm text-muted-foreground transition-colors hover:text-foreground sm:inline-flex"
+          >
+            All projects <ArrowRight className="h-4 w-4" />
+          </Link>
+        </div>
+        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+          {featured.map((p) => (
+            <ProjectCard key={p.slug} project={p} />
+          ))}
+        </div>
+      </section>
+
+      {/* About teaser */}
+      <section className="border-t border-border">
+        <div className="mx-auto w-full max-w-6xl px-6 py-20">
+          <div className="grid gap-8 md:grid-cols-2 md:items-center">
+            <h2 className="font-display text-3xl font-bold tracking-tight text-foreground sm:text-4xl">
+              I care about craft, performance, and the small details.
+            </h2>
+            <div>
+              <p className="text-muted-foreground">
+                Based in {profile.location}. I&apos;ve spent the last decade building everything
+                from developer tools to consumer products at startups and teams that move fast.
+              </p>
+              <Link
+                to="/about"
+                className="mt-6 inline-flex items-center gap-1 text-sm text-primary transition-colors hover:text-[oklch(0.78_0.20_300)]"
+              >
+                More about me <ArrowRight className="h-4 w-4" />
+              </Link>
+            </div>
+          </div>
+        </div>
+      </section>
     </div>
   );
-}
-
-function Index() {
-  return <PlaceholderIndex />;
 }
