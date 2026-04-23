@@ -31,10 +31,16 @@ export const Route = createRootRoute({
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "Alex Chen — Full-Stack Developer" },
-      { name: "description", content: "Portfolio of Alex Chen, a full-stack developer building fast, accessible web products." },
+      { title: "Michael Bertram — Developer Advocate" },
+      {
+        name: "description",
+        content: "Portfolio of Alex Chen, a full-stack developer building fast, accessible web products.",
+      },
       { property: "og:title", content: "Alex Chen — Full-Stack Developer" },
-      { property: "og:description", content: "Portfolio of Alex Chen, a full-stack developer building fast, accessible web products." },
+      {
+        property: "og:description",
+        content: "Portfolio of Alex Chen, a full-stack developer building fast, accessible web products.",
+      },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary" },
       { name: "twitter:site", content: "@Lovable" },
