@@ -7,7 +7,8 @@ import logo from "@/assets/mb-logo.png";
 
 const navLinks = [
   { to: "/", label: "Home" },
-  { to: "/projects", label: "Projects" },
+  { to: "/projects", label: "Work" },
+  { to: "/resources", label: "Resources" },
   { to: "/about", label: "About" },
   { to: "/contact", label: "Contact" },
 ] as const;
