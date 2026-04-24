@@ -4,8 +4,8 @@ export const profile = {
   initials: "MB",
   role: "Developer Advocate & Mentor",
   tagline: "I help developers build better software — through clear writing, working code, and honest conversations.",
-  location: "Brooklyn, NY",
-  email: "hello@michaelbertram.dev",
+  location: "Middlesbrough, UK",
+  email: "michael.bertram@wpengine.com",
   resumeUrl: "/resume.pdf",
   socials: {
     github: "https://github.com/your-handle",
@@ -65,7 +65,8 @@ export const projects: Project[] = [
     slug: "pulse-cli",
     title: "Pulse CLI",
     summary: "Developer CLI for inspecting production traffic locally.",
-    description: "A Rust-powered CLI that streams sanitized production traffic into a local dev environment for safer debugging.",
+    description:
+      "A Rust-powered CLI that streams sanitized production traffic into a local dev environment for safer debugging.",
     tags: ["Rust", "CLI", "DevTools"],
     repoUrl: "https://github.com/your-handle/pulse",
     year: 2023,
