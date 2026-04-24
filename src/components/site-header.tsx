@@ -40,7 +40,10 @@ export function SiteHeader() {
           <img
             src={logo}
             alt={`${profile.name} logo`}
-            className="h-12 w-12 object-contain"
+            className={cn(
+              "h-12 w-12 object-contain transition-[filter] duration-300",
+              !scrolled && "brightness-0 invert",
+            )}
           />
         </Link>
 
