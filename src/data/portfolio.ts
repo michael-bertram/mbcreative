@@ -2,10 +2,11 @@
 export const profile = {
   name: "Michael Bertram",
   initials: "MB",
-  role: "Developer Advocate & Mentor",
-  tagline: "I help developers build better software — through clear writing, working code, and honest conversations.",
-  location: "Middlesbrough, UK",
-  email: "michael.bertram@wpengine.com",
+  role: "Developer Advocate, Mentor & Teacher",
+  tagline:
+    "Engineering mentor and ex–Computer Science teacher helping developers build better software through clear writing, working code, and honest conversations.",
+  location: "Stockton on Tees, UK",
+  email: "mjbertram87@gmail.com",
   resumeUrl: "/resume.pdf",
   socials: {
     github: "https://github.com/your-handle",
@@ -105,29 +106,70 @@ export const techStack = [
 ];
 
 export const skills = [
-  { group: "Frontend", items: ["React", "TypeScript", "Tailwind CSS", "Radix UI", "Framer Motion"] },
-  { group: "Backend", items: ["Node.js", "tRPC", "Postgres", "Redis", "GraphQL"] },
-  { group: "Infra", items: ["AWS", "Docker", "Terraform", "GitHub Actions", "Cloudflare"] },
-  { group: "Tools", items: ["Vite", "Vitest", "Playwright", "Figma"] },
+  {
+    group: "WordPress & Web",
+    items: ["WordPress", "PHP", "HTML", "CSS", "JavaScript"],
+  },
+  {
+    group: "Programming",
+    items: ["Python", "TypeScript", "Visual Basic", "React", "Node.js"],
+  },
+  {
+    group: "Education & Mentoring",
+    items: [
+      "Curriculum design",
+      "Workshops & CPD",
+      "Inclusive practice",
+      "Onboarding programmes",
+    ],
+  },
+  {
+    group: "Content & Media",
+    items: ["Technical writing", "Tutorials & demos", "Digital media", "Public speaking"],
+  },
 ];
 
 export const timeline = [
   {
-    period: "2023 — Present",
-    role: "Senior Software Engineer",
-    company: "Northwind Labs",
-    description: "Leading the platform team building developer-facing tools used by 50k+ engineers.",
+    period: "2026 — Present",
+    role: "Developer Advocate",
+    company: "WP Engine",
+    description:
+      "Bridge between the developer community and product teams. Create technical content, engage developers at events and online, and mentor colleagues on WordPress and front-end development.",
   },
   {
-    period: "2020 — 2023",
-    role: "Full-Stack Engineer",
-    company: "Vellum",
-    description: "Shipped the v2 editor and rebuilt the rendering pipeline for a 3x perf improvement.",
+    period: "2023 — 2026",
+    role: "Engineering Mentor",
+    company: "Big Bite Creative",
+    description:
+      "Onboarded and mentored engineers, designed continuous-development programmes, and partnered with educational organisations to bridge industry and learning.",
   },
   {
-    period: "2018 — 2020",
-    role: "Frontend Engineer",
-    company: "Foundry",
-    description: "Designed the design system and onboarded the first 12 engineers to it.",
+    period: "2019 — 2023",
+    role: "Head of Computer Science & iMedia",
+    company: "Rye Hills Academy (NELT)",
+    description:
+      "Led the Computing department across KS3 and KS4, teaching GCSE Computer Science and Creative iMedia, and delivering staff CPD and digital solutions across the school.",
+  },
+  {
+    period: "2017 — 2019",
+    role: "Teacher of Computer Science",
+    company: "Nunthorpe Academy",
+    description:
+      "Taught Computer Science at KS3/KS4 and Media at KS5, progressing from trainee to qualified teacher with full responsibility for planning, assessment, and pastoral care.",
+  },
+  {
+    period: "2013 — 2017",
+    role: "Cover Supervisor / Teacher",
+    company: "Teaching Personnel",
+    description:
+      "Worked across mainstream and SEN secondary schools, progressing from teaching assistant to leading RE and later IT departments across KS3 and KS4.",
+  },
+  {
+    period: "2006 — 2013",
+    role: "Printer / Print Finisher",
+    company: "County Print",
+    description:
+      "Produced print jobs and occasional design artwork, while handling customer liaison and deliveries — building adaptability and problem-solving skills.",
   },
 ];
