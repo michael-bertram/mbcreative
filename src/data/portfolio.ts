@@ -1,11 +1,11 @@
 // Edit this file to customize your portfolio content.
 export const profile = {
-  name: "Alex Chen",
-  initials: "AC",
-  role: "Full-Stack Developer",
-  tagline: "I build fast, accessible web products with React, TypeScript, and a love for clean systems.",
+  name: "Michael Bertram",
+  initials: "MB",
+  role: "Developer Advocate",
+  tagline: "I help developers build better software — through clear writing, working code, and honest conversations.",
   location: "Brooklyn, NY",
-  email: "hello@alexchen.dev",
+  email: "hello@michaelbertram.dev",
   resumeUrl: "/resume.pdf",
   socials: {
     github: "https://github.com/your-handle",
