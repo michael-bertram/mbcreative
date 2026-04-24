@@ -28,7 +28,7 @@ function Index() {
         className="relative overflow-hidden"
         style={{ backgroundImage: "var(--gradient-hero)" }}
       >
-        <div className="mx-auto w-full max-w-6xl px-6 py-24 sm:py-32 lg:py-40">
+        <div className="mx-auto w-full max-w-6xl px-6 pb-24 pt-40 sm:pb-32 sm:pt-48 lg:pb-40 lg:pt-56">
           <p className="mb-6 inline-flex items-center gap-2 rounded-full border border-border bg-secondary/40 px-3 py-1 text-xs text-muted-foreground">
             <span className="h-1.5 w-1.5 rounded-full bg-primary" />
             Available for new projects
