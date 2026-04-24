@@ -2,7 +2,7 @@
 export const profile = {
   name: "Michael Bertram",
   initials: "MB",
-  role: "Developer Advocate",
+  role: "Developer Advocate & Mentor",
   tagline: "I help developers build better software — through clear writing, working code, and honest conversations.",
   location: "Brooklyn, NY",
   email: "hello@michaelbertram.dev",
