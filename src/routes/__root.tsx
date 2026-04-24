@@ -34,12 +34,12 @@ export const Route = createRootRoute({
       { title: "Michael Bertram — Developer Advocate" },
       {
         name: "description",
-        content: "Portfolio of Alex Chen, a full-stack developer building fast, accessible web products.",
+        content: "Portfolio of Michael Bertram, a Developer Advocate, Mentor and Content Creator",
       },
-      { property: "og:title", content: "Alex Chen — Full-Stack Developer" },
+      { property: "og:title", content: "Michael Bertram — Developer Advocate" },
       {
         property: "og:description",
-        content: "Portfolio of Alex Chen, a full-stack developer building fast, accessible web products.",
+        content: "Portfolio of Michael Bertram, a Developer Advocate, Mentor and Content Creator",
       },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary" },
