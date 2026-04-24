@@ -101,12 +101,13 @@ function Index() {
         <div className="mx-auto w-full max-w-6xl px-6 py-20">
           <div className="grid gap-8 md:grid-cols-2 md:items-center">
             <h2 className="font-display text-3xl font-bold tracking-tight text-foreground sm:text-4xl">
-              I care about craft, performance, and the small details.
+              I care about craft, performance, and helping developers build better on WordPress.
             </h2>
             <div>
               <p className="text-muted-foreground">
-                Based in {profile.location}. I&apos;ve spent the last decade building everything
-                from developer tools to consumer products at startups and teams that move fast.
+                Based in Stockton-on-Tees, UK. Developer Advocate and former educator with
+                experience in developer tools, WordPress, and front-end development, focused on
+                mentoring, content, and developer experience.
               </p>
               <Link
                 to="/about"
