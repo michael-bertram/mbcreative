@@ -3,7 +3,6 @@ import { useEffect, useState } from "react";
 import { Menu, X } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { profile } from "@/data/portfolio";
-import logo from "@/assets/mb-logo.png";
 
 const navLinks = [
   { to: "/", label: "Home" },
@@ -37,11 +36,9 @@ export function SiteHeader() {
           to="/"
           className="flex items-center gap-2 font-display text-base font-semibold tracking-tight text-foreground"
         >
-          <img
-            src={logo}
-            alt={`${profile.name} logo`}
-            className="h-8 w-8 object-contain"
-          />
+          <span className="grid h-16 w-16 place-items-center rounded-md bg-primary text-primary-foreground">
+            {profile.initials}
+          </span>
           <span className="hidden sm:inline">{profile.name}</span>
         </Link>
 
