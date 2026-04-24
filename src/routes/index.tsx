@@ -48,7 +48,7 @@ function Index() {
               to="/projects"
               className="inline-flex items-center gap-2 rounded-md bg-primary px-5 py-2.5 text-sm font-medium text-primary-foreground transition-transform hover:-translate-y-0.5"
             >
-              View projects <ArrowRight className="h-4 w-4" />
+              View work <ArrowRight className="h-4 w-4" />
             </Link>
             <Link
               to="/contact"
@@ -80,13 +80,15 @@ function Index() {
             <h2 className="font-display text-3xl font-bold tracking-tight text-foreground sm:text-4xl">
               Featured work
             </h2>
-            <p className="mt-2 text-muted-foreground">A few things I&apos;ve shipped recently.</p>
+            <p className="mt-2 text-muted-foreground">
+              Websites, design work, code, and learning resources.
+            </p>
           </div>
           <Link
             to="/projects"
             className="hidden items-center gap-1 text-sm text-muted-foreground transition-colors hover:text-foreground sm:inline-flex"
           >
-            All projects <ArrowRight className="h-4 w-4" />
+            All work <ArrowRight className="h-4 w-4" />
           </Link>
         </div>
         <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
