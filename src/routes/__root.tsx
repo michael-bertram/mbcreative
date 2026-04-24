@@ -82,7 +82,7 @@ function RootComponent() {
   return (
     <div className="flex min-h-screen flex-col">
       <SiteHeader />
-      <main className="flex-1">
+      <main className="-mt-16 flex-1">
         <Outlet />
       </main>
       <SiteFooter />
