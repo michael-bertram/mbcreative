@@ -5,7 +5,7 @@ export const profile = {
   role: "Developer Advocate, Mentor & Teacher",
   tagline:
     "Engineering mentor and ex–Computer Science teacher helping developers build better software through clear writing, working code, and honest conversations.",
-  location: "Stockton on Tees, UK",
+  location: "Stockton-on-Tees, UK",
   email: "mjbertram87@gmail.com",
   resumeUrl: "/resume.pdf",
   socials: {
