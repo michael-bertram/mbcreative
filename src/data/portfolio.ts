@@ -18,77 +18,89 @@ export const profile = {
 export type Project = {
   slug: string;
   title: string;
+  type: "Website" | "Design" | "Learning Resource" | "Code";
+  platform?: string;
   summary: string;
   description: string;
   tags: string[];
   demoUrl?: string;
   repoUrl?: string;
+  resourceUrl?: string;
   featured?: boolean;
   year: number;
 };
 
 export const projects: Project[] = [
   {
-    slug: "lumen-analytics",
-    title: "Lumen Analytics",
-    summary: "Realtime product analytics dashboard with sub-second queries.",
+    slug: "wordpress-learning-workshops",
+    title: "WordPress Learning Workshops",
+    type: "Learning Resource",
+    platform: "WordPress / Front-end",
+    summary: "Practical workshop materials for developers learning modern WordPress workflows.",
     description:
-      "Built a multi-tenant analytics platform powered by ClickHouse and a custom query DSL. Reduced p95 query latency from 4s to 280ms.",
-    tags: ["TypeScript", "React", "ClickHouse", "Node"],
-    demoUrl: "https://example.com",
-    repoUrl: "https://github.com/your-handle/lumen",
+      "Created structured learning resources, demos, and guided exercises to help developers understand WordPress, front-end tooling, and best-practice implementation.",
+    tags: ["WordPress", "Teaching", "Workshops", "Developer Experience"],
+    resourceUrl: "/resources",
     featured: true,
-    year: 2024,
+    year: 2026,
   },
   {
-    slug: "orbit-ui",
-    title: "Orbit UI",
-    summary: "Open-source headless component library used by 4k+ devs.",
+    slug: "developer-demo-projects",
+    title: "Developer Demo Projects",
+    type: "Code",
+    platform: "React / WordPress",
+    summary: "Small, focused builds used to explain concepts through working code.",
     description:
-      "Designed and shipped a fully accessible, themeable React component library with first-class TypeScript types and zero runtime CSS.",
-    tags: ["React", "Radix", "Tailwind", "OSS"],
-    repoUrl: "https://github.com/your-handle/orbit-ui",
+      "Built sample projects and demos that turn technical ideas into practical examples for talks, tutorials, and developer onboarding.",
+    tags: ["React", "JavaScript", "WordPress", "Tutorials"],
     featured: true,
-    year: 2024,
+    year: 2026,
   },
   {
-    slug: "drift-cms",
-    title: "Drift CMS",
-    summary: "Git-backed headless CMS for marketing teams.",
+    slug: "education-resource-packs",
+    title: "Education Resource Packs",
+    type: "Learning Resource",
+    platform: "Classroom / CPD",
+    summary: "Curriculum materials, CPD sessions, and scaffolded resources for mixed abilities.",
     description:
-      "A Git-native CMS with branch-based previews, role-based publishing, and a visual block editor built on Tiptap.",
-    tags: ["Next.js", "tRPC", "Postgres"],
-    demoUrl: "https://example.com",
+      "Designed inclusive teaching materials for Computer Science, Creative iMedia, and staff development, with differentiated pathways and accessibility in mind.",
+    tags: ["Curriculum", "CPD", "Accessibility", "Computer Science"],
     featured: true,
     year: 2023,
   },
   {
-    slug: "pulse-cli",
-    title: "Pulse CLI",
-    summary: "Developer CLI for inspecting production traffic locally.",
+    slug: "website-builds",
+    title: "Website Builds",
+    type: "Website",
+    platform: "Code / WordPress / Wix",
+    summary: "A mix of coded, WordPress, and Wix websites created for different audiences.",
     description:
-      "A Rust-powered CLI that streams sanitized production traffic into a local dev environment for safer debugging.",
-    tags: ["Rust", "CLI", "DevTools"],
-    repoUrl: "https://github.com/your-handle/pulse",
-    year: 2023,
+      "Designed and built web experiences across platforms, focusing on clear messaging, usable layouts, and practical delivery for each project’s constraints.",
+    tags: ["Web Design", "WordPress", "Wix", "Frontend"],
+    year: 2024,
   },
   {
-    slug: "tidepool",
-    title: "Tidepool",
-    summary: "Collaborative whiteboard with CRDT-backed offline sync.",
-    description: "Real-time multiplayer canvas using Yjs, with offline-first persistence and conflict-free merging.",
-    tags: ["React", "Yjs", "CRDT"],
-    demoUrl: "https://example.com",
-    year: 2022,
+    slug: "brand-and-logo-work",
+    title: "Brand & Logo Work",
+    type: "Design",
+    platform: "Digital design",
+    summary: "Logo concepts, graphics, and visual assets for digital and print use.",
+    description:
+      "Created visual identity work and graphics informed by a background in creative digital media, print production, and practical client delivery.",
+    tags: ["Logo Design", "Graphics", "Branding", "Print"],
+    year: 2024,
   },
   {
-    slug: "harbor",
-    title: "Harbor",
-    summary: "Self-hosted feature flag service with edge evaluation.",
-    description: "A lightweight feature-flag service that evaluates rules at the edge with <5ms overhead.",
-    tags: ["Go", "Edge", "Infra"],
-    repoUrl: "https://github.com/your-handle/harbor",
-    year: 2022,
+    slug: "developer-content",
+    title: "Developer Content",
+    type: "Learning Resource",
+    platform: "Articles / Demos / Talks",
+    summary: "Technical content that helps developers understand tools, workflows, and concepts.",
+    description:
+      "Produced tutorials, demos, documentation-style guidance, and educational content shaped by both industry and classroom experience.",
+    tags: ["Technical Writing", "Demos", "Mentoring", "WordPress"],
+    resourceUrl: "/resources",
+    year: 2026,
   },
 ];
 
