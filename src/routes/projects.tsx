@@ -3,7 +3,8 @@ import { useMemo, useState } from "react";
 import { ProjectCard } from "@/components/project-card";
 import { profile, projects, type Project } from "@/data/portfolio";
 
-const filters = ["All", "Website", "Design", "Learning Resource", "Code"] as const;
+const workProjects = projects.filter((project) => project.type !== "Learning Resource");
+const filters = ["All", "Website", "Design", "Code"] as const;
 type WorkFilter = (typeof filters)[number];
 
 export const Route = createFileRoute("/projects")({
@@ -12,12 +13,12 @@ export const Route = createFileRoute("/projects")({
       { title: `Work — ${profile.name}` },
       {
         name: "description",
-        content: `Selected work by ${profile.name}, including websites, design, learning resources, and developer-focused code projects.`,
+        content: `Selected project work by ${profile.name}, including websites, design, graphics, and developer-focused code projects.`,
       },
       { property: "og:title", content: `Work — ${profile.name}` },
       {
         property: "og:description",
-        content: `Selected websites, design work, learning resources, and developer content by ${profile.name}.`,
+        content: `Selected websites, design work, graphics, and code projects by ${profile.name}.`,
       },
     ],
   }),
@@ -33,8 +34,8 @@ function ProjectsPage() {
           ...counts,
           [filter]:
             filter === "All"
-              ? projects.length
-              : projects.filter((project: Project) => project.type === filter).length,
+              ? workProjects.length
+              : workProjects.filter((project: Project) => project.type === filter).length,
         }),
         {} as Record<WorkFilter, number>,
       ),
@@ -43,8 +44,8 @@ function ProjectsPage() {
   const filteredProjects = useMemo(
     () =>
       activeFilter === "All"
-        ? projects
-        : projects.filter((project: Project) => project.type === activeFilter),
+        ? workProjects
+        : workProjects.filter((project: Project) => project.type === activeFilter),
     [activeFilter],
   );
 
@@ -55,8 +56,8 @@ function ProjectsPage() {
           Work
         </h1>
         <p className="mt-4 text-muted-foreground">
-          A flexible portfolio of websites, code, design work, and learning resources — including
-          coded builds, WordPress work, Wix sites, graphics, and teaching materials.
+          Project work across websites, code, design, and graphics — including coded builds,
+          WordPress work, Wix sites, personal experiments, and work-related projects.
         </p>
       </header>
       <div

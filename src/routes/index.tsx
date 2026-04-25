@@ -1,5 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, BookOpen } from "lucide-react";
 import { ProjectCard } from "@/components/project-card";
 import { profile, projects, techStack } from "@/data/portfolio";
 
@@ -19,7 +19,7 @@ export const Route = createFileRoute("/")({
 });
 
 function Index() {
-  const featured = projects.filter((p) => p.featured).slice(0, 3);
+  const featured = projects.filter((p) => p.featured && p.type !== "Learning Resource").slice(0, 3);
 
   return (
     <div>
@@ -81,7 +81,7 @@ function Index() {
               Featured work
             </h2>
             <p className="mt-2 text-muted-foreground">
-              Websites, design work, code, and learning resources.
+              Websites, design work, code, and project-based case studies.
             </p>
           </div>
           <Link
@@ -95,6 +95,29 @@ function Index() {
           {featured.map((p) => (
             <ProjectCard key={p.slug} project={p} />
           ))}
+        </div>
+      </section>
+
+      <section className="border-y border-border bg-secondary/20">
+        <div className="mx-auto grid w-full max-w-6xl gap-6 px-6 py-14 md:grid-cols-[1fr_auto] md:items-center">
+          <div>
+            <p className="mb-3 inline-flex items-center gap-2 text-sm font-medium text-primary">
+              <BookOpen className="h-4 w-4" /> Developer learning resources
+            </p>
+            <h2 className="font-display text-3xl font-bold tracking-tight text-foreground">
+              Tutorials, workshops, and resources for a developer audience.
+            </h2>
+            <p className="mt-3 max-w-2xl text-muted-foreground">
+              Separate from project work, this space focuses on the learning material I create as a
+              Developer Advocate: WordPress guidance, front-end demos, workshops, and mentoring resources.
+            </p>
+          </div>
+          <Link
+            to="/resources"
+            className="inline-flex items-center justify-center gap-2 rounded-md border border-border bg-card px-5 py-2.5 text-sm font-medium text-foreground transition-colors hover:border-primary/40 hover:bg-secondary"
+          >
+            Explore resources <ArrowRight className="h-4 w-4" />
+          </Link>
         </div>
       </section>
 
