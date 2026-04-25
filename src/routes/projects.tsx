@@ -26,6 +26,20 @@ export const Route = createFileRoute("/projects")({
 
 function ProjectsPage() {
   const [activeFilter, setActiveFilter] = useState<WorkFilter>("All");
+  const projectCounts = useMemo(
+    () =>
+      filters.reduce(
+        (counts, filter) => ({
+          ...counts,
+          [filter]:
+            filter === "All"
+              ? projects.length
+              : projects.filter((project: Project) => project.type === filter).length,
+        }),
+        {} as Record<WorkFilter, number>,
+      ),
+    [],
+  );
   const filteredProjects = useMemo(
     () =>
       activeFilter === "All"
@@ -45,21 +59,29 @@ function ProjectsPage() {
           coded builds, WordPress work, Wix sites, graphics, and teaching materials.
         </p>
       </header>
-      <div className="mb-8 flex flex-wrap gap-2">
-        {filters.map((filter) => (
-          <button
-            key={filter}
-            type="button"
-            onClick={() => setActiveFilter(filter)}
-            className={`rounded-full border px-3 py-1.5 text-sm transition-colors ${
-              activeFilter === filter
-                ? "border-primary bg-primary text-primary-foreground"
-                : "border-border bg-secondary/40 text-muted-foreground hover:text-foreground"
-            }`}
-          >
-            {filter}
-          </button>
-        ))}
+      <div
+        className="-mx-6 mb-10 overflow-x-auto px-6 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+        aria-label="Work type filters"
+      >
+        <div className="flex w-max min-w-full gap-5 border-b border-border" role="tablist">
+          {filters.map((filter) => (
+            <button
+              key={filter}
+              type="button"
+              role="tab"
+              aria-selected={activeFilter === filter}
+              onClick={() => setActiveFilter(filter)}
+              className={`relative flex min-w-32 snap-start flex-col items-start gap-1 border-b-2 pb-4 pt-2 text-left transition-colors ${
+                activeFilter === filter
+                  ? "border-primary text-foreground"
+                  : "border-transparent text-muted-foreground hover:border-border hover:text-foreground"
+              }`}
+            >
+              <span className="font-display text-base font-semibold tracking-tight">{filter}</span>
+              <span className="text-xs text-muted-foreground">{projectCounts[filter]} pieces</span>
+            </button>
+          ))}
+        </div>
       </div>
       <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
         {filteredProjects.map((p) => (
