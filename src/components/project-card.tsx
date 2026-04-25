@@ -1,15 +1,22 @@
 import { ArrowUpRight, BookOpen, Github } from "lucide-react";
+import { Link } from "@tanstack/react-router";
 import type { Project } from "@/data/portfolio";
 
 export function ProjectCard({ project }: { project: Project }) {
   return (
     <article className="group relative flex flex-col overflow-hidden rounded-xl border border-border bg-card p-6 transition-all duration-300 hover:-translate-y-1 hover:border-primary/40 hover:shadow-[0_20px_60px_-20px_oklch(0.70_0.22_295/0.35)]">
+      <Link
+        to="/projects/$projectSlug"
+        params={{ projectSlug: project.slug }}
+        aria-label={`View ${project.title} case study`}
+        className="absolute inset-0 z-0"
+      />
       <div className="mb-4 flex items-center justify-between">
         <div className="flex flex-col gap-1">
           <span className="text-xs font-medium text-primary">{project.type}</span>
           <span className="text-xs text-muted-foreground">{project.year}</span>
         </div>
-        <div className="flex items-center gap-1">
+        <div className="relative z-10 flex items-center gap-1">
           {project.repoUrl && (
             <a
               href={project.repoUrl}
@@ -53,7 +60,7 @@ export function ProjectCard({ project }: { project: Project }) {
         </p>
       )}
       <p className="mt-3 text-sm leading-relaxed text-muted-foreground/80">{project.description}</p>
-      <div className="mt-5 flex flex-wrap gap-2">
+      <div className="relative z-10 mt-5 flex flex-wrap gap-2">
         {project.tags.map((tag) => (
           <span
             key={tag}
