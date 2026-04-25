@@ -1,6 +1,12 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { ArrowLeft, ArrowUpRight, BookOpen, Github } from "lucide-react";
+import { ArrowLeft, ArrowUpRight, BookOpen, Github, type LucideIcon } from "lucide-react";
 import { profile, projects } from "@/data/portfolio";
+
+type ProjectLink = {
+  label: string;
+  href: string;
+  icon: LucideIcon;
+};
 
 export const Route = createFileRoute("/projects/$projectSlug")({
   head: ({ params }) => {
@@ -40,11 +46,10 @@ function ProjectPage() {
     );
   }
 
-  const links = [
-    project.demoUrl && { label: "View live example", href: project.demoUrl, icon: ArrowUpRight, external: true },
-    project.repoUrl && { label: "View repository", href: project.repoUrl, icon: Github, external: true },
-    project.resourceUrl && { label: "View resource", href: project.resourceUrl, icon: BookOpen, external: false },
-  ].filter(Boolean);
+  const externalLinks: ProjectLink[] = [
+    ...(project.demoUrl ? [{ label: "View live example", href: project.demoUrl, icon: ArrowUpRight }] : []),
+    ...(project.repoUrl ? [{ label: "View repository", href: project.repoUrl, icon: Github }] : []),
+  ];
 
   return (
     <main className="mx-auto w-full max-w-5xl px-6 py-24 sm:py-28">
@@ -94,24 +99,28 @@ function ProjectPage() {
             </div>
           </div>
 
-          {links.length > 0 && (
+          {(externalLinks.length > 0 || project.resourceUrl) && (
             <div>
               <h2 className="text-sm font-medium text-foreground">Links</h2>
               <div className="mt-3 grid gap-2">
-                {links.map((link) => {
+                {externalLinks.map((link) => {
                   const Icon = link.icon;
                   const className = "inline-flex items-center justify-between gap-3 rounded-md border border-border bg-card px-3 py-2 text-sm text-foreground transition-colors hover:border-primary/40 hover:bg-secondary";
 
-                  return link.external ? (
-                    <a key={link.label} href={link.href} target="_blank" rel="noreferrer" className={className}>
-                      {link.label} <Icon className="h-4 w-4 text-primary" />
-                    </a>
-                  ) : (
-                    <Link key={link.label} to={link.href} className={className}>
-                      {link.label} <Icon className="h-4 w-4 text-primary" />
-                    </Link>
-                  );
+                  return (
+                  <a key={link.label} href={link.href} target="_blank" rel="noreferrer" className={className}>
+                    {link.label} <Icon className="h-4 w-4 text-primary" />
+                  </a>
+                );
                 })}
+                {project.resourceUrl && (
+                  <Link
+                    to="/resources"
+                    className="inline-flex items-center justify-between gap-3 rounded-md border border-border bg-card px-3 py-2 text-sm text-foreground transition-colors hover:border-primary/40 hover:bg-secondary"
+                  >
+                    View resource <BookOpen className="h-4 w-4 text-primary" />
+                  </Link>
+                )}
               </div>
             </div>
           )}
