@@ -6,10 +6,10 @@ export const profile = {
   tagline:
     "Engineering mentor and ex–Computer Science teacher helping developers build better software through clear writing, working code, and honest conversations.",
   location: "Stockton-on-Tees, UK",
-  email: "mjbertram87@gmail.com",
+  email: "michael.bertram@wpengine.com",
   resumeUrl: "/resume.pdf",
   socials: {
-    github: "https://github.com/your-handle",
+    github: "https://github.com/michaelbertram",
     linkedin: "https://linkedin.com/in/your-handle",
     x: "https://x.com/your-handle",
   },
