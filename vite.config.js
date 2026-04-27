@@ -11,6 +11,7 @@ export default defineConfig({
     router: {
       generatedRouteTree: "./routeTree.gen.js",
       disableTypes: true,
+      routeTreeFileFooter: [],
     },
   },
 });
