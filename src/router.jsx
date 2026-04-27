@@ -1,5 +1,5 @@
 import { createRouter, useRouter } from "@tanstack/react-router";
-import { routeTree } from "./routeTree.gen.js";
+import { routeTree } from "./routeTree.gen";
 function DefaultErrorComponent({ error, reset }) {
     const router = useRouter();
     return (<div className="flex min-h-screen items-center justify-center bg-background px-4">
