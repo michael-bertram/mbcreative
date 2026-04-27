@@ -9,7 +9,7 @@ import { defineConfig } from "@lovable.dev/vite-tanstack-config";
 export default defineConfig({
   tanstackStart: {
     router: {
-      generatedRouteTree: "./src/routeTree.gen.js",
+      generatedRouteTree: "./routeTree.gen.js",
       disableTypes: true,
     },
   },
