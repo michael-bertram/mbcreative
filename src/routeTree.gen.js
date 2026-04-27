@@ -8,14 +8,14 @@
 // You should NOT make any changes in this file as it will be overwritten.
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
-import { Route as rootRouteImport } from './../routes/__root'
-import { Route as ResourcesRouteImport } from './../routes/resources'
-import { Route as ProjectsRouteImport } from './../routes/projects'
-import { Route as ContactRouteImport } from './../routes/contact'
-import { Route as AboutRouteImport } from './../routes/about'
-import { Route as IndexRouteImport } from './../routes/index'
-import { Route as ProjectsIndexRouteImport } from './../routes/projects.index'
-import { Route as ProjectsProjectSlugRouteImport } from './../routes/projects.$projectSlug'
+import { Route as rootRouteImport } from './routes/__root'
+import { Route as ResourcesRouteImport } from './routes/resources'
+import { Route as ProjectsRouteImport } from './routes/projects'
+import { Route as ContactRouteImport } from './routes/contact'
+import { Route as AboutRouteImport } from './routes/about'
+import { Route as IndexRouteImport } from './routes/index'
+import { Route as ProjectsIndexRouteImport } from './routes/projects.index'
+import { Route as ProjectsProjectSlugRouteImport } from './routes/projects.$projectSlug'
 
 const ResourcesRoute = ResourcesRouteImport.update({
   id: '/resources',
@@ -71,7 +71,7 @@ const rootRouteChildren = {
 }
 export const routeTree = rootRouteImport._addFileChildren(rootRouteChildren)
 
-import type { getRouter } from '../router.jsx'
+import type { getRouter } from './router.jsx'
 import type { createStart } from '@tanstack/react-start'
 declare module '@tanstack/react-start' {
   interface Register {
