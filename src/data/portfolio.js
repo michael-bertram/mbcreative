@@ -1,4 +1,5 @@
 // Edit this file to customize your portfolio content.
+import coverWebsiteBuilds from "@/assets/cover-website-builds.jpg";
 export const profile = {
     name: "Michael Bertram",
     initials: "MB",
@@ -57,6 +58,39 @@ export const projects = [
         description: "Designed and built web experiences across platforms, focusing on clear messaging, usable layouts, and practical delivery for each project’s constraints.",
         tags: ["Web Design", "WordPress", "Wix", "Frontend"],
         year: 2024,
+        cover: coverWebsiteBuilds,
+        client: "Mixed clients & personal",
+        role: "Designer & developer",
+        timeframe: "Ongoing, 2019 – present",
+        stack: ["WordPress", "Wix", "HTML", "CSS", "JavaScript", "PHP"],
+        highlights: [
+            "Shipped sites across three different platforms",
+            "Custom WordPress themes and block patterns",
+            "Hand-coded landing pages with zero framework overhead",
+            "Briefed, designed, built, and handed over end-to-end",
+        ],
+        sections: [
+            {
+                heading: "Context",
+                body: "A rolling collection of small and mid-sized websites built for clients, friends, schools, and personal projects. Each one had a different brief, budget, and audience — from one-page event sites to fully managed WordPress builds — so the platform choice was driven by what the owner could maintain afterwards, not by what was most fun to build.",
+            },
+            {
+                heading: "Approach",
+                body: "Every build started with a short conversation about who the site was for and what success looked like a year after launch. From there I sketched a tight content structure first, then layered on visual design, then code. Keeping content and structure ahead of the visuals stopped scope creep and made handover painless.",
+            },
+            {
+                heading: "What I built",
+                body: "Hand-coded marketing sites in HTML/CSS/JS for performance-sensitive clients; custom WordPress themes and block patterns where the client needed to edit content themselves; Wix sites for owners who wanted full self-service after launch. Where it helped, I added small bits of bespoke functionality — booking forms, gated downloads, mailing list integrations — without bolting on heavy plugins.",
+            },
+            {
+                heading: "Outcome",
+                body: "Owners walked away with sites they could actually maintain, documentation they could understand, and clear Lighthouse / accessibility baselines to defend against future regressions. Several of these builds are still running, unchanged, years later — which I take as the real success metric.",
+            },
+            {
+                heading: "What I learned",
+                body: "The right platform is the one the owner will still be comfortable opening in twelve months. Restraint in design and tooling is almost always the kinder long-term choice for a small client.",
+            },
+        ],
     },
     {
         slug: "brand-and-logo-work",
