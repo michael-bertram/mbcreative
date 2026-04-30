@@ -34,24 +34,54 @@ const LAYOUT = [
 
 export function FloatingProjectsShowcase({ projects }) {
   const sectionRef = useRef(null);
+  const stageRef = useRef(null);
   const [offset, setOffset] = useState(0);
+  const [tilt, setTilt] = useState({ x: 0, y: 0 });
+  const [reduced, setReduced] = useState(false);
+  const [isCoarse, setIsCoarse] = useState(false);
 
+  // Detect reduced motion + coarse pointer (mobile/touch)
   useEffect(() => {
-    let raf = 0;
-    const onScroll = () => {
-      cancelAnimationFrame(raf);
-      raf = requestAnimationFrame(() => {
-        const el = sectionRef.current;
-        if (!el) return;
-        const rect = el.getBoundingClientRect();
-        const viewportH = window.innerHeight || 1;
-        // Progress from -1 (below viewport) -> 0 (centered) -> +1 (above viewport)
-        const center = rect.top + rect.height / 2;
-        const progress = (viewportH / 2 - center) / (viewportH / 2 + rect.height / 2);
-        setOffset(Math.max(-1, Math.min(1, progress)));
-      });
+    if (typeof window === "undefined") return;
+    const rm = window.matchMedia("(prefers-reduced-motion: reduce)");
+    const cp = window.matchMedia("(pointer: coarse)");
+    const sync = () => {
+      setReduced(rm.matches);
+      setIsCoarse(cp.matches);
     };
-    onScroll();
+    sync();
+    rm.addEventListener?.("change", sync);
+    cp.addEventListener?.("change", sync);
+    return () => {
+      rm.removeEventListener?.("change", sync);
+      cp.removeEventListener?.("change", sync);
+    };
+  }, []);
+
+  // Scroll parallax (skipped if reduced-motion)
+  useEffect(() => {
+    if (reduced) {
+      setOffset(0);
+      return;
+    }
+    let raf = 0;
+    let ticking = false;
+    const update = () => {
+      ticking = false;
+      const el = sectionRef.current;
+      if (!el) return;
+      const rect = el.getBoundingClientRect();
+      const viewportH = window.innerHeight || 1;
+      const center = rect.top + rect.height / 2;
+      const progress = (viewportH / 2 - center) / (viewportH / 2 + rect.height / 2);
+      setOffset(Math.max(-1, Math.min(1, progress)));
+    };
+    const onScroll = () => {
+      if (ticking) return;
+      ticking = true;
+      raf = requestAnimationFrame(update);
+    };
+    update();
     window.addEventListener("scroll", onScroll, { passive: true });
     window.addEventListener("resize", onScroll);
     return () => {
@@ -59,7 +89,35 @@ export function FloatingProjectsShowcase({ projects }) {
       window.removeEventListener("scroll", onScroll);
       window.removeEventListener("resize", onScroll);
     };
-  }, []);
+  }, [reduced]);
+
+  // Pointer tilt — desktop / fine pointer only
+  useEffect(() => {
+    if (reduced || isCoarse) {
+      setTilt({ x: 0, y: 0 });
+      return;
+    }
+    const el = stageRef.current;
+    if (!el) return;
+    let raf = 0;
+    const onMove = (e) => {
+      const rect = el.getBoundingClientRect();
+      const px = (e.clientX - rect.left) / rect.width - 0.5;
+      const py = (e.clientY - rect.top) / rect.height - 0.5;
+      cancelAnimationFrame(raf);
+      raf = requestAnimationFrame(() =>
+        setTilt({ x: Math.max(-0.5, Math.min(0.5, px)), y: Math.max(-0.5, Math.min(0.5, py)) }),
+      );
+    };
+    const onLeave = () => setTilt({ x: 0, y: 0 });
+    el.addEventListener("pointermove", onMove);
+    el.addEventListener("pointerleave", onLeave);
+    return () => {
+      cancelAnimationFrame(raf);
+      el.removeEventListener("pointermove", onMove);
+      el.removeEventListener("pointerleave", onLeave);
+    };
+  }, [reduced, isCoarse]);
 
   const cards = projects.slice(0, LAYOUT.length);
 
@@ -98,17 +156,25 @@ export function FloatingProjectsShowcase({ projects }) {
         {/* Stage */}
         <div
           className="relative mx-auto h-[520px] w-full sm:h-[560px] lg:h-[620px]"
+          ref={stageRef}
           style={{ perspective: "1400px", perspectiveOrigin: "50% 40%" }}
         >
           {cards.map((project, i) => {
             const layout = LAYOUT[i];
-            const driftY = Math.sin((offset + i * 0.3) * Math.PI) * 6;
+            // Tone everything down on coarse pointers (mobile) and fully off when reduced.
+            const motionScale = reduced ? 0 : isCoarse ? 0.45 : 1;
+            const driftY = Math.sin((offset + i * 0.3) * Math.PI) * 6 * motionScale;
+            const parallaxY = offset * layout.depth * motionScale;
+            // Pointer tilt: deeper cards react more, mirrored to feel like depth.
+            const tiltStrength = (layout.depth / 140) * 14 * motionScale;
+            const tiltX = -tilt.y * tiltStrength;
+            const tiltY = tilt.x * tiltStrength;
             return (
               <article
                 key={project.slug}
-                className={`absolute ${layout.className} transition-transform duration-300 ease-out`}
+                className={`absolute ${layout.className} ${reduced ? "" : "transition-transform duration-300 ease-out will-change-transform"}`}
                 style={{
-                  transform: `translate3d(0, ${offset * layout.depth + driftY}px, 0) ${layout.transform}`,
+                  transform: `translate3d(0, ${parallaxY + driftY}px, 0) rotateX(${tiltX}deg) rotateY(${tiltY}deg) ${layout.transform}`,
                   transformStyle: "preserve-3d",
                   filter: `drop-shadow(0 30px 40px oklch(0 0 0 / 0.55))`,
                 }}
