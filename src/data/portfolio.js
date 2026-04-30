@@ -1,4 +1,5 @@
 // Edit this file to customize your portfolio content.
+import coverWebsiteBuilds from "@/assets/cover-website-builds.jpg";
 export const profile = {
     name: "Michael Bertram",
     initials: "MB",
