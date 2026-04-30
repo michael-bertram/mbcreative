@@ -3,6 +3,9 @@ import { Link } from "@tanstack/react-router";
 export function ProjectCard({ project }) {
     return (<article className="group relative flex flex-col overflow-hidden rounded-xl border border-border bg-card p-6 transition-all duration-300 hover:-translate-y-1 hover:border-primary/40 hover:shadow-[0_20px_60px_-20px_oklch(0.70_0.22_295/0.35)]">
       <Link to="/projects/$projectSlug" params={{ projectSlug: project.slug }} aria-label={`View ${project.title} case study`} className="absolute inset-0 z-0"/>
+      {project.cover && (<div className="relative z-0 -mx-6 -mt-6 mb-5 aspect-[16/9] overflow-hidden border-b border-border">
+          <img src={project.cover} alt="" loading="lazy" className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-[1.03]"/>
+        </div>)}
       <div className="mb-4 flex items-center justify-between">
         <div className="flex flex-col gap-1">
           <span className="text-xs font-medium text-primary">{project.type}</span>
