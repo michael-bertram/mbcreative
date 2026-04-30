@@ -1,6 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { ArrowRight, BookOpen } from "lucide-react";
-import { ProjectCard } from "@/components/project-card";
+import { FloatingProjectsShowcase } from "@/components/floating-projects-showcase";
 import { profile, projects, techStack } from "@/data/portfolio";
 export const Route = createFileRoute("/")({
     head: () => ({
@@ -17,7 +17,7 @@ export const Route = createFileRoute("/")({
     component: Index,
 });
 function Index() {
-    const featured = projects.filter((p) => p.featured && p.type !== "Learning Resource").slice(0, 3);
+    const featured = projects.filter((p) => p.type !== "Learning Resource").slice(0, 5);
     return (<div>
       {/* Hero */}
       <section className="relative overflow-hidden" style={{ backgroundImage: "var(--gradient-hero)" }}>
@@ -59,24 +59,7 @@ function Index() {
       </section>
 
       {/* Featured */}
-      <section className="mx-auto w-full max-w-6xl px-6 py-20 sm:py-24">
-        <div className="mb-10 flex items-end justify-between gap-4">
-          <div>
-            <h2 className="font-display text-3xl font-bold tracking-tight text-foreground sm:text-4xl">
-              Featured work
-            </h2>
-            <p className="mt-2 text-muted-foreground">
-              Websites, design work, code, and project-based case studies.
-            </p>
-          </div>
-          <Link to="/projects" className="hidden items-center gap-1 text-sm text-muted-foreground transition-colors hover:text-foreground sm:inline-flex">
-            All work <ArrowRight className="h-4 w-4"/>
-          </Link>
-        </div>
-        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-          {featured.map((p) => (<ProjectCard key={p.slug} project={p}/>))}
-        </div>
-      </section>
+      <FloatingProjectsShowcase projects={featured} />
 
       <section className="border-y border-border bg-secondary/20">
         <div className="mx-auto grid w-full max-w-6xl gap-6 px-6 py-14 md:grid-cols-[1fr_auto] md:items-center">
