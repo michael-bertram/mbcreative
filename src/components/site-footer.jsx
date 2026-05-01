@@ -4,7 +4,7 @@ export function SiteFooter() {
     return (<footer className="border-t border-border">
       <div className="mx-auto flex w-full max-w-6xl flex-col items-center justify-between gap-4 px-6 py-8 sm:flex-row">
         <p className="text-sm text-muted-foreground">
-          © {new Date().getFullYear()} {profile.name}. Built with TanStack Start.
+          © {new Date().getFullYear()} {profile.name}.
         </p>
         <div className="flex items-center gap-2">
           <a href={profile.socials.github} target="_blank" rel="noreferrer" aria-label="GitHub" className="rounded-md p-2 text-muted-foreground transition-colors hover:bg-secondary hover:text-foreground">

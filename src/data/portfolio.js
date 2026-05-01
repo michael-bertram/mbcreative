@@ -8,9 +8,9 @@ export const profile = {
     email: "michael.bertram@wpengine.com",
     resumeUrl: "/resume.pdf",
     socials: {
-        github: "https://github.com/michaelbertram",
-        linkedin: "https://linkedin.com/in/your-handle",
-        x: "https://x.com/your-handle",
+        github: "https://github.com/michael-bertram",
+        linkedin: "https://www.linkedin.com/in/michael-bertram-3b335b290/",
+        x: "https://x.com/micberty",
     },
 };
 export const projects = [
