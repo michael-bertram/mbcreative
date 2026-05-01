@@ -2,6 +2,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { ArrowRight, BookOpen } from "lucide-react";
 import { FloatingProjectsShowcase } from "@/components/floating-projects-showcase";
 import { profile, projects, techStack } from "@/data/portfolio";
+import { TypeAnimation } from 'react-type-animation';
 export const Route = createFileRoute("/")({
     head: () => ({
         meta: [
@@ -26,13 +27,30 @@ function Index() {
             <span className="h-1.5 w-1.5 rounded-full bg-primary"/>
             Available for new projects
           </p>
-          <h1 className="font-display text-4xl font-bold tracking-tight text-foreground sm:text-6xl lg:text-7xl">
-            {profile.name}.
+          <div>
+            {/* Name Section */}
+            <TypeAnimation
+              sequence={["Hi, i'm Michael."]}
+              speed={70}
+              className="font-display text-4xl font-bold tracking-tight text-foreground sm:text-6xl lg:text-7xl"
+              repeat={0}
+            />
+            
             <br />
-            <span className="bg-gradient-to-r from-primary to-[oklch(0.78_0.20_300)] bg-clip-text text-transparent">
-              {profile.role}.
-            </span>
-          </h1>
+
+            {/* Role Section */}
+            <TypeAnimation
+              sequence={[
+                "Developer Advocate", 1000,
+                "Mentor", 1000,
+                "Teacher", 1000
+              ]}
+              wrapper="span"
+              speed={20}
+              className="block bg-gradient-to-r from-primary to-[oklch(0.78_0.20_300)] bg-clip-text text-transparent font-display text-4xl font-bold tracking-tight sm:text-6xl lg:text-7xl"
+              repeat={Infinity}
+            />
+          </div>
           <p className="mt-6 max-w-2xl text-lg text-muted-foreground sm:text-xl">
             {profile.tagline}
           </p>
@@ -90,7 +108,7 @@ function Index() {
             </h2>
             <div>
               <p className="text-muted-foreground">
-                Based in Stockton-on-Tees, UK. Developer Advocate and former educator with
+                Based in the North East of England. Developer Advocate and former educator with
                 experience in developer tools, WordPress, and front-end development, focused on
                 mentoring, content, and developer experience.
               </p>
