@@ -305,7 +305,7 @@ export function FloatingProjectsShowcase({
                 <Link
                   to="/projects/$projectSlug"
                   params={{ projectSlug: project.slug }}
-                  className="group flex aspect-[5/4] flex-col rounded-2xl border border-white/10 bg-gradient-to-br from-white to-[oklch(0.94_0.01_280)] p-4 sm:p-5 text-[oklch(0.20_0.03_280)] shadow-2xl transition-shadow hover:shadow-[0_30px_60px_-20px_oklch(0.55_0.27_280/0.6)]"
+                  className="group flex aspect-[5/4] flex-col gap-2 rounded-2xl border border-white/10 bg-gradient-to-br from-white to-[oklch(0.94_0.01_280)] p-3 text-[oklch(0.20_0.03_280)] shadow-2xl transition-shadow hover:shadow-[0_30px_60px_-20px_oklch(0.55_0.27_280/0.6)] sm:p-4"
                   style={{ transformStyle: "preserve-3d" }}
                 >
                   <div className="flex items-start justify-between gap-3">
@@ -321,20 +321,20 @@ export function FloatingProjectsShowcase({
                       <ArrowUpRight className="h-3.5 w-3.5" />
                     </span>
                   </div>
-                  <p className="mt-2 line-clamp-3 text-xs text-[oklch(0.40_0.03_280)] sm:text-[13px]">
+                  <p className="line-clamp-2 text-[11px] leading-snug text-[oklch(0.40_0.03_280)] sm:text-xs">
                     {project.summary}
                   </p>
-                  <div className="mt-auto flex flex-wrap gap-1.5 pt-3">
+                  <div className="mt-auto flex flex-wrap gap-1">
                     {project.tags.slice(0, 3).map((tag) => (
                       <span
                         key={tag}
-                        className="rounded-full bg-[oklch(0.95_0.01_280)] px-2 py-0.5 text-[10px] font-medium text-[oklch(0.35_0.04_280)]"
+                        className="rounded-full bg-[oklch(0.95_0.01_280)] px-1.5 py-0.5 text-[9px] font-medium text-[oklch(0.35_0.04_280)]"
                       >
                         {tag}
                       </span>
                     ))}
                   </div>
-                  <div className="mt-3 flex items-center justify-between border-t border-[oklch(0.90_0.01_280)] pt-2 text-[10px] text-[oklch(0.50_0.03_280)]">
+                  <div className="flex items-center justify-between border-t border-[oklch(0.90_0.01_280)] pt-2 text-[10px] text-[oklch(0.50_0.03_280)]">
                     <span>{project.platform}</span>
                     <span>{project.year}</span>
                   </div>
