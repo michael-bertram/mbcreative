@@ -1,83 +1,47 @@
-## Focused improvement: Project case studies
+# Refining the Floating Projects Showcase
 
-Right now `/projects/$slug` shows a title, one summary paragraph, the same description from the card, tags, and external links — essentially the card content again on a bigger page. Visitors who click through expect a story: what the project was, what you did, what you used, what came out of it. This plan turns those pages into proper case studies.
+Two issues to fix:
+1. **Crowding** — the stage sits too close to the heading above it.
+2. **Over-tilted cards** — the 3D rotations are too aggressive and make text harder to scan.
 
-We'll keep all the other ideas you flagged (about polish, theme toggle, bespoke 404, animated section transitions) on the back-burner as separate follow-up rounds.
+Both are easy tweaks to `src/components/floating-projects-showcase.jsx`. Below are the spacing fix (small, applied either way) plus four layout/motion directions — pick whichever feels right and we'll apply it.
 
-### What changes
+## Spacing fix (applied in all options)
 
-**1. Extend the project data model in `src/data/portfolio.js`**
+- Increase the gap between the heading block and the stage from `mb-12` to `mb-20 sm:mb-24`.
+- Bump the stage's top padding inside the section (`pt-20 sm:pt-28` → `pt-24 sm:pt-32`) so the topmost cards don't kiss the headline.
+- Add a small `mt-6` cushion above the stage for extra air on smaller screens.
 
-Each project gains optional, structured fields. Optional means existing entries keep working without immediately filling everything in.
+## Pick a direction for the cards
 
-- `cover` — hero image URL (can be a generated/branded placeholder for now)
-- `gallery` — array of `{ src, alt, caption? }` for in-page screenshots
-- `client` and `role` — short labels (e.g. "Personal project", "Lead developer")
-- `timeframe` — human-readable (e.g. "Spring 2024, 3 weeks")
-- `stack` — array of technologies used on this specific project
-- `sections` — ordered narrative blocks: `{ heading, body }`. Typical headings: Context, Approach, What I built, Outcome, What I learned.
-- `highlights` — short bullet list of standout outcomes for the sidebar (e.g. "Cut load time by 40%", "Shipped in 2 weeks")
+### Option A — Subtle tilt (closest to today, just calmer)
+Keep the same five-card scattered layout, but dial everything back:
+- Rotations roughly halved: `rotateX` ~8–10°, `rotateY` ±8–10°, `rotateZ` ±1–2°.
+- Reduce parallax `depth` values by ~40% so scroll movement is gentler.
+- Pointer-tilt strength reduced from `14` → `6`.
+- Result: still a "floating workspace" feel, but reads as polished rather than dramatic.
 
-Existing string `description` stays as a fallback when `sections` isn't filled in, so nothing breaks.
+### Option B — Flat stack with light float
+Cards sit almost flat to the page (no Y/X rotation), with only a faint Z-rotation (±1–2°) for a "tossed on a desk" feel:
+- Drop perspective entirely (or push to `2400px` so it barely registers).
+- Keep gentle vertical drift + scroll parallax.
+- Cards become much more readable; the *arrangement* does the work, not the 3D.
 
-**2. Rebuild `/projects/$projectSlug` page**
+### Option C — Fanned deck (centered, overlapping)
+Cards arranged as an overlapping fan across the centre, like a hand of cards:
+- Five cards spread along a shallow arc, each rotated ±2–6° around its bottom-centre.
+- Hovered card lifts forward and straightens (`rotateZ(0)` + slight Y translate).
+- Stage height reduced (`h-[420px] sm:h-[480px]`) since the layout is more compact.
+- Feels editorial and deliberate; great for hover interaction.
 
-New layout, top to bottom:
+### Option D — Isometric grid
+Cards laid out on a shared isometric plane (single shared `rotateX(12deg) rotateZ(-8deg)` on the stage, cards themselves untilted):
+- Looks like a tidy 3D dashboard.
+- All cards share one vanishing point, so it feels designed rather than scattered.
+- Pointer movement subtly shifts the whole stage rather than individual cards.
 
-```text
-[ ← Back to work ]
+## Recommendation
 
-[ TYPE · YEAR · PLATFORM ]
-[ Project Title                        ]
-[ One-line summary                     ]
+**Option A** is the smallest change and likely solves what you're describing — same character, just toned down and with breathing room above. **Option C** is the bigger upgrade if you want the section to feel more like a signature moment.
 
-[ ===== Cover image (if provided) ===== ]
-
-┌── Main column ─────────────┐ ┌─ Sidebar ─┐
-│ Section: Context           │ │ Client    │
-│ Section: Approach          │ │ Role      │
-│ Section: What I built      │ │ Timeframe │
-│ Section: Outcome           │ │ Stack     │
-│                            │ │ Highlights│
-│ [ Gallery grid ]           │ │ Links     │
-│                            │ │ Tags      │
-└────────────────────────────┘ └───────────┘
-
-[ ← Previous project ]   [ Next project → ]
-```
-
-- Narrative `sections` render as styled blocks with consistent typography.
-- Gallery uses a responsive 1/2-column grid; clicking opens a lightweight lightbox (existing shadcn `dialog` component).
-- Sidebar gains Client / Role / Timeframe / Stack / Highlights above the existing Tags + Links.
-- Previous/Next navigation cycles through `workProjects` (excluding Learning Resources, matching the `/projects` index filter).
-
-**3. Update `ProjectCard` slightly**
-
-If a project has a `cover`, show it as a thumbnail at the top of the card on the `/projects` grid. Cards without a cover stay text-only — no visual regression.
-
-**4. Wire one project as the reference example**
-
-I'll pick `website-builds` and fill in the new fields completely (cover, 3–4 gallery items using placeholder imagery, sections, stack, highlights) so you have a working template to copy. The other projects keep their current shape and degrade gracefully until you flesh them out.
-
-**5. Improve the empty / not-found state**
-
-The current "Project not found" screen stays, but I'll route it through `notFound()` + `notFoundComponent` so it's a proper 404 (better SEO, sets up the bespoke 404 work for a later round).
-
-### Out of scope this round
-
-- Theme toggle, animated section transitions, bespoke 404 design, About page polish — saved for follow-up plans once case studies land.
-- A CMS or markdown loader for case studies. Content stays in `portfolio.js` for now; we can migrate to MDX later if you want to write longer-form posts.
-
-### Technical notes
-
-- Files touched: `src/data/portfolio.js`, `src/routes/projects.$projectSlug.jsx`, `src/components/project-card.jsx`. Possibly a small new `src/components/project-gallery.jsx` to keep the route file readable.
-- Cover/gallery images: placeholders generated under `src/assets/` or referenced as URLs. Real images can be swapped in later without code changes.
-- Previous/Next derived at render time from the filtered `workProjects` list — no extra data needed.
-- All new fields are optional, so partial case studies render cleanly (sidebar items hide when empty, cover hides when missing, etc.).
-
-### Follow-up rounds (not building now, just queued)
-
-1. About page polish — visual timeline, talks/credentials, downloadable CV, photo.
-2. Bespoke 404 + skeleton loaders matching the floating-cards motion language.
-3. Animated section transitions — viewport-triggered fade/slide reveals.
-4. Dark/light theme toggle — light variant of the purple palette.
+Let me know which option (or mix) and I'll implement it.
