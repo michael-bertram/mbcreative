@@ -305,7 +305,7 @@ export function FloatingProjectsShowcase({
                 <Link
                   to="/projects/$projectSlug"
                   params={{ projectSlug: project.slug }}
-                  className="group flex aspect-square flex-col rounded-2xl border border-white/10 bg-gradient-to-br from-white to-[oklch(0.94_0.01_280)] p-4 sm:p-5 text-[oklch(0.20_0.03_280)] shadow-2xl transition-shadow hover:shadow-[0_30px_60px_-20px_oklch(0.55_0.27_280/0.6)]"
+                  className="group flex aspect-[4/5] flex-col rounded-2xl border border-white/10 bg-gradient-to-br from-white to-[oklch(0.94_0.01_280)] p-4 sm:p-5 text-[oklch(0.20_0.03_280)] shadow-2xl transition-shadow hover:shadow-[0_30px_60px_-20px_oklch(0.55_0.27_280/0.6)]"
                   style={{ transformStyle: "preserve-3d" }}
                 >
                   <div className="flex items-start justify-between gap-3">
