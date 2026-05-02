@@ -305,7 +305,7 @@ export function FloatingProjectsShowcase({
                 <Link
                   to="/projects/$projectSlug"
                   params={{ projectSlug: project.slug }}
-                  className="group block rounded-2xl border border-white/10 bg-gradient-to-br from-white to-[oklch(0.94_0.01_280)] p-4 sm:p-5 text-[oklch(0.20_0.03_280)] shadow-2xl transition-shadow hover:shadow-[0_30px_60px_-20px_oklch(0.55_0.27_280/0.6)]"
+                  className="group flex aspect-square flex-col rounded-2xl border border-white/10 bg-gradient-to-br from-white to-[oklch(0.94_0.01_280)] p-4 sm:p-5 text-[oklch(0.20_0.03_280)] shadow-2xl transition-shadow hover:shadow-[0_30px_60px_-20px_oklch(0.55_0.27_280/0.6)]"
                   style={{ transformStyle: "preserve-3d" }}
                 >
                   <div className="flex items-start justify-between gap-3">
@@ -321,10 +321,10 @@ export function FloatingProjectsShowcase({
                       <ArrowUpRight className="h-3.5 w-3.5" />
                     </span>
                   </div>
-                  <p className="mt-2 line-clamp-2 text-xs text-[oklch(0.40_0.03_280)] sm:text-[13px]">
+                  <p className="mt-2 line-clamp-3 text-xs text-[oklch(0.40_0.03_280)] sm:text-[13px]">
                     {project.summary}
                   </p>
-                  <div className="mt-3 flex flex-wrap gap-1.5">
+                  <div className="mt-auto flex flex-wrap gap-1.5 pt-3">
                     {project.tags.slice(0, 3).map((tag) => (
                       <span
                         key={tag}

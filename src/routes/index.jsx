@@ -76,38 +76,8 @@ function Index() {
         </div>
       </section>
 
-      {/* Featured — comparing four layout variants */}
-      <FloatingProjectsShowcase
-        projects={featured}
-        variant="subtle"
-        eyebrow="Variant A · Subtle tilt"
-        heading={<>Subtle tilt — <span className="bg-gradient-to-r from-primary to-[oklch(0.78_0.20_300)] bg-clip-text text-transparent">calmer scatter.</span></>}
-        description="Same scattered workspace as before, with rotations roughly halved and gentler parallax."
-        showCta={false}
-      />
-      <FloatingProjectsShowcase
-        projects={featured}
-        variant="flat"
-        eyebrow="Variant B · Flat stack"
-        heading={<>Flat stack — <span className="bg-gradient-to-r from-primary to-[oklch(0.78_0.20_300)] bg-clip-text text-transparent">tossed on a desk.</span></>}
-        description="Cards sit almost flat with only a faint Z-rotation. The arrangement does the work, not the 3D."
-        showCta={false}
-      />
-      <FloatingProjectsShowcase
-        projects={featured}
-        variant="fan"
-        eyebrow="Variant C · Fanned deck"
-        heading={<>Fanned deck — <span className="bg-gradient-to-r from-primary to-[oklch(0.78_0.20_300)] bg-clip-text text-transparent">a hand of cards.</span></>}
-        description="Overlapping arc across the centre. Hovered card lifts forward and straightens."
-        showCta={false}
-      />
-      <FloatingProjectsShowcase
-        projects={featured}
-        variant="isometric"
-        eyebrow="Variant D · Isometric grid"
-        heading={<>Isometric grid — <span className="bg-gradient-to-r from-primary to-[oklch(0.78_0.20_300)] bg-clip-text text-transparent">a tidy 3D dashboard.</span></>}
-        description="Cards share a single isometric plane. Pointer movement shifts the whole stage."
-      />
+      {/* Featured */}
+      <FloatingProjectsShowcase projects={featured} variant="subtle" />
 
       <section className="border-y border-border bg-secondary/20">
         <div className="mx-auto grid w-full max-w-6xl gap-6 px-6 py-14 md:grid-cols-[1fr_auto] md:items-center">
