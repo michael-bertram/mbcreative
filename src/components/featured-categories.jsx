@@ -210,13 +210,13 @@ export function FeaturedCategories({ projects }) {
   ];
 
   return (
-    <section className="relative overflow-hidden border-y border-border bg-[oklch(0.10_0.025_280)]">
+    <section className="relative overflow-hidden border-y border-border bg-secondary/40">
       <div
         aria-hidden
         className="pointer-events-none absolute inset-0"
         style={{
           background:
-            "radial-gradient(circle at 18% 22%, oklch(0.55 0.27 280 / 0.18), transparent 55%), radial-gradient(circle at 82% 78%, oklch(0.50 0.22 265 / 0.15), transparent 55%)",
+            "radial-gradient(circle at 18% 22%, oklch(0.55 0.27 280 / 0.10), transparent 55%), radial-gradient(circle at 82% 78%, oklch(0.50 0.22 265 / 0.08), transparent 55%)",
         }}
       />
 
