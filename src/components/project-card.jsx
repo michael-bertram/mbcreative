@@ -3,9 +3,17 @@ import { Link } from "@tanstack/react-router";
 export function ProjectCard({ project }) {
     return (<article className="group relative flex flex-col overflow-hidden rounded-xl border border-border bg-card p-6 transition-all duration-300 hover:-translate-y-1 hover:border-primary/40 hover:shadow-[0_20px_60px_-20px_oklch(0.70_0.22_295/0.35)]">
       <Link to="/projects/$projectSlug" params={{ projectSlug: project.slug }} aria-label={`View ${project.title} case study`} className="absolute inset-0 z-0"/>
-      {project.cover && (<div className="relative z-0 -mx-6 -mt-6 mb-5 aspect-[16/9] overflow-hidden border-b border-border">
-          <img src={project.cover} alt="" loading="lazy" className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-[1.03]"/>
-        </div>)}
+      {project.cover && (
+        <div className="relative z-0 -mx-6 -mt-6 mb-5 aspect-[16/9] overflow-hidden border-b border-border">
+          {project.coverMode === "logo" ? (
+            <div className={`flex h-full w-full items-center justify-center p-6 ${project.coverBg === "dark" ? "bg-[oklch(0.14_0.02_280)]" : "bg-white"}`}>
+              <img src={project.cover} alt={`${project.title} logo`} loading="lazy" className="max-h-[80%] max-w-[80%] object-contain transition-transform duration-500 group-hover:scale-[1.05]"/>
+            </div>
+          ) : (
+            <img src={project.cover} alt="" loading="lazy" className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-[1.03]"/>
+          )}
+        </div>
+      )}
       <div className="mb-4 flex items-center justify-between">
         <div className="flex flex-col gap-1">
           <span className="text-xs font-medium text-primary">{project.type}</span>
@@ -15,7 +23,7 @@ export function ProjectCard({ project }) {
           {project.repoUrl && (<a href={project.repoUrl} target="_blank" rel="noreferrer" aria-label={`${project.title} repository`} className="rounded-md p-1.5 text-muted-foreground transition-colors hover:bg-secondary hover:text-foreground">
               <Github className="h-4 w-4"/>
             </a>)}
-          {project.demoUrl && (<a href={project.demoUrl} target="_blank" rel="noreferrer" aria-label={`${project.title} live demo`} className="rounded-md p-1.5 text-muted-foreground transition-colors hover:bg-secondary hover:text-foreground">
+          {project.demoUrl && (<a href={project.demoUrl} target="_blank" rel="noreferrer" aria-label={`${project.title} live site`} className="rounded-md p-1.5 text-muted-foreground transition-colors hover:bg-secondary hover:text-foreground">
               <ArrowUpRight className="h-4 w-4"/>
             </a>)}
           {project.resourceUrl && (<a href={project.resourceUrl} aria-label={`${project.title} resource`} className="rounded-md p-1.5 text-muted-foreground transition-colors hover:bg-secondary hover:text-foreground">
