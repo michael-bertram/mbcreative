@@ -230,6 +230,7 @@ function MobileStackedDeck({ projects, reduced }) {
       {projects.map((project, i) => {
         const TypeIcon = iconFor(project.type);
         const cover = project.cover;
+        const isLogo = project.coverMode === "logo";
         const top = 80 + i * 14;
         return (
           <div
@@ -252,7 +253,20 @@ function MobileStackedDeck({ projects, reduced }) {
               }
             >
               <div className="absolute inset-0 overflow-hidden">
-                {cover ? (
+                {cover && isLogo ? (
+                  <div
+                    className={`relative flex h-full w-full items-center justify-center p-10 ${
+                      project.coverBg === "dark" ? "bg-[oklch(0.14_0.02_280)]" : "bg-white"
+                    }`}
+                  >
+                    <img
+                      src={cover}
+                      alt={`${project.title} logo`}
+                      loading="lazy"
+                      className="max-h-[60%] max-w-[70%] object-contain"
+                    />
+                  </div>
+                ) : cover ? (
                   <img
                     src={cover}
                     alt=""
