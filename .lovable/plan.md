@@ -1,47 +1,51 @@
-# Refining the Floating Projects Showcase
+## Replace floating cards with an animated bento grid
 
-Two issues to fix:
-1. **Crowding** — the stage sits too close to the heading above it.
-2. **Over-tilted cards** — the 3D rotations are too aggressive and make text harder to scan.
+The current `FloatingProjectsShowcase` is fun but hard to scan. We'll replace it with an **image-first bento grid** — an asymmetric layout of project tiles dominated by their cover images, with rich (but tasteful) motion: scroll reveals, image parallax/zoom on hover, magnetic cursor follow on tiles, and an animated gradient border on the featured tile.
 
-Both are easy tweaks to `src/components/floating-projects-showcase.jsx`. Below are the spacing fix (small, applied either way) plus four layout/motion directions — pick whichever feels right and we'll apply it.
+### What it will look like
 
-## Spacing fix (applied in all options)
+```
+┌─────────────────────┬───────────┐
+│                     │           │
+│    FEATURED (2x2)   │  Tile 2   │
+│    big image        │           │
+│                     ├───────────┤
+│                     │  Tile 3   │
+├──────────┬──────────┼───────────┤
+│  Tile 4  │  Tile 5  │  Tile 6   │
+└──────────┴──────────┴───────────┘
+```
 
-- Increase the gap between the heading block and the stage from `mb-12` to `mb-20 sm:mb-24`.
-- Bump the stage's top padding inside the section (`pt-20 sm:pt-28` → `pt-24 sm:pt-32`) so the topmost cards don't kiss the headline.
-- Add a small `mt-6` cushion above the stage for extra air on smaller screens.
+- 6 tiles on desktop, 12-col grid with mixed `col-span` / `row-span`.
+- Tablet: 2 cols, featured spans 2. Mobile: single column stack.
+- Each tile is mostly cover image; title + type + tags slide up over a dark gradient on hover. Year shown as a small chip in the corner.
+- Tiles without a `cover` image get a generated gradient background derived from their type so the layout still feels intentional.
 
-## Pick a direction for the cards
+### Motion (rich, but consistent)
 
-### Option A — Subtle tilt (closest to today, just calmer)
-Keep the same five-card scattered layout, but dial everything back:
-- Rotations roughly halved: `rotateX` ~8–10°, `rotateY` ±8–10°, `rotateZ` ±1–2°.
-- Reduce parallax `depth` values by ~40% so scroll movement is gentler.
-- Pointer-tilt strength reduced from `14` → `6`.
-- Result: still a "floating workspace" feel, but reads as polished rather than dramatic.
+- **Scroll reveal**: each tile fades + slides up with a small stagger using `IntersectionObserver` (no extra deps).
+- **Hover**: image scales `1.08` and shifts slightly (parallax), overlay darkens, info panel slides up from the bottom, an arrow icon translates up-right.
+- **Magnetic cursor**: tile tilts ~4° toward the pointer (desktop / fine pointer only), eased with rAF. Disabled for `prefers-reduced-motion` and coarse pointers.
+- **Featured tile**: animated conic-gradient border (slow rotation) using a `::before` pseudo via inline style + CSS keyframe added to `src/styles.css`.
+- **Filter chips** above the grid (All / Websites / Code / Design / Learning) — clicking re-flows the grid with a FLIP-style transition (using `View Transitions API` where available, falling back to a CSS `transition-all` on transforms).
 
-### Option B — Flat stack with light float
-Cards sit almost flat to the page (no Y/X rotation), with only a faint Z-rotation (±1–2°) for a "tossed on a desk" feel:
-- Drop perspective entirely (or push to `2400px` so it barely registers).
-- Keep gentle vertical drift + scroll parallax.
-- Cards become much more readable; the *arrangement* does the work, not the 3D.
+### Files
 
-### Option C — Fanned deck (centered, overlapping)
-Cards arranged as an overlapping fan across the centre, like a hand of cards:
-- Five cards spread along a shallow arc, each rotated ±2–6° around its bottom-centre.
-- Hovered card lifts forward and straightens (`rotateZ(0)` + slight Y translate).
-- Stage height reduced (`h-[420px] sm:h-[480px]`) since the layout is more compact.
-- Feels editorial and deliberate; great for hover interaction.
+- **Replace** `src/components/floating-projects-showcase.jsx` with a new component (same export name + props signature) implementing the bento grid. Keeps the call site in `src/routes/index.jsx` working unchanged. The `variant` prop becomes a no-op (accepted but ignored) for backward compatibility.
+- **Edit** `src/routes/index.jsx`: remove the `.slice(0, 5)` cap so up to 6 projects are shown; pass them through.
+- **Edit** `src/styles.css`: add two keyframes — `bento-reveal` (fade + translateY) and `bento-border-spin` (conic-gradient rotation for the featured tile border).
+- **No new dependencies.**
 
-### Option D — Isometric grid
-Cards laid out on a shared isometric plane (single shared `rotateX(12deg) rotateZ(-8deg)` on the stage, cards themselves untilted):
-- Looks like a tidy 3D dashboard.
-- All cards share one vanishing point, so it feels designed rather than scattered.
-- Pointer movement subtly shifts the whole stage rather than individual cards.
+### Technical notes
 
-## Recommendation
+- Built with Tailwind utility classes; grid uses `grid-cols-12` + `auto-rows-[minmax(160px,auto)]` with explicit `col-span` / `row-span` per tile.
+- Cover image: `<img loading="lazy" />` inside a `relative overflow-hidden` wrapper, scale handled via `transition-transform duration-700`.
+- Magnetic tilt uses one shared `pointermove` handler per tile with rAF throttling; `transform-style: preserve-3d` + `perspective` on the wrapper.
+- Each tile is a `<Link to="/projects/$projectSlug">` so the whole tile is clickable (current behaviour).
+- Respects `prefers-reduced-motion`: reveals become instant, hover scale/tilt disabled, gradient border static.
+- Accessible: tiles are real links with visible focus rings; overlay text has sufficient contrast against the dark gradient regardless of cover image.
 
-**Option A** is the smallest change and likely solves what you're describing — same character, just toned down and with breathing room above. **Option C** is the bigger upgrade if you want the section to feel more like a signature moment.
+### Out of scope
 
-Let me know which option (or mix) and I'll implement it.
+- No changes to project detail pages or the `/projects` index.
+- No changes to data shape in `src/data/portfolio.js` (covers are still optional).

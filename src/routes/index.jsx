@@ -18,7 +18,7 @@ export const Route = createFileRoute("/")({
     component: Index,
 });
 function Index() {
-    const featured = projects.filter((p) => p.type !== "Learning Resource").slice(0, 5);
+    const featured = projects.slice(0, 6);
     return (<div>
       {/* Hero */}
       <section className="relative overflow-hidden" style={{ backgroundImage: "var(--gradient-hero)" }}>

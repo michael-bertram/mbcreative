@@ -1,155 +1,202 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { Link } from "@tanstack/react-router";
 import { ArrowUpRight } from "lucide-react";
 
-// Layout presets per variant. `depth` controls scroll parallax intensity.
-const LAYOUTS = {
-  // A — Subtle tilt: scattered like today, but rotations & motion roughly halved.
-  subtle: [
-    {
-      transform: "rotateX(8deg) rotateY(-10deg) rotateZ(-2deg) translate3d(-4%, -2%, -40px)",
-      className: "top-[2%] left-[2%] w-[44%] sm:w-[36%] z-10",
-      depth: 36,
-    },
-    {
-      transform: "rotateX(7deg) rotateY(9deg) rotateZ(1.5deg) translate3d(3%, -1%, -40px)",
-      className: "top-[6%] right-[2%] w-[44%] sm:w-[34%] z-10",
-      depth: 54,
-    },
-    {
-      transform: "rotateX(9deg) rotateY(-3deg) rotateZ(-1deg) translateZ(120px)",
-      className: "top-[34%] left-1/2 -translate-x-1/2 w-[52%] sm:w-[38%] z-30",
-      depth: 84,
-    },
-    {
-      transform: "rotateX(8deg) rotateY(10deg) rotateZ(1deg) translate3d(4%, 3%, -40px)",
-      className: "bottom-[6%] right-[4%] w-[46%] sm:w-[36%] z-10",
-      depth: 45,
-    },
-    {
-      transform: "rotateX(8deg) rotateY(-9deg) rotateZ(-1.5deg) translate3d(-3%, 3%, -40px)",
-      className: "bottom-[4%] left-[4%] w-[44%] sm:w-[34%] z-10",
-      depth: 30,
-    },
-  ],
-  // B — Flat stack: tossed-on-a-desk feel, only faint Z-rotation.
-  flat: [
-    {
-      transform: "rotateZ(-3deg) translate3d(-2%, -1%, 0)",
-      className: "top-[2%] left-[3%] w-[42%] sm:w-[34%]",
-      depth: 30,
-    },
-    {
-      transform: "rotateZ(2deg) translate3d(2%, -1%, 0)",
-      className: "top-[6%] right-[3%] w-[42%] sm:w-[34%]",
-      depth: 50,
-    },
-    {
-      transform: "rotateZ(-1deg)",
-      className: "top-[36%] left-1/2 -translate-x-1/2 w-[50%] sm:w-[38%] z-20",
-      depth: 70,
-    },
-    {
-      transform: "rotateZ(2.5deg) translate3d(3%, 2%, 0)",
-      className: "bottom-[5%] right-[5%] w-[44%] sm:w-[34%]",
-      depth: 40,
-    },
-    {
-      transform: "rotateZ(-2deg) translate3d(-3%, 2%, 0)",
-      className: "bottom-[3%] left-[5%] w-[42%] sm:w-[34%]",
-      depth: 25,
-    },
-  ],
-  // C — Fanned deck: overlapping arc across the centre.
-  fan: [
-    {
-      transform: "rotateZ(-10deg) translate3d(0, 18px, 0)",
-      className: "bottom-[8%] left-[6%] w-[34%] sm:w-[26%]",
-      depth: 20,
-    },
-    {
-      transform: "rotateZ(-5deg) translate3d(0, 6px, 0)",
-      className: "bottom-[10%] left-[24%] w-[34%] sm:w-[26%] z-10",
-      depth: 30,
-    },
-    {
-      transform: "rotateZ(0deg)",
-      className: "bottom-[12%] left-1/2 -translate-x-1/2 w-[36%] sm:w-[28%] z-30",
-      depth: 45,
-    },
-    {
-      transform: "rotateZ(5deg) translate3d(0, 6px, 0)",
-      className: "bottom-[10%] right-[24%] w-[34%] sm:w-[26%] z-10",
-      depth: 30,
-    },
-    {
-      transform: "rotateZ(10deg) translate3d(0, 18px, 0)",
-      className: "bottom-[8%] right-[6%] w-[34%] sm:w-[26%]",
-      depth: 20,
-    },
-  ],
-  // D — Isometric grid: cards untilted; the stage shares a single iso transform.
-  isometric: [
-    {
-      transform: "translate3d(0, 0, 0)",
-      className: "top-[4%] left-[4%] w-[40%] sm:w-[32%]",
-      depth: 40,
-    },
-    {
-      transform: "translate3d(0, 0, 0)",
-      className: "top-[4%] right-[4%] w-[40%] sm:w-[32%]",
-      depth: 40,
-    },
-    {
-      transform: "translate3d(0, 0, 0)",
-      className: "top-[38%] left-1/2 -translate-x-1/2 w-[44%] sm:w-[34%] z-20",
-      depth: 60,
-    },
-    {
-      transform: "translate3d(0, 0, 0)",
-      className: "bottom-[6%] left-[6%] w-[40%] sm:w-[32%]",
-      depth: 40,
-    },
-    {
-      transform: "translate3d(0, 0, 0)",
-      className: "bottom-[6%] right-[6%] w-[40%] sm:w-[32%]",
-      depth: 40,
-    },
-  ],
+// Bento-grid layout slots (desktop). Index maps to project order.
+// 12-col grid, mixed col/row spans. Up to 6 tiles.
+const SLOTS = [
+  "md:col-span-7 md:row-span-2", // 0 — featured large
+  "md:col-span-5 md:row-span-1",
+  "md:col-span-5 md:row-span-1",
+  "md:col-span-4 md:row-span-1",
+  "md:col-span-4 md:row-span-1",
+  "md:col-span-4 md:row-span-1",
+];
+
+const TYPE_GRADIENTS = {
+  Website: "linear-gradient(135deg, oklch(0.55 0.27 280), oklch(0.45 0.22 240))",
+  Code: "linear-gradient(135deg, oklch(0.60 0.22 200), oklch(0.45 0.20 260))",
+  "Learning Resource": "linear-gradient(135deg, oklch(0.65 0.20 150), oklch(0.45 0.22 200))",
+  Design: "linear-gradient(135deg, oklch(0.70 0.20 30), oklch(0.50 0.25 320))",
+  default: "linear-gradient(135deg, oklch(0.50 0.22 280), oklch(0.35 0.18 260))",
 };
 
-const VARIANT_CONFIG = {
-  subtle: { perspective: "1600px", stageTransform: "", tiltStrength: 6 },
-  flat: { perspective: "2400px", stageTransform: "", tiltStrength: 2 },
-  fan: { perspective: "1800px", stageTransform: "", tiltStrength: 4, fanHover: true },
-  isometric: {
-    perspective: "1800px",
-    stageTransform: "rotateX(14deg) rotateZ(-10deg)",
-    tiltStrength: 0,
-    stageTilt: true,
-  },
-};
+function gradientFor(type) {
+  return TYPE_GRADIENTS[type] ?? TYPE_GRADIENTS.default;
+}
+
+function BentoTile({ project, slotClass, index, featured, reduced, isCoarse }) {
+  const ref = useRef(null);
+  const imgRef = useRef(null);
+  const [revealed, setRevealed] = useState(reduced);
+
+  // Scroll reveal
+  useEffect(() => {
+    if (reduced) {
+      setRevealed(true);
+      return;
+    }
+    const el = ref.current;
+    if (!el) return;
+    const io = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setRevealed(true);
+          io.disconnect();
+        }
+      },
+      { threshold: 0.15 },
+    );
+    io.observe(el);
+    return () => io.disconnect();
+  }, [reduced]);
+
+  // Magnetic tilt + image parallax (desktop only)
+  useEffect(() => {
+    if (reduced || isCoarse) return;
+    const el = ref.current;
+    if (!el) return;
+    let raf = 0;
+    const onMove = (e) => {
+      const rect = el.getBoundingClientRect();
+      const px = (e.clientX - rect.left) / rect.width - 0.5;
+      const py = (e.clientY - rect.top) / rect.height - 0.5;
+      cancelAnimationFrame(raf);
+      raf = requestAnimationFrame(() => {
+        el.style.transform = `perspective(1000px) rotateX(${-py * 4}deg) rotateY(${px * 4}deg) translateZ(0)`;
+        if (imgRef.current) {
+          imgRef.current.style.transform = `scale(1.08) translate3d(${-px * 12}px, ${-py * 12}px, 0)`;
+        }
+      });
+    };
+    const onLeave = () => {
+      cancelAnimationFrame(raf);
+      el.style.transform = "perspective(1000px) rotateX(0) rotateY(0) translateZ(0)";
+      if (imgRef.current) imgRef.current.style.transform = "";
+    };
+    el.addEventListener("pointermove", onMove);
+    el.addEventListener("pointerleave", onLeave);
+    return () => {
+      cancelAnimationFrame(raf);
+      el.removeEventListener("pointermove", onMove);
+      el.removeEventListener("pointerleave", onLeave);
+    };
+  }, [reduced, isCoarse]);
+
+  const cover = project.cover;
+  const bg = gradientFor(project.type);
+  const delay = `${Math.min(index * 90, 540)}ms`;
+
+  return (
+    <article
+      ref={ref}
+      className={`group relative ${slotClass} ${revealed ? "bento-reveal" : "opacity-0"} min-h-[220px] md:min-h-0`}
+      style={{
+        animationDelay: delay,
+        transformStyle: "preserve-3d",
+        transition: "transform 400ms cubic-bezier(0.22, 1, 0.36, 1)",
+      }}
+    >
+      {featured && !reduced && (
+        <span
+          aria-hidden
+          className="pointer-events-none absolute -inset-px rounded-2xl"
+          style={{
+            background:
+              "conic-gradient(from 0deg, oklch(0.55 0.27 280), oklch(0.78 0.20 300), oklch(0.55 0.27 280))",
+            animation: "bento-border-spin 6s linear infinite",
+            filter: "blur(8px)",
+            opacity: 0.55,
+            zIndex: 0,
+          }}
+        />
+      )}
+      <Link
+        to="/projects/$projectSlug"
+        params={{ projectSlug: project.slug }}
+        className="relative z-10 block h-full overflow-hidden rounded-2xl border border-white/10 bg-card focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+        style={{ transformStyle: "preserve-3d" }}
+      >
+        {/* Background: cover image or gradient */}
+        <div className="absolute inset-0 overflow-hidden">
+          {cover ? (
+            <img
+              ref={imgRef}
+              src={cover}
+              alt=""
+              loading="lazy"
+              className="h-full w-full object-cover transition-transform duration-700 ease-out group-hover:scale-110"
+              style={{ transformOrigin: "center" }}
+            />
+          ) : (
+            <div className="h-full w-full" style={{ backgroundImage: bg }} />
+          )}
+        </div>
+
+        {/* Dark gradient for text legibility */}
+        <div
+          aria-hidden
+          className="absolute inset-0 transition-opacity duration-500"
+          style={{
+            background:
+              "linear-gradient(to top, oklch(0.10 0.025 280 / 0.92) 0%, oklch(0.10 0.025 280 / 0.55) 45%, oklch(0.10 0.025 280 / 0.15) 100%)",
+          }}
+        />
+
+        {/* Top-right meta */}
+        <div className="absolute right-3 top-3 flex items-center gap-2">
+          <span className="rounded-full bg-black/40 px-2 py-0.5 text-[10px] font-medium text-white/80 backdrop-blur">
+            {project.year}
+          </span>
+          <span className="rounded-full bg-white/15 p-1.5 text-white backdrop-blur transition-transform duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5">
+            <ArrowUpRight className="h-3.5 w-3.5" />
+          </span>
+        </div>
+
+        {/* Bottom info — slides up on hover */}
+        <div className="absolute inset-x-0 bottom-0 p-4 sm:p-5">
+          <p className="mb-1 text-[10px] font-semibold uppercase tracking-wider text-primary">
+            {project.type}
+          </p>
+          <h3 className="font-display text-lg font-bold leading-tight text-white sm:text-xl md:text-2xl">
+            {project.title}
+          </h3>
+          <div
+            className="grid grid-rows-[1fr] transition-all duration-500 ease-out md:grid-rows-[0fr] md:opacity-0 md:group-hover:grid-rows-[1fr] md:group-hover:opacity-100"
+          >
+            <div className="overflow-hidden">
+              <p className="mt-2 line-clamp-2 text-sm text-white/80">{project.summary}</p>
+              <div className="mt-2 flex flex-wrap gap-1.5">
+                {project.tags.slice(0, 3).map((tag) => (
+                  <span
+                    key={tag}
+                    className="rounded-full bg-white/10 px-2 py-0.5 text-[10px] font-medium text-white/85 backdrop-blur"
+                  >
+                    {tag}
+                  </span>
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+      </Link>
+    </article>
+  );
+}
 
 export function FloatingProjectsShowcase({
   projects,
-  variant = "subtle",
+  // legacy/no-op — kept for backward compatibility
+  variant: _variant,
   eyebrow = "Featured work",
   heading,
-  description = "Websites, design work, and code — presented as a floating workspace.",
+  description = "A selection of recent projects across web, code, and design.",
   showCta = true,
 }) {
-  const config = VARIANT_CONFIG[variant] ?? VARIANT_CONFIG.subtle;
-  const layout = LAYOUTS[variant] ?? LAYOUTS.subtle;
-  const sectionRef = useRef(null);
-  const stageRef = useRef(null);
-  const [offset, setOffset] = useState(0);
-  const [tilt, setTilt] = useState({ x: 0, y: 0 });
   const [reduced, setReduced] = useState(false);
   const [isCoarse, setIsCoarse] = useState(false);
-  const [hovered, setHovered] = useState(null);
-  const cardRefs = useRef([]);
+  const [filter, setFilter] = useState("All");
 
-  // Detect reduced motion + coarse pointer (mobile/touch)
   useEffect(() => {
     if (typeof window === "undefined") return;
     const rm = window.matchMedia("(prefers-reduced-motion: reduce)");
@@ -167,75 +214,18 @@ export function FloatingProjectsShowcase({
     };
   }, []);
 
-  // Scroll parallax (skipped if reduced-motion)
-  useEffect(() => {
-    if (reduced) {
-      setOffset(0);
-      return;
-    }
-    let raf = 0;
-    let ticking = false;
-    const update = () => {
-      ticking = false;
-      const el = sectionRef.current;
-      if (!el) return;
-      const rect = el.getBoundingClientRect();
-      const viewportH = window.innerHeight || 1;
-      const center = rect.top + rect.height / 2;
-      const progress = (viewportH / 2 - center) / (viewportH / 2 + rect.height / 2);
-      setOffset(Math.max(-1, Math.min(1, progress)));
-    };
-    const onScroll = () => {
-      if (ticking) return;
-      ticking = true;
-      raf = requestAnimationFrame(update);
-    };
-    update();
-    window.addEventListener("scroll", onScroll, { passive: true });
-    window.addEventListener("resize", onScroll);
-    return () => {
-      cancelAnimationFrame(raf);
-      window.removeEventListener("scroll", onScroll);
-      window.removeEventListener("resize", onScroll);
-    };
-  }, [reduced]);
+  const filters = useMemo(() => {
+    const types = Array.from(new Set(projects.map((p) => p.type)));
+    return ["All", ...types];
+  }, [projects]);
 
-  // Pointer tilt — desktop / fine pointer only
-  useEffect(() => {
-    if (reduced || isCoarse) {
-      setTilt({ x: 0, y: 0 });
-      return;
-    }
-    const el = stageRef.current;
-    if (!el) return;
-    let raf = 0;
-    const onMove = (e) => {
-      const rect = el.getBoundingClientRect();
-      const px = (e.clientX - rect.left) / rect.width - 0.5;
-      const py = (e.clientY - rect.top) / rect.height - 0.5;
-      cancelAnimationFrame(raf);
-      raf = requestAnimationFrame(() =>
-        setTilt({ x: Math.max(-0.5, Math.min(0.5, px)), y: Math.max(-0.5, Math.min(0.5, py)) }),
-      );
-    };
-    const onLeave = () => setTilt({ x: 0, y: 0 });
-    el.addEventListener("pointermove", onMove);
-    el.addEventListener("pointerleave", onLeave);
-    return () => {
-      cancelAnimationFrame(raf);
-      el.removeEventListener("pointermove", onMove);
-      el.removeEventListener("pointerleave", onLeave);
-    };
-  }, [reduced, isCoarse]);
-
-  const cards = projects.slice(0, layout.length);
+  const visible = useMemo(() => {
+    const list = filter === "All" ? projects : projects.filter((p) => p.type === filter);
+    return list.slice(0, SLOTS.length);
+  }, [projects, filter]);
 
   return (
-    <section
-      ref={sectionRef}
-      className="relative overflow-hidden border-y border-border bg-[oklch(0.10_0.025_280)]"
-    >
-      {/* ambient glows */}
+    <section className="relative overflow-hidden border-y border-border bg-[oklch(0.10_0.025_280)]">
       <div
         aria-hidden
         className="pointer-events-none absolute inset-0"
@@ -246,137 +236,64 @@ export function FloatingProjectsShowcase({
       />
 
       <div className="relative mx-auto w-full max-w-6xl px-6 py-24 sm:py-32">
-        <div className="mb-20 max-w-2xl sm:mb-24">
-          <p className="mb-3 inline-flex items-center gap-2 text-xs font-medium uppercase tracking-wider text-primary">
-            <span className="h-1.5 w-1.5 rounded-full bg-primary" />
-            {eyebrow}
-          </p>
-          <h2 className="font-display text-3xl font-bold tracking-tight text-foreground sm:text-5xl">
-            {heading ?? (
-              <>
-                A look at recent{" "}
-                <span className="bg-gradient-to-r from-primary to-[oklch(0.78_0.20_300)] bg-clip-text text-transparent">
-                  projects.
-                </span>
-              </>
-            )}
-          </h2>
-          <p className="mt-4 text-muted-foreground">{description}</p>
+        <div className="mb-10 flex flex-col gap-6 sm:mb-14 sm:flex-row sm:items-end sm:justify-between">
+          <div className="max-w-2xl">
+            <p className="mb-3 inline-flex items-center gap-2 text-xs font-medium uppercase tracking-wider text-primary">
+              <span className="h-1.5 w-1.5 rounded-full bg-primary" />
+              {eyebrow}
+            </p>
+            <h2 className="font-display text-3xl font-bold tracking-tight text-foreground sm:text-5xl">
+              {heading ?? (
+                <>
+                  A look at recent{" "}
+                  <span className="bg-gradient-to-r from-primary to-[oklch(0.78_0.20_300)] bg-clip-text text-transparent">
+                    projects.
+                  </span>
+                </>
+              )}
+            </h2>
+            <p className="mt-4 text-muted-foreground">{description}</p>
+          </div>
+
+          {filters.length > 2 && (
+            <div className="flex flex-wrap gap-2">
+              {filters.map((f) => {
+                const active = f === filter;
+                return (
+                  <button
+                    key={f}
+                    type="button"
+                    onClick={() => setFilter(f)}
+                    className={`rounded-full border px-3 py-1.5 text-xs font-medium transition-all duration-300 ${
+                      active
+                        ? "border-primary/60 bg-primary/15 text-foreground"
+                        : "border-border bg-card/40 text-muted-foreground hover:border-primary/40 hover:text-foreground"
+                    }`}
+                  >
+                    {f}
+                  </button>
+                );
+              })}
+            </div>
+          )}
         </div>
 
-        {/* Stage */}
-        <div
-          className={`relative mx-auto w-full ${variant === "fan" ? "h-[420px] sm:h-[480px] lg:h-[520px]" : "h-[520px] sm:h-[560px] lg:h-[620px]"}`}
-          ref={stageRef}
-          style={{ perspective: config.perspective, perspectiveOrigin: "50% 40%" }}
-        >
-          <div
-            className={reduced ? "" : "transition-transform duration-300 ease-out will-change-transform"}
-            style={{
-              transformStyle: "preserve-3d",
-              transform: config.stageTilt
-                ? `${config.stageTransform} rotateX(${-tilt.y * 4}deg) rotateY(${tilt.x * 4}deg)`
-                : config.stageTransform || undefined,
-              height: "100%",
-              position: "relative",
-            }}
-          >
-          {cards.map((project, i) => {
-            const item = layout[i];
-            const isCenter = i === Math.floor(layout.length / 2);
-            const motionScale = reduced ? 0 : isCoarse ? 0.45 : 1;
-            const driftY = Math.sin((offset + i * 0.3) * Math.PI) * 4 * motionScale;
-            const parallaxY = offset * item.depth * motionScale;
-            // Per-card pointer tilt only when the stage isn't tilting as a whole.
-            const perCardStrength = config.stageTilt ? 0 : (item.depth / 90) * config.tiltStrength * motionScale;
-            const tiltX = -tilt.y * perCardStrength;
-            const tiltY = tilt.x * perCardStrength;
-            const fanHoverClass = config.fanHover
-              ? "hover:!rotate-0 hover:!translate-y-[-10px]"
-              : "";
-            return (
-              <article
-                key={project.slug}
-                ref={(el) => (cardRefs.current[i] = el)}
-                className={`absolute ${item.className} ${fanHoverClass} ${hovered === i ? "z-40" : ""} ${reduced ? "" : "transition-all duration-500 ease-out will-change-transform"}`}
-                style={(() => {
-                  const isHovered = hovered === i;
-                  let dx = 0, dy = 0;
-                  if (isHovered && !reduced) {
-                    const el = cardRefs.current[i];
-                    const stage = stageRef.current;
-                    if (el && stage) {
-                      const stageCx = stage.clientWidth / 2;
-                      const stageCy = stage.clientHeight / 2;
-                      const cardCx = el.offsetLeft + el.offsetWidth / 2;
-                      const cardCy = el.offsetTop + el.offsetHeight / 2;
-                      dx = stageCx - cardCx;
-                      dy = stageCy - cardCy;
-                    }
-                  }
-                  const baseTransform = `translate3d(${dx}px, ${(isHovered ? 0 : parallaxY + driftY) + dy}px, 0) rotateX(${isHovered ? 0 : tiltX}deg) rotateY(${isHovered ? 0 : tiltY}deg) ${isHovered ? "rotateZ(0deg) translateZ(180px) scale(1.05)" : item.transform}`;
-                  const elevated = isHovered || isCenter;
-                  return {
-                    transform: baseTransform,
-                    transformStyle: "preserve-3d",
-                    transformOrigin: variant === "fan" ? "50% 100%" : undefined,
-                    boxShadow: isHovered
-                      ? "0 50px 90px -10px oklch(0 0 0 / 0.75), 0 0 0 1px oklch(1 0 0 / 0.1), 0 0 70px oklch(0.55 0.27 280 / 0.45)"
-                      : isCenter
-                        ? "0 40px 80px -10px oklch(0 0 0 / 0.7), 0 0 0 1px oklch(1 0 0 / 0.08), 0 0 60px oklch(0.55 0.27 280 / 0.35)"
-                        : "0 20px 40px -10px oklch(0 0 0 / 0.45)",
-                    filter: elevated ? "none" : "brightness(0.9)",
-                    borderRadius: "1rem",
-                  };
-                })()}
-                onMouseEnter={() => !reduced && setHovered(i)}
-                onMouseLeave={() => !reduced && setHovered((h) => (h === i ? null : h))}
-              >
-                <Link
-                  to="/projects/$projectSlug"
-                  params={{ projectSlug: project.slug }}
-                  className="group relative z-10 flex aspect-[5/4] flex-col gap-2 rounded-2xl border border-white/10 bg-gradient-to-br from-white to-[oklch(0.94_0.01_280)] p-3 text-[oklch(0.20_0.03_280)] sm:p-4"
-                  style={{ transformStyle: "preserve-3d" }}
-                >
-                  <div className="flex items-start justify-between gap-3">
-                    <div>
-                      <p className="text-[10px] font-semibold uppercase tracking-wider text-[oklch(0.55_0.27_280)]">
-                        {project.type}
-                      </p>
-                      <h3 className="mt-1 font-display text-base font-bold leading-tight sm:text-lg">
-                        {project.title}
-                      </h3>
-                    </div>
-                    <span className="rounded-full bg-[oklch(0.55_0.27_280/0.12)] p-1.5 text-[oklch(0.55_0.27_280)] transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5">
-                      <ArrowUpRight className="h-3.5 w-3.5" />
-                    </span>
-                  </div>
-                  <p className="line-clamp-2 text-[11px] leading-snug text-[oklch(0.40_0.03_280)] sm:text-xs">
-                    {project.summary}
-                  </p>
-                  <div className="mt-auto flex flex-wrap gap-1">
-                    {project.tags.slice(0, 3).map((tag) => (
-                      <span
-                        key={tag}
-                        className="rounded-full bg-[oklch(0.95_0.01_280)] px-1.5 py-0.5 text-[9px] font-medium text-[oklch(0.35_0.04_280)]"
-                      >
-                        {tag}
-                      </span>
-                    ))}
-                  </div>
-                  <div className="flex items-center justify-between border-t border-[oklch(0.90_0.01_280)] pt-2 text-[10px] text-[oklch(0.50_0.03_280)]">
-                    <span>{project.platform}</span>
-                    <span>{project.year}</span>
-                  </div>
-                </Link>
-              </article>
-            );
-          })}
-          </div>
+        <div className="grid grid-cols-1 gap-4 md:grid-cols-12 md:auto-rows-[200px] lg:auto-rows-[220px]">
+          {visible.map((project, i) => (
+            <BentoTile
+              key={project.slug + filter}
+              project={project}
+              slotClass={SLOTS[i] ?? "md:col-span-4 md:row-span-1"}
+              index={i}
+              featured={i === 0}
+              reduced={reduced}
+              isCoarse={isCoarse}
+            />
+          ))}
         </div>
 
         {showCta && (
-          <div className="mt-10 flex justify-center">
+          <div className="mt-12 flex justify-center">
             <Link
               to="/projects"
               className="inline-flex items-center gap-2 rounded-md border border-border bg-card/60 px-5 py-2.5 text-sm font-medium text-foreground backdrop-blur transition-colors hover:border-primary/40 hover:bg-secondary"
