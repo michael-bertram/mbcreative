@@ -281,6 +281,7 @@ export function FloatingProjectsShowcase({
           >
           {cards.map((project, i) => {
             const item = layout[i];
+            const isCenter = i === Math.floor(layout.length / 2);
             const motionScale = reduced ? 0 : isCoarse ? 0.45 : 1;
             const driftY = Math.sin((offset + i * 0.3) * Math.PI) * 4 * motionScale;
             const parallaxY = offset * item.depth * motionScale;
@@ -299,13 +300,17 @@ export function FloatingProjectsShowcase({
                   transform: `translate3d(0, ${parallaxY + driftY}px, 0) rotateX(${tiltX}deg) rotateY(${tiltY}deg) ${item.transform}`,
                   transformStyle: "preserve-3d",
                   transformOrigin: variant === "fan" ? "50% 100%" : undefined,
-                  boxShadow: "0 30px 40px oklch(0 0 0 / 0.55)",
+                  boxShadow: isCenter
+                    ? "0 40px 80px -10px oklch(0 0 0 / 0.7), 0 0 0 1px oklch(1 0 0 / 0.08), 0 0 60px oklch(0.55 0.27 280 / 0.35)"
+                    : "0 20px 40px -10px oklch(0 0 0 / 0.45)",
+                  filter: isCenter ? "none" : "brightness(0.9)",
+                  borderRadius: "1rem",
                 }}
               >
                 <Link
                   to="/projects/$projectSlug"
                   params={{ projectSlug: project.slug }}
-                  className="group flex aspect-[5/4] flex-col gap-2 rounded-2xl border border-white/10 bg-gradient-to-br from-white to-[oklch(0.94_0.01_280)] p-3 text-[oklch(0.20_0.03_280)] shadow-2xl transition-shadow hover:shadow-[0_30px_60px_-20px_oklch(0.55_0.27_280/0.6)] sm:p-4"
+                  className="group flex aspect-[5/4] flex-col gap-2 rounded-2xl border border-white/10 bg-gradient-to-br from-white to-[oklch(0.94_0.01_280)] p-3 text-[oklch(0.20_0.03_280)] sm:p-4"
                   style={{ transformStyle: "preserve-3d" }}
                 >
                   <div className="flex items-start justify-between gap-3">
