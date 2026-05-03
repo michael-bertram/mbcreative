@@ -146,6 +146,8 @@ export function FloatingProjectsShowcase({
   const [tilt, setTilt] = useState({ x: 0, y: 0 });
   const [reduced, setReduced] = useState(false);
   const [isCoarse, setIsCoarse] = useState(false);
+  const [hovered, setHovered] = useState(null);
+  const cardRefs = useRef([]);
 
   // Detect reduced motion + coarse pointer (mobile/touch)
   useEffect(() => {
@@ -295,42 +297,40 @@ export function FloatingProjectsShowcase({
             return (
               <article
                 key={project.slug}
-                className={`group/card absolute ${item.className} ${fanHoverClass} hover:z-40 ${reduced ? "" : "transition-all duration-500 ease-out will-change-transform"}`}
-                style={{
-                  transform: `translate3d(0, ${parallaxY + driftY}px, 0) rotateX(${tiltX}deg) rotateY(${tiltY}deg) ${item.transform}`,
-                  transformStyle: "preserve-3d",
-                  transformOrigin: variant === "fan" ? "50% 100%" : undefined,
-                  boxShadow: isCenter
-                    ? "0 40px 80px -10px oklch(0 0 0 / 0.7), 0 0 0 1px oklch(1 0 0 / 0.08), 0 0 60px oklch(0.55 0.27 280 / 0.35)"
-                    : "0 20px 40px -10px oklch(0 0 0 / 0.45)",
-                  filter: isCenter ? "none" : "brightness(0.9)",
-                  borderRadius: "1rem",
-                }}
-                onMouseEnter={(e) => {
-                  if (reduced) return;
-                  const card = e.currentTarget;
-                  const stage = stageRef.current;
-                  if (!stage) return;
-                  const cRect = card.getBoundingClientRect();
-                  const sRect = stage.getBoundingClientRect();
-                  const cardCenterX = cRect.left + cRect.width / 2;
-                  const cardCenterY = cRect.top + cRect.height / 2;
-                  const targetX = sRect.left + sRect.width / 2;
-                  const targetY = sRect.top + sRect.height * 0.5;
-                  const dx = targetX - cardCenterX;
-                  const dy = targetY - cardCenterY;
-                  card.style.transform = `translate3d(${dx}px, ${dy}px, 0) rotateX(0deg) rotateY(0deg) rotateZ(0deg) translateZ(160px) scale(1.05)`;
-                  e.currentTarget.style.filter = "none";
-                  e.currentTarget.style.boxShadow = "0 50px 90px -10px oklch(0 0 0 / 0.75), 0 0 0 1px oklch(1 0 0 / 0.1), 0 0 70px oklch(0.55 0.27 280 / 0.45)";
-                }}
-                onMouseLeave={(e) => {
-                  if (reduced) return;
-                  e.currentTarget.style.transform = `translate3d(0, ${parallaxY + driftY}px, 0) rotateX(${tiltX}deg) rotateY(${tiltY}deg) ${item.transform}`;
-                  e.currentTarget.style.filter = isCenter ? "none" : "brightness(0.9)";
-                  e.currentTarget.style.boxShadow = isCenter
-                    ? "0 40px 80px -10px oklch(0 0 0 / 0.7), 0 0 0 1px oklch(1 0 0 / 0.08), 0 0 60px oklch(0.55 0.27 280 / 0.35)"
-                    : "0 20px 40px -10px oklch(0 0 0 / 0.45)";
-                }}
+                ref={(el) => (cardRefs.current[i] = el)}
+                className={`absolute ${item.className} ${fanHoverClass} ${hovered === i ? "z-40" : ""} ${reduced ? "" : "transition-all duration-500 ease-out will-change-transform"}`}
+                style={(() => {
+                  const isHovered = hovered === i;
+                  let dx = 0, dy = 0;
+                  if (isHovered && !reduced) {
+                    const el = cardRefs.current[i];
+                    const stage = stageRef.current;
+                    if (el && stage) {
+                      const stageCx = stage.clientWidth / 2;
+                      const stageCy = stage.clientHeight / 2;
+                      const cardCx = el.offsetLeft + el.offsetWidth / 2;
+                      const cardCy = el.offsetTop + el.offsetHeight / 2;
+                      dx = stageCx - cardCx;
+                      dy = stageCy - cardCy;
+                    }
+                  }
+                  const baseTransform = `translate3d(${dx}px, ${(isHovered ? 0 : parallaxY + driftY) + dy}px, 0) rotateX(${isHovered ? 0 : tiltX}deg) rotateY(${isHovered ? 0 : tiltY}deg) ${isHovered ? "rotateZ(0deg) translateZ(180px) scale(1.05)" : item.transform}`;
+                  const elevated = isHovered || isCenter;
+                  return {
+                    transform: baseTransform,
+                    transformStyle: "preserve-3d",
+                    transformOrigin: variant === "fan" ? "50% 100%" : undefined,
+                    boxShadow: isHovered
+                      ? "0 50px 90px -10px oklch(0 0 0 / 0.75), 0 0 0 1px oklch(1 0 0 / 0.1), 0 0 70px oklch(0.55 0.27 280 / 0.45)"
+                      : isCenter
+                        ? "0 40px 80px -10px oklch(0 0 0 / 0.7), 0 0 0 1px oklch(1 0 0 / 0.08), 0 0 60px oklch(0.55 0.27 280 / 0.35)"
+                        : "0 20px 40px -10px oklch(0 0 0 / 0.45)",
+                    filter: elevated ? "none" : "brightness(0.9)",
+                    borderRadius: "1rem",
+                  };
+                })()}
+                onMouseEnter={() => !reduced && setHovered(i)}
+                onMouseLeave={() => !reduced && setHovered((h) => (h === i ? null : h))}
               >
                 <Link
                   to="/projects/$projectSlug"
