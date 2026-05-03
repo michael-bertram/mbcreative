@@ -1,51 +1,63 @@
-## Replace floating cards with an animated bento grid
+## Goals
 
-The current `FloatingProjectsShowcase` is fun but hard to scan. We'll replace it with an **image-first bento grid** — an asymmetric layout of project tiles dominated by their cover images, with rich (but tasteful) motion: scroll reveals, image parallax/zoom on hover, magnetic cursor follow on tiles, and an animated gradient border on the featured tile.
+Address three issues with the homepage Featured Work section:
 
-### What it will look like
+1. **Flow / duplication** — homepage currently shows all 6 projects (including Learning Resources), and each card links to the same place as cards on `/projects`.
+2. **Theming** — synthetic purple/teal gradient fallbacks don't match the site palette; only *Website Builds* (which has a real cover image) looks right.
+3. **Mobile** — tiles currently stack as a flat vertical list. You want a stacked / overlapping deck where cards come forward as you scroll.
 
+---
+
+## 1. Fix the flow & remove duplication
+
+- Filter homepage featured to **work only** (exclude `Learning Resource`) — Resources already get their own teaser section directly below.
+- Cap to **3 hero items** on the homepage (the strongest: Website Builds, Brand & Logo Work, Developer Demo Projects). This makes "Featured" actually mean curated, not "first 6".
+- Reframe the section heading slightly — "Selected work" rather than "A look at recent projects" — to clearly signal it's a curated subset, with the existing "View all work" CTA leading to the full `/projects` page.
+- Cards continue to link to `/projects/$projectSlug` — that's correct (same destination on both pages is expected; only Website Builds currently has a full detail page populated, which is fine).
+
+Edit: `src/routes/index.jsx` — change the slice to a curated filter; pass 3 items.
+
+## 2. Retheme the tile fallbacks
+
+Replace the saturated `TYPE_GRADIENTS` map with palette-aligned surfaces using the existing CSS tokens (`--card`, `--primary`, `--secondary`, the same `oklch` values already used elsewhere in the section background). Tiles without a cover image get:
+
+- A subtle dark card surface (`bg-card`) with a soft primary-tinted radial in one corner.
+- A large, low-opacity type-icon watermark (Lucide: `Globe` for Website, `Code2` for Code, `Palette` for Design, `BookOpen` for Learning Resource) so each tile still feels distinct without clashing colours.
+- The animated conic border on the featured tile keeps its current primary→accent gradient (already on-palette).
+
+Edit: `src/components/floating-projects-showcase.jsx` — replace `TYPE_GRADIENTS` + the gradient `<div>` fallback with the new themed surface + icon watermark.
+
+## 3. Mobile stacked-card scroll
+
+Below `md`, switch from the vertical grid stack to a **sticky-stacked card deck**:
+
+```text
+┌──────────────┐  ← top of section
+│   Card 1     │  sticky, sits at top
+└──────────────┘
+   ┌──────────────┐  ← scrolls up, slides over card 1
+   │   Card 2     │
+   └──────────────┘
+       ┌──────────────┐
+       │   Card 3     │
+       └──────────────┘
 ```
-┌─────────────────────┬───────────┐
-│                     │           │
-│    FEATURED (2x2)   │  Tile 2   │
-│    big image        │           │
-│                     ├───────────┤
-│                     │  Tile 3   │
-├──────────┬──────────┼───────────┤
-│  Tile 4  │  Tile 5  │  Tile 6   │
-└──────────┴──────────┴───────────┘
-```
 
-- 6 tiles on desktop, 12-col grid with mixed `col-span` / `row-span`.
-- Tablet: 2 cols, featured spans 2. Mobile: single column stack.
-- Each tile is mostly cover image; title + type + tags slide up over a dark gradient on hover. Year shown as a small chip in the corner.
-- Tiles without a `cover` image get a generated gradient background derived from their type so the layout still feels intentional.
+Implementation:
 
-### Motion (rich, but consistent)
+- Mobile-only wrapper (`md:hidden`) renders each tile inside a `position: sticky; top: 80px` container with progressively increasing `top` offsets (`top: calc(80px + i * 12px)`) so previous cards peek out behind the active one.
+- Each card scales down slightly and fades as the next one covers it, driven by `IntersectionObserver` thresholds (no scroll listener spam) — the entering card animates from `scale(0.94) translateY(24px)` to `scale(1) translateY(0)`.
+- Desktop (`md:` and up) keeps the existing bento grid unchanged.
+- Respects `prefers-reduced-motion`: cards still stack via sticky, but skip the scale/fade transitions.
 
-- **Scroll reveal**: each tile fades + slides up with a small stagger using `IntersectionObserver` (no extra deps).
-- **Hover**: image scales `1.08` and shifts slightly (parallax), overlay darkens, info panel slides up from the bottom, an arrow icon translates up-right.
-- **Magnetic cursor**: tile tilts ~4° toward the pointer (desktop / fine pointer only), eased with rAF. Disabled for `prefers-reduced-motion` and coarse pointers.
-- **Featured tile**: animated conic-gradient border (slow rotation) using a `::before` pseudo via inline style + CSS keyframe added to `src/styles.css`.
-- **Filter chips** above the grid (All / Websites / Code / Design / Learning) — clicking re-flows the grid with a FLIP-style transition (using `View Transitions API` where available, falling back to a CSS `transition-all` on transforms).
+Edit: `src/components/floating-projects-showcase.jsx` — add a parallel mobile render branch; share the same `BentoTile` content (image + overlay + meta) but wrap it in the sticky deck container.
 
-### Files
+---
 
-- **Replace** `src/components/floating-projects-showcase.jsx` with a new component (same export name + props signature) implementing the bento grid. Keeps the call site in `src/routes/index.jsx` working unchanged. The `variant` prop becomes a no-op (accepted but ignored) for backward compatibility.
-- **Edit** `src/routes/index.jsx`: remove the `.slice(0, 5)` cap so up to 6 projects are shown; pass them through.
-- **Edit** `src/styles.css`: add two keyframes — `bento-reveal` (fade + translateY) and `bento-border-spin` (conic-gradient rotation for the featured tile border).
-- **No new dependencies.**
+## Files
 
-### Technical notes
+- `src/routes/index.jsx` — curated featured list (3 work items, no Learning Resources).
+- `src/components/floating-projects-showcase.jsx` — retheme fallback tiles, add mobile sticky-deck render path, light heading copy tweak.
+- `src/styles.css` — small additions only if needed for the mobile deck transition (likely none; Tailwind utilities should cover it).
 
-- Built with Tailwind utility classes; grid uses `grid-cols-12` + `auto-rows-[minmax(160px,auto)]` with explicit `col-span` / `row-span` per tile.
-- Cover image: `<img loading="lazy" />` inside a `relative overflow-hidden` wrapper, scale handled via `transition-transform duration-700`.
-- Magnetic tilt uses one shared `pointermove` handler per tile with rAF throttling; `transform-style: preserve-3d` + `perspective` on the wrapper.
-- Each tile is a `<Link to="/projects/$projectSlug">` so the whole tile is clickable (current behaviour).
-- Respects `prefers-reduced-motion`: reveals become instant, hover scale/tilt disabled, gradient border static.
-- Accessible: tiles are real links with visible focus rings; overlay text has sufficient contrast against the dark gradient regardless of cover image.
-
-### Out of scope
-
-- No changes to project detail pages or the `/projects` index.
-- No changes to data shape in `src/data/portfolio.js` (covers are still optional).
+No changes to `/projects`, project detail pages, or `portfolio.js` data shape.

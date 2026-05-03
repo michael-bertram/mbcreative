@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { Link } from "@tanstack/react-router";
-import { ArrowUpRight } from "lucide-react";
+import { ArrowUpRight, Globe, Code2, Palette, BookOpen, Sparkles } from "lucide-react";
 
 // Bento-grid layout slots (desktop). Index maps to project order.
 // 12-col grid, mixed col/row spans. Up to 6 tiles.
@@ -13,16 +13,15 @@ const SLOTS = [
   "md:col-span-4 md:row-span-1",
 ];
 
-const TYPE_GRADIENTS = {
-  Website: "linear-gradient(135deg, oklch(0.55 0.27 280), oklch(0.45 0.22 240))",
-  Code: "linear-gradient(135deg, oklch(0.60 0.22 200), oklch(0.45 0.20 260))",
-  "Learning Resource": "linear-gradient(135deg, oklch(0.65 0.20 150), oklch(0.45 0.22 200))",
-  Design: "linear-gradient(135deg, oklch(0.70 0.20 30), oklch(0.50 0.25 320))",
-  default: "linear-gradient(135deg, oklch(0.50 0.22 280), oklch(0.35 0.18 260))",
+const TYPE_ICON = {
+  Website: Globe,
+  Code: Code2,
+  Design: Palette,
+  "Learning Resource": BookOpen,
 };
 
-function gradientFor(type) {
-  return TYPE_GRADIENTS[type] ?? TYPE_GRADIENTS.default;
+function iconFor(type) {
+  return TYPE_ICON[type] ?? Sparkles;
 }
 
 function BentoTile({ project, slotClass, index, featured, reduced, isCoarse }) {
@@ -84,7 +83,7 @@ function BentoTile({ project, slotClass, index, featured, reduced, isCoarse }) {
   }, [reduced, isCoarse]);
 
   const cover = project.cover;
-  const bg = gradientFor(project.type);
+  const TypeIcon = iconFor(project.type);
   const delay = `${Math.min(index * 90, 540)}ms`;
 
   return (
@@ -129,7 +128,21 @@ function BentoTile({ project, slotClass, index, featured, reduced, isCoarse }) {
               style={{ transformOrigin: "center" }}
             />
           ) : (
-            <div className="h-full w-full" style={{ backgroundImage: bg }} />
+            <div className="relative h-full w-full bg-card">
+              <div
+                aria-hidden
+                className="absolute inset-0"
+                style={{
+                  background:
+                    "radial-gradient(circle at 85% 15%, oklch(0.55 0.27 280 / 0.22), transparent 60%), radial-gradient(circle at 15% 90%, oklch(0.50 0.22 265 / 0.16), transparent 55%)",
+                }}
+              />
+              <TypeIcon
+                aria-hidden
+                className="absolute -bottom-6 -right-6 h-44 w-44 text-primary/15 transition-transform duration-700 ease-out group-hover:scale-110 group-hover:text-primary/25"
+                strokeWidth={1.25}
+              />
+            </div>
           )}
         </div>
 
@@ -184,13 +197,109 @@ function BentoTile({ project, slotClass, index, featured, reduced, isCoarse }) {
   );
 }
 
+function MobileStackedDeck({ projects, reduced }) {
+  return (
+    <div className="md:hidden">
+      {projects.map((project, i) => {
+        const TypeIcon = iconFor(project.type);
+        const cover = project.cover;
+        const top = 80 + i * 14;
+        return (
+          <div
+            key={project.slug}
+            className="sticky"
+            style={{
+              top: `${top}px`,
+              marginBottom: i === projects.length - 1 ? 0 : "1.25rem",
+              zIndex: 10 + i,
+            }}
+          >
+            <Link
+              to="/projects/$projectSlug"
+              params={{ projectSlug: project.slug }}
+              className="group relative block h-[460px] overflow-hidden rounded-2xl border border-white/10 bg-card shadow-2xl shadow-black/40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+              style={
+                reduced
+                  ? undefined
+                  : { transition: "transform 500ms cubic-bezier(0.22,1,0.36,1)" }
+              }
+            >
+              <div className="absolute inset-0 overflow-hidden">
+                {cover ? (
+                  <img
+                    src={cover}
+                    alt=""
+                    loading="lazy"
+                    className="h-full w-full object-cover"
+                  />
+                ) : (
+                  <div className="relative h-full w-full bg-card">
+                    <div
+                      aria-hidden
+                      className="absolute inset-0"
+                      style={{
+                        background:
+                          "radial-gradient(circle at 85% 15%, oklch(0.55 0.27 280 / 0.22), transparent 60%), radial-gradient(circle at 15% 90%, oklch(0.50 0.22 265 / 0.16), transparent 55%)",
+                      }}
+                    />
+                    <TypeIcon
+                      aria-hidden
+                      className="absolute -bottom-6 -right-6 h-48 w-48 text-primary/15"
+                      strokeWidth={1.25}
+                    />
+                  </div>
+                )}
+              </div>
+              <div
+                aria-hidden
+                className="absolute inset-0"
+                style={{
+                  background:
+                    "linear-gradient(to top, oklch(0.10 0.025 280 / 0.95) 0%, oklch(0.10 0.025 280 / 0.55) 50%, oklch(0.10 0.025 280 / 0.15) 100%)",
+                }}
+              />
+              <div className="absolute right-3 top-3 flex items-center gap-2">
+                <span className="rounded-full bg-black/40 px-2 py-0.5 text-[10px] font-medium text-white/80 backdrop-blur">
+                  {project.year}
+                </span>
+                <span className="rounded-full bg-white/15 p-1.5 text-white backdrop-blur">
+                  <ArrowUpRight className="h-3.5 w-3.5" />
+                </span>
+              </div>
+              <div className="absolute inset-x-0 bottom-0 p-5">
+                <p className="mb-1 text-[10px] font-semibold uppercase tracking-wider text-primary">
+                  {project.type}
+                </p>
+                <h3 className="font-display text-2xl font-bold leading-tight text-white">
+                  {project.title}
+                </h3>
+                <p className="mt-2 line-clamp-2 text-sm text-white/80">{project.summary}</p>
+                <div className="mt-3 flex flex-wrap gap-1.5">
+                  {project.tags.slice(0, 3).map((tag) => (
+                    <span
+                      key={tag}
+                      className="rounded-full bg-white/10 px-2 py-0.5 text-[10px] font-medium text-white/85 backdrop-blur"
+                    >
+                      {tag}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            </Link>
+          </div>
+        );
+      })}
+    </div>
+  );
+}
+
 export function FloatingProjectsShowcase({
   projects,
   // legacy/no-op — kept for backward compatibility
   variant: _variant,
   eyebrow = "Featured work",
   heading,
-  description = "A selection of recent projects across web, code, and design.",
+  description = "A small, curated selection. Head to the work page for everything.",
   showCta = true,
 }) {
   const [reduced, setReduced] = useState(false);
@@ -245,9 +354,9 @@ export function FloatingProjectsShowcase({
             <h2 className="font-display text-3xl font-bold tracking-tight text-foreground sm:text-5xl">
               {heading ?? (
                 <>
-                  A look at recent{" "}
+                  Selected{" "}
                   <span className="bg-gradient-to-r from-primary to-[oklch(0.78_0.20_300)] bg-clip-text text-transparent">
-                    projects.
+                    work.
                   </span>
                 </>
               )}
@@ -255,7 +364,7 @@ export function FloatingProjectsShowcase({
             <p className="mt-4 text-muted-foreground">{description}</p>
           </div>
 
-          {filters.length > 2 && (
+          {filters.length > 2 && projects.length > 4 && (
             <div className="flex flex-wrap gap-2">
               {filters.map((f) => {
                 const active = f === filter;
@@ -278,7 +387,11 @@ export function FloatingProjectsShowcase({
           )}
         </div>
 
-        <div className="grid grid-cols-1 gap-4 md:grid-cols-12 md:auto-rows-[200px] lg:auto-rows-[220px]">
+        {/* Mobile: stacked sticky-card deck */}
+        <MobileStackedDeck projects={visible} reduced={reduced} />
+
+        {/* Desktop: bento grid */}
+        <div className="hidden gap-4 md:grid md:grid-cols-12 md:auto-rows-[200px] lg:auto-rows-[220px]">
           {visible.map((project, i) => (
             <BentoTile
               key={project.slug + filter}
