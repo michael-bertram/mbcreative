@@ -80,7 +80,7 @@ export const projects = [
         description: "A hands-on pedagogical platform that moves users from basic variables to advanced asynchronous concepts through live coding and logic application.",
         tags: ["JavaScript", "Education", "Web App", "Frontend"],
         year: 2025,
-        demoUrl: "https://learnjs.co.uk",
+        demoUrl: "https://learn-js-react.vercel.app/",
         cover: logoLearnJs,
         coverMode: "logo",
         coverBg: "dark",
