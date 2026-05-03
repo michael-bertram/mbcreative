@@ -364,7 +364,7 @@ export function FloatingProjectsShowcase({
             <p className="mt-4 text-muted-foreground">{description}</p>
           </div>
 
-          {filters.length > 2 && (
+          {filters.length > 2 && projects.length > 4 && (
             <div className="flex flex-wrap gap-2">
               {filters.map((f) => {
                 const active = f === filter;
