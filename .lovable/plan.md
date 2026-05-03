@@ -1,63 +1,76 @@
-## Goals
+# Restructure the Work section with real projects + branding
 
-Address three issues with the homepage Featured Work section:
+You've given me real content for 7 projects across three categories, plus brand logos. Right now the portfolio data is generic placeholder text, and the Work cards link to `/projects/$projectSlug` — but **no detail route file exists**, so clicking any card today silently 404s (or hits the root not-found). We should fix that as part of this pass.
 
-1. **Flow / duplication** — homepage currently shows all 6 projects (including Learning Resources), and each card links to the same place as cards on `/projects`.
-2. **Theming** — synthetic purple/teal gradient fallbacks don't match the site palette; only *Website Builds* (which has a real cover image) looks right.
-3. **Mobile** — tiles currently stack as a flat vertical list. You want a stacked / overlapping deck where cards come forward as you scroll.
+## What changes
 
----
+### 1. Replace placeholder data in `src/data/portfolio.js`
 
-## 1. Fix the flow & remove duplication
+Rewrite the `projects` array to match your real work. Three categories, mapped to the existing `type` field used by filters:
 
-- Filter homepage featured to **work only** (exclude `Learning Resource`) — Resources already get their own teaser section directly below.
-- Cap to **3 hero items** on the homepage (the strongest: Website Builds, Brand & Logo Work, Developer Demo Projects). This makes "Featured" actually mean curated, not "first 6".
-- Reframe the section heading slightly — "Selected work" rather than "A look at recent projects" — to clearly signal it's a curated subset, with the existing "View all work" CTA leading to the full `/projects` page.
-- Cards continue to link to `/projects/$projectSlug` — that's correct (same destination on both pages is expected; only Website Builds currently has a full detail page populated, which is fine).
+- **Website** — The Moline Cross, Norton Bowling Club, Learn JS
+- **Code** — Gather, Bowls Booker, Traqr (SaaS apps — `Code` keeps the existing filter chip working; we can rename the chip label to "Apps" if you prefer)
+- **Design** — Norton Sports Charity / NS&LP brand system, MB Creative identity
 
-Edit: `src/routes/index.jsx` — change the slice to a curated filter; pass 3 items.
+Each entry gets: `slug`, `title`, `type`, `platform`, `summary`, `description`, `tags`, `year`, `cover` (logo import), plus a longer `sections` block for the detail page using the copy you provided (Project / Key Focus / Branding / Functionality). External sites get a `demoUrl` (themolinecross.co.uk, nortonbowlingclub.com, learnjs.co.uk, gather-app.co.uk).
 
-## 2. Retheme the tile fallbacks
+### 2. Bring in the uploaded logos as project covers
 
-Replace the saturated `TYPE_GRADIENTS` map with palette-aligned surfaces using the existing CSS tokens (`--card`, `--primary`, `--secondary`, the same `oklch` values already used elsewhere in the section background). Tiles without a cover image get:
-
-- A subtle dark card surface (`bg-card`) with a soft primary-tinted radial in one corner.
-- A large, low-opacity type-icon watermark (Lucide: `Globe` for Website, `Code2` for Code, `Palette` for Design, `BookOpen` for Learning Resource) so each tile still feels distinct without clashing colours.
-- The animated conic border on the featured tile keeps its current primary→accent gradient (already on-palette).
-
-Edit: `src/components/floating-projects-showcase.jsx` — replace `TYPE_GRADIENTS` + the gradient `<div>` fallback with the new themed surface + icon watermark.
-
-## 3. Mobile stacked-card scroll
-
-Below `md`, switch from the vertical grid stack to a **sticky-stacked card deck**:
+Copy the uploaded files into `src/assets/logos/` and import them:
 
 ```text
-┌──────────────┐  ← top of section
-│   Card 1     │  sticky, sits at top
-└──────────────┘
-   ┌──────────────┐  ← scrolls up, slides over card 1
-   │   Card 2     │
-   └──────────────┘
-       ┌──────────────┐
-       │   Card 3     │
-       └──────────────┘
+user-uploads://Charity_Vector_Colour.png      → src/assets/logos/norton-sports-charity.png
+user-uploads://Complex_Vector_Colour.png      → src/assets/logos/norton-sports-complex.png
+user-uploads://Screenshot_2026-05-03_at_22.31.01.png → src/assets/logos/nslp.png
+user-uploads://gather-logo-BooG84Xi.png       → src/assets/logos/gather.png
+user-uploads://traqr-logo-DU5fn97p.png        → src/assets/logos/traqr.png
+user-uploads://logo.webp                      → src/assets/logos/mb-creative.webp
+```
+(Norton Bowling Club, Moline Cross, Learn JS, Bowls Booker — no logo supplied yet, so they'll fall back to the existing icon-watermark tile until you upload them.)
+
+### 3. Logo-friendly tile rendering in `floating-projects-showcase.jsx` + `project-card.jsx`
+
+Most of the new covers are **logos on transparent/white backgrounds**, not photographic covers. If we drop them into the existing `object-cover` image slot they'll get cropped and look awful. Add an opt-in `coverMode: "logo"` field on a project; when set:
+
+- Render the logo on a branded backdrop (white for dark logos like Norton/Gather, dark for the MB white logo, brand-blue tint for Traqr) using `object-contain` with padding instead of `object-cover`.
+- Keep the dark gradient for text legibility but fade it more aggressively at the top so the logo stays visible.
+- Skip the image parallax transform for logo tiles (parallax on a centered logo looks broken).
+
+### 4. Create the missing detail route `src/routes/projects.$projectSlug.jsx`
+
+Currently a typecheck/runtime hazard — the Link `to="/projects/$projectSlug"` resolves but the page renders nothing meaningful. Add a proper route:
+
+- `Route.useParams()` → look up project by slug from `portfolio.js`
+- Render: cover/logo, title, type, platform, year, external link button (`demoUrl`), description, the `sections` blocks (Context / Approach / Branding / etc.), tag list
+- `notFoundComponent` for unknown slugs, `errorComponent` per project rules
+- Per-route `head()` with title/description/og:image derived from the project
+
+### 5. Homepage featured selection
+
+`src/routes/index.jsx` already filters out `Learning Resource` and slices to 3. With the new dataset that gives a Website + a SaaS app + a Design piece — a nice mix. Update the slice to pick one of each category for variety:
+
+```js
+const pickOne = (t) => projects.find((p) => p.type === t);
+const featured = ["Website", "Code", "Design"].map(pickOne).filter(Boolean);
 ```
 
-Implementation:
+### 6. Small copy/UX tweaks
 
-- Mobile-only wrapper (`md:hidden`) renders each tile inside a `position: sticky; top: 80px` container with progressively increasing `top` offsets (`top: calc(80px + i * 12px)`) so previous cards peek out behind the active one.
-- Each card scales down slightly and fades as the next one covers it, driven by `IntersectionObserver` thresholds (no scroll listener spam) — the entering card animates from `scale(0.94) translateY(24px)` to `scale(1) translateY(0)`.
-- Desktop (`md:` and up) keeps the existing bento grid unchanged.
-- Respects `prefers-reduced-motion`: cards still stack via sticky, but skip the scale/fade transitions.
+- Rename the `Code` filter label on `/projects` to **Apps** (data stays `type: "Code"`, label only) — better fits Gather/Traqr/Bowls Booker.
+- Add `demoUrl` rendering to the bento tile top-right (small external-link chip) so live sites are reachable directly from the showcase.
 
-Edit: `src/components/floating-projects-showcase.jsx` — add a parallel mobile render branch; share the same `BentoTile` content (image + overlay + meta) but wrap it in the sticky deck container.
+## Files touched
 
----
+- `src/data/portfolio.js` — rewrite `projects` array with real content
+- `src/assets/logos/*` — six new logo files copied from uploads
+- `src/components/floating-projects-showcase.jsx` — add `coverMode: "logo"` rendering branch + external-link chip
+- `src/components/project-card.jsx` — same logo rendering treatment
+- `src/routes/projects.$projectSlug.jsx` — **new** detail page
+- `src/routes/projects.index.jsx` — relabel `Code` filter to "Apps"
+- `src/routes/index.jsx` — pick one project per category for the featured trio
 
-## Files
+## Open questions (won't block — sensible defaults below if you don't reply)
 
-- `src/routes/index.jsx` — curated featured list (3 work items, no Learning Resources).
-- `src/components/floating-projects-showcase.jsx` — retheme fallback tiles, add mobile sticky-deck render path, light heading copy tweak.
-- `src/styles.css` — small additions only if needed for the mobile deck transition (likely none; Tailwind utilities should cover it).
-
-No changes to `/projects`, project detail pages, or `portfolio.js` data shape.
+1. **Years** — you didn't list dates per project. Default: Moline Cross 2024, Norton Bowling 2023, Learn JS 2025, Gather 2025, Bowls Booker 2026, Traqr 2026, Norton brand 2023, MB Creative 2024.
+2. **Bowls Booker / Moline Cross / Norton Bowling / Learn JS logos** — not uploaded. They'll use the icon-watermark fallback for now; ship logos later and I'll wire them in.
+3. **"Code" → "Apps" filter rename** — happy to leave it as Code if you prefer the developer framing.
