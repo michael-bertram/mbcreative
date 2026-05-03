@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { Link } from "@tanstack/react-router";
-import { ArrowUpRight, Globe, Code2, Palette, BookOpen, Sparkles } from "lucide-react";
+import { ArrowUpRight, Globe, Code2, Palette, BookOpen, Sparkles, ExternalLink } from "lucide-react";
 
 // Bento-grid layout slots (desktop). Index maps to project order.
 // 12-col grid, mixed col/row spans. Up to 6 tiles.
@@ -28,6 +28,7 @@ function BentoTile({ project, slotClass, index, featured, reduced, isCoarse }) {
   const ref = useRef(null);
   const imgRef = useRef(null);
   const [revealed, setRevealed] = useState(reduced);
+  const isLogo = project.coverMode === "logo";
 
   // Scroll reveal
   useEffect(() => {
@@ -63,7 +64,7 @@ function BentoTile({ project, slotClass, index, featured, reduced, isCoarse }) {
       cancelAnimationFrame(raf);
       raf = requestAnimationFrame(() => {
         el.style.transform = `perspective(1000px) rotateX(${-py * 4}deg) rotateY(${px * 4}deg) translateZ(0)`;
-        if (imgRef.current) {
+        if (imgRef.current && !isLogo) {
           imgRef.current.style.transform = `scale(1.08) translate3d(${-px * 12}px, ${-py * 12}px, 0)`;
         }
       });
@@ -80,7 +81,7 @@ function BentoTile({ project, slotClass, index, featured, reduced, isCoarse }) {
       el.removeEventListener("pointermove", onMove);
       el.removeEventListener("pointerleave", onLeave);
     };
-  }, [reduced, isCoarse]);
+  }, [reduced, isCoarse, isLogo]);
 
   const cover = project.cover;
   const TypeIcon = iconFor(project.type);
@@ -118,7 +119,20 @@ function BentoTile({ project, slotClass, index, featured, reduced, isCoarse }) {
       >
         {/* Background: cover image or gradient */}
         <div className="absolute inset-0 overflow-hidden">
-          {cover ? (
+          {cover && isLogo ? (
+            <div
+              className={`relative flex h-full w-full items-center justify-center p-8 ${
+                project.coverBg === "dark" ? "bg-[oklch(0.14_0.02_280)]" : "bg-white"
+              }`}
+            >
+              <img
+                src={cover}
+                alt={`${project.title} logo`}
+                loading="lazy"
+                className="max-h-[70%] max-w-[70%] object-contain transition-transform duration-500 group-hover:scale-105"
+              />
+            </div>
+          ) : cover ? (
             <img
               ref={imgRef}
               src={cover}
@@ -151,8 +165,9 @@ function BentoTile({ project, slotClass, index, featured, reduced, isCoarse }) {
           aria-hidden
           className="absolute inset-0 transition-opacity duration-500"
           style={{
-            background:
-              "linear-gradient(to top, oklch(0.10 0.025 280 / 0.92) 0%, oklch(0.10 0.025 280 / 0.55) 45%, oklch(0.10 0.025 280 / 0.15) 100%)",
+            background: isLogo
+              ? "linear-gradient(to top, oklch(0.10 0.025 280 / 0.95) 0%, oklch(0.10 0.025 280 / 0.55) 35%, transparent 60%)"
+              : "linear-gradient(to top, oklch(0.10 0.025 280 / 0.92) 0%, oklch(0.10 0.025 280 / 0.55) 45%, oklch(0.10 0.025 280 / 0.15) 100%)",
           }}
         />
 
@@ -161,6 +176,18 @@ function BentoTile({ project, slotClass, index, featured, reduced, isCoarse }) {
           <span className="rounded-full bg-black/40 px-2 py-0.5 text-[10px] font-medium text-white/80 backdrop-blur">
             {project.year}
           </span>
+          {project.demoUrl && (
+            <a
+              href={project.demoUrl}
+              target="_blank"
+              rel="noreferrer"
+              onClick={(e) => e.stopPropagation()}
+              aria-label={`Visit ${project.title}`}
+              className="relative z-20 rounded-full bg-white/15 p-1.5 text-white backdrop-blur transition-transform duration-300 hover:-translate-y-0.5"
+            >
+              <ExternalLink className="h-3.5 w-3.5" />
+            </a>
+          )}
           <span className="rounded-full bg-white/15 p-1.5 text-white backdrop-blur transition-transform duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5">
             <ArrowUpRight className="h-3.5 w-3.5" />
           </span>
