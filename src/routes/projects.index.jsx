@@ -1,5 +1,6 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
-import { useMemo } from "react";
+import { useEffect, useMemo, useRef } from "react";
+import { ArrowRight } from "lucide-react";
 import { ProjectCard } from "@/components/project-card";
 import { profile, projects } from "@/data/portfolio";
 const workProjects = projects.filter((project) => project.type !== "Learning Resource");
@@ -10,6 +11,11 @@ const filters = [
     { label: "Design", type: "Design" },
 ];
 const VALID = new Set(filters.map((f) => f.type));
+const SECTIONS = [
+    { type: "Website", label: "Websites", description: "Hospitality, community, and education sites." },
+    { type: "Code", label: "Apps", description: "Custom SaaS, scheduling, and AI-enhanced productivity tools." },
+    { type: "Design", label: "Design", description: "Identity systems and brand marks rooted in geometry." },
+];
 export const Route = createFileRoute("/projects/")({
     validateSearch: (search) => {
         const f = search?.filter;
@@ -31,6 +37,42 @@ export const Route = createFileRoute("/projects/")({
     }),
     component: ProjectsPage,
 });
+function Section({ section, items, onViewAll, sectionRef }) {
+    if (!items.length) return null;
+    const [feature, ...rest] = items;
+    return (
+        <section ref={sectionRef} id={section.type.toLowerCase()} className="scroll-mt-24">
+            <div className="mb-6 flex items-end justify-between gap-4 border-b border-border pb-4">
+                <div>
+                    <h2 className="font-display text-2xl font-semibold tracking-tight text-foreground sm:text-3xl">
+                        {section.label}
+                    </h2>
+                    <p className="mt-1 text-sm text-muted-foreground">{section.description}</p>
+                </div>
+                <div className="flex shrink-0 items-center gap-3">
+                    <span className="hidden text-xs text-muted-foreground sm:inline">
+                        {items.length} {items.length === 1 ? "project" : "projects"}
+                    </span>
+                    {onViewAll && (
+                        <button
+                            type="button"
+                            onClick={onViewAll}
+                            className="inline-flex items-center gap-1 text-sm font-medium text-primary transition-colors hover:text-foreground"
+                        >
+                            View all <ArrowRight className="h-3.5 w-3.5" />
+                        </button>
+                    )}
+                </div>
+            </div>
+            <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+                <div className="md:col-span-2">
+                    <ProjectCard project={feature} featured />
+                </div>
+                {rest.map((p) => (<ProjectCard key={p.slug} project={p} />))}
+            </div>
+        </section>
+    );
+}
 function ProjectsPage() {
     const { filter: activeFilter } = Route.useSearch();
     const navigate = useNavigate({ from: "/projects" });
@@ -42,31 +84,61 @@ function ProjectsPage() {
             ? workProjects.length
             : workProjects.filter((project) => project.type === f.type).length,
     }), {}), []);
-    const filteredProjects = useMemo(() => activeFilter === "All"
-        ? workProjects
-        : workProjects.filter((project) => project.type === activeFilter), [activeFilter]);
+    const sectionRefs = useRef({});
+    useEffect(() => {
+        if (activeFilter === "All") return;
+        const el = sectionRefs.current[activeFilter];
+        if (el) {
+            requestAnimationFrame(() => el.scrollIntoView({ behavior: "smooth", block: "start" }));
+        }
+    }, [activeFilter]);
+    const visibleSections = activeFilter === "All"
+        ? SECTIONS
+        : SECTIONS.filter((s) => s.type === activeFilter);
     return (<div className="mx-auto w-full max-w-6xl px-6 py-20 sm:py-24">
-      <header className="mb-12 max-w-2xl">
+      <header className="mb-10 max-w-2xl">
+        <p className="mb-3 text-xs font-semibold uppercase tracking-wider text-primary">Selected work</p>
         <h1 className="font-display text-4xl font-bold tracking-tight text-foreground sm:text-5xl">
           Work
         </h1>
-        <p className="mt-4 text-muted-foreground">
-          Project work across websites, code, design, and graphics — including coded builds,
-          WordPress work, Wix sites, personal experiments, and work-related projects.
+        <p className="mt-4 text-lg text-muted-foreground">
+          A selection of websites, apps, and identity work — coded builds, WordPress and Wix sites,
+          custom SaaS tools, and brand systems.
         </p>
       </header>
-      <div className="-mx-6 mb-10 overflow-x-auto px-6 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden" aria-label="Work type filters">
-        <div className="flex w-max min-w-full gap-5 border-b border-border" role="tablist">
-          {filters.map((f) => (<button key={f.type} type="button" role="tab" aria-selected={activeFilter === f.type} onClick={() => setActiveFilter(f.type)} className={`relative flex min-w-32 snap-start flex-col items-start gap-1 border-b-2 pb-4 pt-2 text-left transition-colors ${activeFilter === f.type
-                ? "border-primary text-foreground"
-                : "border-transparent text-muted-foreground hover:border-border hover:text-foreground"}`}>
-              <span className="font-display text-base font-semibold tracking-tight">{f.label}</span>
-              <span className="text-xs text-muted-foreground">{projectCounts[f.type]} pieces</span>
-            </button>))}
-        </div>
+      <div className="mb-12 flex flex-wrap gap-2" role="tablist" aria-label="Work type filters">
+        {filters.map((f) => {
+            const active = activeFilter === f.type;
+            return (
+              <button
+                key={f.type}
+                type="button"
+                role="tab"
+                aria-selected={active}
+                onClick={() => setActiveFilter(f.type)}
+                className={`inline-flex items-center gap-2 rounded-full border px-4 py-1.5 text-sm font-medium transition-colors ${active
+                    ? "border-foreground bg-foreground text-background"
+                    : "border-border bg-card text-muted-foreground hover:border-foreground/30 hover:text-foreground"}`}
+              >
+                {f.label}
+                <span className={`text-xs ${active ? "text-background/70" : "text-muted-foreground/70"}`}>{projectCounts[f.type]}</span>
+              </button>
+            );
+        })}
       </div>
-      <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-        {filteredProjects.map((p) => (<ProjectCard key={p.slug} project={p}/>))}
+      <div className="space-y-20">
+        {visibleSections.map((section) => {
+            const items = workProjects.filter((p) => p.type === section.type);
+            return (
+                <Section
+                    key={section.type}
+                    section={section}
+                    items={items}
+                    sectionRef={(el) => { sectionRefs.current[section.type] = el; }}
+                    onViewAll={activeFilter === "All" ? () => setActiveFilter(section.type) : null}
+                />
+            );
+        })}
       </div>
     </div>);
 }
