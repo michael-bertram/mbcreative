@@ -295,7 +295,7 @@ export function FloatingProjectsShowcase({
             return (
               <article
                 key={project.slug}
-                className={`absolute ${item.className} ${fanHoverClass} ${reduced ? "" : "transition-transform duration-300 ease-out will-change-transform"}`}
+                className={`group/card absolute ${item.className} ${fanHoverClass} hover:z-40 ${reduced ? "" : "transition-all duration-500 ease-out will-change-transform"}`}
                 style={{
                   transform: `translate3d(0, ${parallaxY + driftY}px, 0) rotateX(${tiltX}deg) rotateY(${tiltY}deg) ${item.transform}`,
                   transformStyle: "preserve-3d",
@@ -305,6 +305,20 @@ export function FloatingProjectsShowcase({
                     : "0 20px 40px -10px oklch(0 0 0 / 0.45)",
                   filter: isCenter ? "none" : "brightness(0.9)",
                   borderRadius: "1rem",
+                }}
+                onMouseEnter={(e) => {
+                  if (reduced) return;
+                  e.currentTarget.style.transform = "translate3d(0, 0, 0) rotateX(0deg) rotateY(0deg) rotateZ(0deg) translateZ(160px)";
+                  e.currentTarget.style.filter = "none";
+                  e.currentTarget.style.boxShadow = "0 50px 90px -10px oklch(0 0 0 / 0.75), 0 0 0 1px oklch(1 0 0 / 0.1), 0 0 70px oklch(0.55 0.27 280 / 0.45)";
+                }}
+                onMouseLeave={(e) => {
+                  if (reduced) return;
+                  e.currentTarget.style.transform = `translate3d(0, ${parallaxY + driftY}px, 0) rotateX(${tiltX}deg) rotateY(${tiltY}deg) ${item.transform}`;
+                  e.currentTarget.style.filter = isCenter ? "none" : "brightness(0.9)";
+                  e.currentTarget.style.boxShadow = isCenter
+                    ? "0 40px 80px -10px oklch(0 0 0 / 0.7), 0 0 0 1px oklch(1 0 0 / 0.08), 0 0 60px oklch(0.55 0.27 280 / 0.35)"
+                    : "0 20px 40px -10px oklch(0 0 0 / 0.45)";
                 }}
               >
                 <Link
