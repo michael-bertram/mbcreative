@@ -1,6 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { ArrowRight, BookOpen } from "lucide-react";
-import { FloatingProjectsShowcase } from "@/components/floating-projects-showcase";
+import { FeaturedCategories } from "@/components/featured-categories";
 import { profile, projects, techStack } from "@/data/portfolio";
 import { TypeAnimation } from 'react-type-animation';
 export const Route = createFileRoute("/")({
@@ -18,9 +18,7 @@ export const Route = createFileRoute("/")({
     component: Index,
 });
 function Index() {
-    const featured = ["Website", "Code", "Design"]
-        .map((t) => projects.find((p) => p.type === t))
-        .filter(Boolean);
+    const workProjects = projects.filter((p) => p.type !== "Learning Resource");
     return (<div>
       {/* Hero */}
       <section className="relative overflow-hidden" style={{ backgroundImage: "var(--gradient-hero)" }}>
@@ -79,7 +77,7 @@ function Index() {
       </section>
 
       {/* Featured */}
-      <FloatingProjectsShowcase projects={featured} variant="subtle" />
+      <FeaturedCategories projects={workProjects} />
 
       <section className="border-y border-border bg-secondary/20">
         <div className="mx-auto grid w-full max-w-6xl gap-6 px-6 py-14 md:grid-cols-[1fr_auto] md:items-center">
