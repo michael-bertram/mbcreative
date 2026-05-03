@@ -1,5 +1,4 @@
 // Edit this file to customize your portfolio content.
-import coverWebsiteBuilds from "@/assets/cover-website-builds.jpg";
 import logoNortonCharity from "@/assets/logos/norton-sports-charity.png";
 import logoNortonComplex from "@/assets/logos/norton-sports-complex.png";
 import logoNslp from "@/assets/logos/nslp.png";
