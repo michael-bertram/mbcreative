@@ -310,7 +310,7 @@ export function FloatingProjectsShowcase({
                 <Link
                   to="/projects/$projectSlug"
                   params={{ projectSlug: project.slug }}
-                  className="group flex aspect-[5/4] flex-col gap-2 rounded-2xl border border-white/10 bg-gradient-to-br from-white to-[oklch(0.94_0.01_280)] p-3 text-[oklch(0.20_0.03_280)] sm:p-4"
+                  className="group relative z-10 flex aspect-[5/4] flex-col gap-2 rounded-2xl border border-white/10 bg-gradient-to-br from-white to-[oklch(0.94_0.01_280)] p-3 text-[oklch(0.20_0.03_280)] sm:p-4"
                   style={{ transformStyle: "preserve-3d" }}
                 >
                   <div className="flex items-start justify-between gap-3">
