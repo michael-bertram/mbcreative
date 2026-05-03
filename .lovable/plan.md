@@ -1,76 +1,76 @@
-# Restructure the Work section with real projects + branding
+## Goal
 
-You've given me real content for 7 projects across three categories, plus brand logos. Right now the portfolio data is generic placeholder text, and the Work cards link to `/projects/$projectSlug` — but **no detail route file exists**, so clicking any card today silently 404s (or hits the root not-found). We should fix that as part of this pass.
+Three changes:
 
-## What changes
+1. Homepage **Featured Work** becomes a curated "types of work" trio (Websites / Apps / Design) — each card is a category, not an individual project, and clicks deep-link to that filter on the Work page.
+2. Fix incorrect logo assignments (Learn JS, MB Creative) and the invisible Traqr logo.
+3. Bring back the rich image-first cover with parallax (the style previously used for the Websites card) for these category tiles.
 
-### 1. Replace placeholder data in `src/data/portfolio.js`
+---
 
-Rewrite the `projects` array to match your real work. Three categories, mapped to the existing `type` field used by filters:
+## 1. Curated category tiles on the homepage
 
-- **Website** — The Moline Cross, Norton Bowling Club, Learn JS
-- **Code** — Gather, Bowls Booker, Traqr (SaaS apps — `Code` keeps the existing filter chip working; we can rename the chip label to "Apps" if you prefer)
-- **Design** — Norton Sports Charity / NS&LP brand system, MB Creative identity
+Replace the per-project featured trio with three **category cards**:
 
-Each entry gets: `slug`, `title`, `type`, `platform`, `summary`, `description`, `tags`, `year`, `cover` (logo import), plus a longer `sections` block for the detail page using the copy you provided (Project / Key Focus / Branding / Functionality). External sites get a `demoUrl` (themolinecross.co.uk, nortonbowlingclub.com, learnjs.co.uk, gather-app.co.uk).
+| Tile | Type filter | Cover | Link |
+|---|---|---|---|
+| Websites | `Website` | `cover-website-builds.jpg` (existing) | `/projects?filter=Website` |
+| Apps | `Code` | new generated image (dashboard / SaaS feel) | `/projects?filter=Code` |
+| Design | `Design` | new generated image (identity / branding feel) | `/projects?filter=Design` |
 
-### 2. Bring in the uploaded logos as project covers
+Each tile shows: type label, big title ("Websites" / "Apps" / "Design"), short description, a count ("3 projects"), and an "Explore →" CTA. Image-first with the same dark legibility gradient and **parallax on pointer-move + subtle zoom on hover** that the previous Websites tile had. Bento layout: one large feature tile (Websites) + two stacked tiles. Mobile keeps the sticky-stacked deck.
 
-Copy the uploaded files into `src/assets/logos/` and import them:
+### Work page reads the filter from the URL
 
-```text
-user-uploads://Charity_Vector_Colour.png      → src/assets/logos/norton-sports-charity.png
-user-uploads://Complex_Vector_Colour.png      → src/assets/logos/norton-sports-complex.png
-user-uploads://Screenshot_2026-05-03_at_22.31.01.png → src/assets/logos/nslp.png
-user-uploads://gather-logo-BooG84Xi.png       → src/assets/logos/gather.png
-user-uploads://traqr-logo-DU5fn97p.png        → src/assets/logos/traqr.png
-user-uploads://logo.webp                      → src/assets/logos/mb-creative.webp
-```
-(Norton Bowling Club, Moline Cross, Learn JS, Bowls Booker — no logo supplied yet, so they'll fall back to the existing icon-watermark tile until you upload them.)
+`src/routes/projects.index.jsx` already has the All / Websites / Apps / Design tabs. Update it to:
+- Read `?filter=Website|Code|Design|All` on mount via TanStack Router's `useSearch`/`Route.useSearch` and seed `activeFilter`.
+- Keep the URL in sync when the user changes tabs (`navigate({ search: { filter } })`).
+- Smooth-scroll to the project grid after navigation so the user lands on the filtered list.
 
-### 3. Logo-friendly tile rendering in `floating-projects-showcase.jsx` + `project-card.jsx`
+This means the homepage cards behave as "jump to Websites / Apps / Design on the Work page" rather than going to individual project detail pages.
 
-Most of the new covers are **logos on transparent/white backgrounds**, not photographic covers. If we drop them into the existing `object-cover` image slot they'll get cropped and look awful. Add an opt-in `coverMode: "logo"` field on a project; when set:
+---
 
-- Render the logo on a branded backdrop (white for dark logos like Norton/Gather, dark for the MB white logo, brand-blue tint for Traqr) using `object-contain` with padding instead of `object-cover`.
-- Keep the dark gradient for text legibility but fade it more aggressively at the top so the logo stays visible.
-- Skip the image parallax transform for logo tiles (parallax on a centered logo looks broken).
+## 2. Logo fixes in `src/data/portfolio.js`
 
-### 4. Create the missing detail route `src/routes/projects.$projectSlug.jsx`
+- **Learn JS** — assign the file currently imported as `logoMbCreative` (`src/assets/logos/mb-creative.webp`) as Learn JS's cover. Rename the import to `logoLearnJs` and (optionally) move/rename the file to `learn-js.webp` for clarity. Use `coverMode: "logo"`, `coverBg: "dark"` (since it's a dark mark).
+- **MB Creative** — use the existing site logo `src/assets/mb-logo.png` (or `mb-logo-white.png` on dark bg) as its cover. `coverMode: "logo"`, `coverBg: "dark"` with `mb-logo-white.png`.
+- **Traqr** — currently rendered on a white background where the mark disappears. Switch `coverBg` to `"dark"` so the existing `traqr.png` reads correctly. If it still doesn't read on dark, we'll ask for a light-on-transparent version.
 
-Currently a typecheck/runtime hazard — the Link `to="/projects/$projectSlug"` resolves but the page renders nothing meaningful. Add a proper route:
+No project pages or routes change as a result — just the cover assets.
 
-- `Route.useParams()` → look up project by slug from `portfolio.js`
-- Render: cover/logo, title, type, platform, year, external link button (`demoUrl`), description, the `sections` blocks (Context / Approach / Branding / etc.), tag list
-- `notFoundComponent` for unknown slugs, `errorComponent` per project rules
-- Per-route `head()` with title/description/og:image derived from the project
+---
 
-### 5. Homepage featured selection
+## 3. Image-first parallax for category tiles
 
-`src/routes/index.jsx` already filters out `Learning Resource` and slices to 3. With the new dataset that gives a Website + a SaaS app + a Design piece — a nice mix. Update the slice to pick one of each category for variety:
+The category tiles on the homepage will not use logo mode. They render the cover photo full-bleed with:
+- `object-cover` + `scale(1.08)` parallax translation driven by pointer movement (same code path that exists today in `BentoTile`'s `onMove` handler — the `isLogo` branch currently disables it).
+- Hover zoom + magnetic tilt (already implemented).
+- The category's Lucide icon (`Globe` / `Code2` / `Palette`) as a soft watermark in the corner.
 
-```js
-const pickOne = (t) => projects.find((p) => p.type === t);
-const featured = ["Website", "Code", "Design"].map(pickOne).filter(Boolean);
-```
+For the two missing covers (Apps, Design), generate two on-brand images sized ~1600×1000 and store them as:
+- `src/assets/cover-apps.jpg`
+- `src/assets/cover-design.jpg`
 
-### 6. Small copy/UX tweaks
+Style: same dark, gradient-tinted, slightly abstract aesthetic as `cover-website-builds.jpg` so the trio feels cohesive.
 
-- Rename the `Code` filter label on `/projects` to **Apps** (data stays `type: "Code"`, label only) — better fits Gather/Traqr/Bowls Booker.
-- Add `demoUrl` rendering to the bento tile top-right (small external-link chip) so live sites are reachable directly from the showcase.
+---
 
-## Files touched
+## Technical details
 
-- `src/data/portfolio.js` — rewrite `projects` array with real content
-- `src/assets/logos/*` — six new logo files copied from uploads
-- `src/components/floating-projects-showcase.jsx` — add `coverMode: "logo"` rendering branch + external-link chip
-- `src/components/project-card.jsx` — same logo rendering treatment
-- `src/routes/projects.$projectSlug.jsx` — **new** detail page
-- `src/routes/projects.index.jsx` — relabel `Code` filter to "Apps"
-- `src/routes/index.jsx` — pick one project per category for the featured trio
+**Files to edit**
+- `src/routes/index.jsx` — replace `featured` (currently picks one project per type) with a hard-coded `categories` array `[{ type, label, description, cover, count }]`, and pass to a new lightweight component.
+- `src/components/floating-projects-showcase.jsx` — either:
+  - extend it to accept `mode: "categories"` and render category tiles linking to `/projects?filter=...`, OR
+  - create a sibling `src/components/featured-categories.jsx` that reuses the same bento + parallax styling but renders category data. Sibling component is cleaner; the existing showcase stays focused on real projects (still used elsewhere if needed).
+- `src/routes/projects.index.jsx` — add `validateSearch: (s) => ({ filter: s.filter ?? "All" })`, use `Route.useSearch()` to drive `activeFilter`, and `useNavigate` to push search updates on tab click.
+- `src/data/portfolio.js` — fix Learn JS / MB Creative / Traqr cover + bg mappings.
+- `src/assets/` — add `cover-apps.jpg`, `cover-design.jpg` (generated). Optionally rename `logos/mb-creative.webp` → `logos/learn-js.webp`.
 
-## Open questions (won't block — sensible defaults below if you don't reply)
+**No new routes, no schema changes, no new dependencies.**
 
-1. **Years** — you didn't list dates per project. Default: Moline Cross 2024, Norton Bowling 2023, Learn JS 2025, Gather 2025, Bowls Booker 2026, Traqr 2026, Norton brand 2023, MB Creative 2024.
-2. **Bowls Booker / Moline Cross / Norton Bowling / Learn JS logos** — not uploaded. They'll use the icon-watermark fallback for now; ship logos later and I'll wire them in.
-3. **"Code" → "Apps" filter rename** — happy to leave it as Code if you prefer the developer framing.
+---
+
+## Open question
+
+For the Apps and Design covers I'll generate new images in the same style as `cover-website-builds.jpg`. If you'd rather supply your own photography/artwork, upload them and I'll wire those in instead.
