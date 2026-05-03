@@ -308,7 +308,18 @@ export function FloatingProjectsShowcase({
                 }}
                 onMouseEnter={(e) => {
                   if (reduced) return;
-                  e.currentTarget.style.transform = "translate3d(0, 0, 0) rotateX(0deg) rotateY(0deg) rotateZ(0deg) translateZ(160px)";
+                  const card = e.currentTarget;
+                  const stage = stageRef.current;
+                  if (!stage) return;
+                  const cRect = card.getBoundingClientRect();
+                  const sRect = stage.getBoundingClientRect();
+                  const cardCenterX = cRect.left + cRect.width / 2;
+                  const cardCenterY = cRect.top + cRect.height / 2;
+                  const targetX = sRect.left + sRect.width / 2;
+                  const targetY = sRect.top + sRect.height * 0.5;
+                  const dx = targetX - cardCenterX;
+                  const dy = targetY - cardCenterY;
+                  card.style.transform = `translate3d(${dx}px, ${dy}px, 0) rotateX(0deg) rotateY(0deg) rotateZ(0deg) translateZ(160px) scale(1.05)`;
                   e.currentTarget.style.filter = "none";
                   e.currentTarget.style.boxShadow = "0 50px 90px -10px oklch(0 0 0 / 0.75), 0 0 0 1px oklch(1 0 0 / 0.1), 0 0 70px oklch(0.55 0.27 280 / 0.45)";
                 }}
