@@ -4,7 +4,8 @@ import logoNortonComplex from "@/assets/logos/norton-sports-complex.png";
 import logoNslp from "@/assets/logos/nslp.png";
 import logoGather from "@/assets/logos/gather.png";
 import logoTraqr from "@/assets/logos/traqr.png";
-import logoMbCreative from "@/assets/logos/mb-creative.webp";
+import logoLearnJs from "@/assets/logos/mb-creative.webp";
+import logoMbCreative from "@/assets/mb-logo-white.png";
 export const profile = {
     name: "Michael Bertram",
     initials: "MB",
