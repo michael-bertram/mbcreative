@@ -1,5 +1,5 @@
-import { createFileRoute } from "@tanstack/react-router";
-import { useMemo, useState } from "react";
+import { createFileRoute, useNavigate } from "@tanstack/react-router";
+import { useMemo } from "react";
 import { ProjectCard } from "@/components/project-card";
 import { profile, projects } from "@/data/portfolio";
 const workProjects = projects.filter((project) => project.type !== "Learning Resource");
@@ -9,7 +9,12 @@ const filters = [
     { label: "Apps", type: "Code" },
     { label: "Design", type: "Design" },
 ];
+const VALID = new Set(filters.map((f) => f.type));
 export const Route = createFileRoute("/projects/")({
+    validateSearch: (search) => {
+        const f = search?.filter;
+        return { filter: typeof f === "string" && VALID.has(f) ? f : "All" };
+    },
     head: () => ({
         meta: [
             { title: `Work — ${profile.name}` },
@@ -27,7 +32,10 @@ export const Route = createFileRoute("/projects/")({
     component: ProjectsPage,
 });
 function ProjectsPage() {
-    const [activeFilter, setActiveFilter] = useState("All");
+    const { filter: activeFilter } = Route.useSearch();
+    const navigate = useNavigate({ from: "/projects" });
+    const setActiveFilter = (type) =>
+        navigate({ search: { filter: type }, replace: true });
     const projectCounts = useMemo(() => filters.reduce((counts, f) => ({
         ...counts,
         [f.type]: f.type === "All"

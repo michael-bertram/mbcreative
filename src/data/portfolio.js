@@ -4,7 +4,8 @@ import logoNortonComplex from "@/assets/logos/norton-sports-complex.png";
 import logoNslp from "@/assets/logos/nslp.png";
 import logoGather from "@/assets/logos/gather.png";
 import logoTraqr from "@/assets/logos/traqr.png";
-import logoMbCreative from "@/assets/logos/mb-creative.webp";
+import logoLearnJs from "@/assets/logos/mb-creative.webp";
+import logoMbCreative from "@/assets/mb-logo-white.png";
 export const profile = {
     name: "Michael Bertram",
     initials: "MB",
@@ -63,6 +64,9 @@ export const projects = [
         tags: ["JavaScript", "Education", "Web App", "Frontend"],
         year: 2025,
         demoUrl: "https://learnjs.co.uk",
+        cover: logoLearnJs,
+        coverMode: "logo",
+        coverBg: "dark",
         sections: [
             { heading: "The Project", body: "An interactive, practical-based learning tool for JavaScript fundamentals." },
             { heading: "Key Focus", body: "A hands-on pedagogical platform that moves users from basic variables to advanced asynchronous concepts through live coding and logic application." },
@@ -115,7 +119,7 @@ export const projects = [
         year: 2026,
         cover: logoTraqr,
         coverMode: "logo",
-        coverBg: "light",
+        coverBg: "dark",
         sections: [
             { heading: "The Project", body: "An AI-enhanced personal productivity and goal-setting ecosystem." },
             { heading: "Functionality", body: "Bridges the gap between long-term goals and daily tasks. Features an AI-driven notebook that converts audio or text transcripts into actionable project tasks." },
