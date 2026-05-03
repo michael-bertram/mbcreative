@@ -7,27 +7,27 @@ const LAYOUTS = {
   // A — Subtle tilt: scattered like today, but rotations & motion roughly halved.
   subtle: [
     {
-      transform: "rotateX(8deg) rotateY(-10deg) rotateZ(-2deg) translate3d(-4%, -2%, 0)",
+      transform: "rotateX(8deg) rotateY(-10deg) rotateZ(-2deg) translate3d(-4%, -2%, -40px)",
       className: "top-[2%] left-[2%] w-[44%] sm:w-[36%] z-10",
       depth: 36,
     },
     {
-      transform: "rotateX(7deg) rotateY(9deg) rotateZ(1.5deg) translate3d(3%, -1%, 0)",
+      transform: "rotateX(7deg) rotateY(9deg) rotateZ(1.5deg) translate3d(3%, -1%, -40px)",
       className: "top-[6%] right-[2%] w-[44%] sm:w-[34%] z-10",
       depth: 54,
     },
     {
-      transform: "rotateX(9deg) rotateY(-3deg) rotateZ(-1deg) translateZ(60px)",
+      transform: "rotateX(9deg) rotateY(-3deg) rotateZ(-1deg) translateZ(120px)",
       className: "top-[34%] left-1/2 -translate-x-1/2 w-[52%] sm:w-[38%] z-30",
       depth: 84,
     },
     {
-      transform: "rotateX(8deg) rotateY(10deg) rotateZ(1deg) translate3d(4%, 3%, 0)",
+      transform: "rotateX(8deg) rotateY(10deg) rotateZ(1deg) translate3d(4%, 3%, -40px)",
       className: "bottom-[6%] right-[4%] w-[46%] sm:w-[36%] z-10",
       depth: 45,
     },
     {
-      transform: "rotateX(8deg) rotateY(-9deg) rotateZ(-1.5deg) translate3d(-3%, 3%, 0)",
+      transform: "rotateX(8deg) rotateY(-9deg) rotateZ(-1.5deg) translate3d(-3%, 3%, -40px)",
       className: "bottom-[4%] left-[4%] w-[44%] sm:w-[34%] z-10",
       depth: 30,
     },
