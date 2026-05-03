@@ -146,3 +146,21 @@
     color: var(--color-foreground);
   }
 }
+
+@keyframes bento-reveal {
+  from { opacity: 0; transform: translateY(28px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes bento-border-spin {
+  to { transform: rotate(1turn); }
+}
+
+.bento-reveal {
+  opacity: 0;
+  animation: bento-reveal 0.7s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .bento-reveal { animation: none; opacity: 1; }
+}
