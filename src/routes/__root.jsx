@@ -56,7 +56,7 @@ export const Route = createRootRoute({
     notFoundComponent: NotFoundComponent,
 });
 function RootShell({ children }) {
-    return (<html lang="en" className="dark">
+    return (<html lang="en">
       <head>
         <HeadContent />
       </head>
