@@ -3,7 +3,12 @@ import { useMemo, useState } from "react";
 import { ProjectCard } from "@/components/project-card";
 import { profile, projects } from "@/data/portfolio";
 const workProjects = projects.filter((project) => project.type !== "Learning Resource");
-const filters = ["All", "Website", "Design", "Code"];
+const filters = [
+    { label: "All", type: "All" },
+    { label: "Websites", type: "Website" },
+    { label: "Apps", type: "Code" },
+    { label: "Design", type: "Design" },
+];
 export const Route = createFileRoute("/projects/")({
     head: () => ({
         meta: [
@@ -23,11 +28,11 @@ export const Route = createFileRoute("/projects/")({
 });
 function ProjectsPage() {
     const [activeFilter, setActiveFilter] = useState("All");
-    const projectCounts = useMemo(() => filters.reduce((counts, filter) => ({
+    const projectCounts = useMemo(() => filters.reduce((counts, f) => ({
         ...counts,
-        [filter]: filter === "All"
+        [f.type]: f.type === "All"
             ? workProjects.length
-            : workProjects.filter((project) => project.type === filter).length,
+            : workProjects.filter((project) => project.type === f.type).length,
     }), {}), []);
     const filteredProjects = useMemo(() => activeFilter === "All"
         ? workProjects
@@ -44,11 +49,11 @@ function ProjectsPage() {
       </header>
       <div className="-mx-6 mb-10 overflow-x-auto px-6 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden" aria-label="Work type filters">
         <div className="flex w-max min-w-full gap-5 border-b border-border" role="tablist">
-          {filters.map((filter) => (<button key={filter} type="button" role="tab" aria-selected={activeFilter === filter} onClick={() => setActiveFilter(filter)} className={`relative flex min-w-32 snap-start flex-col items-start gap-1 border-b-2 pb-4 pt-2 text-left transition-colors ${activeFilter === filter
+          {filters.map((f) => (<button key={f.type} type="button" role="tab" aria-selected={activeFilter === f.type} onClick={() => setActiveFilter(f.type)} className={`relative flex min-w-32 snap-start flex-col items-start gap-1 border-b-2 pb-4 pt-2 text-left transition-colors ${activeFilter === f.type
                 ? "border-primary text-foreground"
                 : "border-transparent text-muted-foreground hover:border-border hover:text-foreground"}`}>
-              <span className="font-display text-base font-semibold tracking-tight">{filter}</span>
-              <span className="text-xs text-muted-foreground">{projectCounts[filter]} pieces</span>
+              <span className="font-display text-base font-semibold tracking-tight">{f.label}</span>
+              <span className="text-xs text-muted-foreground">{projectCounts[f.type]} pieces</span>
             </button>))}
         </div>
       </div>
