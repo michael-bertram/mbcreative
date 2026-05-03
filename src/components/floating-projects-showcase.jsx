@@ -299,7 +299,7 @@ export function FloatingProjectsShowcase({
                   transform: `translate3d(0, ${parallaxY + driftY}px, 0) rotateX(${tiltX}deg) rotateY(${tiltY}deg) ${item.transform}`,
                   transformStyle: "preserve-3d",
                   transformOrigin: variant === "fan" ? "50% 100%" : undefined,
-                  filter: `drop-shadow(0 30px 40px oklch(0 0 0 / 0.55))`,
+                  boxShadow: "0 30px 40px oklch(0 0 0 / 0.55)",
                 }}
               >
                 <Link
