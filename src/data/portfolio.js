@@ -64,6 +64,9 @@ export const projects = [
         tags: ["JavaScript", "Education", "Web App", "Frontend"],
         year: 2025,
         demoUrl: "https://learnjs.co.uk",
+        cover: logoLearnJs,
+        coverMode: "logo",
+        coverBg: "dark",
         sections: [
             { heading: "The Project", body: "An interactive, practical-based learning tool for JavaScript fundamentals." },
             { heading: "Key Focus", body: "A hands-on pedagogical platform that moves users from basic variables to advanced asynchronous concepts through live coding and logic application." },
@@ -116,7 +119,7 @@ export const projects = [
         year: 2026,
         cover: logoTraqr,
         coverMode: "logo",
-        coverBg: "light",
+        coverBg: "dark",
         sections: [
             { heading: "The Project", body: "An AI-enhanced personal productivity and goal-setting ecosystem." },
             { heading: "Functionality", body: "Bridges the gap between long-term goals and daily tasks. Features an AI-driven notebook that converts audio or text transcripts into actionable project tasks." },
