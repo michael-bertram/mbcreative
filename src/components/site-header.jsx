@@ -25,7 +25,7 @@ export function SiteHeader() {
             : "border-b border-transparent bg-transparent")}>
       <div className="mx-auto flex h-16 w-full max-w-6xl items-center justify-between px-6">
         <Link to="/" className="flex items-center gap-2 font-display text-base font-semibold tracking-tight text-foreground">
-          <img src={logo} alt={`${profile.name} logo`} className={cn("h-12 w-12 object-contain transition-[filter] duration-300", !scrolled && "brightness-0 invert")}/>
+          <img src={logo} alt={`${profile.name} logo`} className="h-12 w-12 object-contain"/>
         </Link>
 
         <nav className="hidden items-center gap-1 rounded-full border border-border bg-background/35 p-1 shadow-[var(--shadow-elegant)] backdrop-blur-xl md:flex">
