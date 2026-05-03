@@ -55,6 +55,23 @@ export const projects = [
         ],
     },
     {
+        slug: "norton-sports-charity",
+        title: "Norton Sports Charity",
+        type: "Website",
+        platform: "Wix",
+        summary: "The digital home for Norton Sports Charity, sitting within the wider Moline Cross brand identity.",
+        description: "A community-focused website supporting the charity's work across the 55-acre Norton Sports Complex, tied visually into the same heritage brand system as The Moline Cross.",
+        tags: ["Wix", "Charity", "Community", "Web Design"],
+        year: 2024,
+        cover: logoNortonCharity,
+        coverMode: "logo",
+        coverBg: "light",
+        sections: [
+            { heading: "The Project", body: "The digital home for Norton Sports Charity — part of the wider Moline Cross brand family." },
+            { heading: "Key Focus", body: "Communicates the charity's mission and activities while tying directly into the heritage and visual language of The Moline Cross and Norton Sports Complex." },
+        ],
+    },
+    {
         slug: "learn-js",
         title: "Learn JS",
         type: "Website",
@@ -141,13 +158,12 @@ export const projects = [
         coverMode: "logo",
         coverBg: "light",
         gallery: [
-            { src: logoNortonCharity, label: "Norton Sports Charity" },
             { src: logoNortonComplex, label: "Norton Sports Complex" },
             { src: logoNslp, label: "NS&LP CIC" },
         ],
         sections: [
-            { heading: "The Design", body: "A unified visual language for the Norton Sports Complex and its promotional arm, NS&LP CIC." },
-            { heading: "Visual Logic", body: "These logos use a consistent shield/crest geometry, incorporating the millrind cross to tie the charity back to the local heritage of the Moline Cross. Bold, block typography ensures readability across physical signage on the 55-acre site." },
+            { heading: "The Design", body: "A unified visual language for the Norton Sports Complex, its charity arm, and its promotional vehicle NS&LP CIC — all sitting alongside The Moline Cross within the same brand family." },
+            { heading: "Visual Logic", body: "These logos use a consistent shield/crest geometry, incorporating the millrind cross to tie the family of brands back to the local heritage of The Moline Cross. Bold, block typography ensures readability across physical signage on the 55-acre site." },
         ],
     },
     {
