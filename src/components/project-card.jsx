@@ -1,6 +1,59 @@
 import { ArrowUpRight, BookOpen, Github } from "lucide-react";
 import { Link } from "@tanstack/react-router";
-export function ProjectCard({ project, featured = false }) {
+
+const PASTEL_PALETTE = [
+    { bg: "oklch(0.86 0.10 320)", ink: "oklch(0.28 0.08 320)" }, // pink/violet
+    { bg: "oklch(0.86 0.09 180)", ink: "oklch(0.28 0.08 180)" }, // mint
+    { bg: "oklch(0.88 0.10 80)",  ink: "oklch(0.32 0.08 80)"  }, // sand
+    { bg: "oklch(0.84 0.10 240)", ink: "oklch(0.28 0.08 240)" }, // sky
+    { bg: "oklch(0.86 0.09 30)",  ink: "oklch(0.30 0.10 30)"  }, // peach
+    { bg: "oklch(0.86 0.10 145)", ink: "oklch(0.28 0.08 145)" }, // sage
+];
+
+function hashIndex(str, mod) {
+    let h = 0;
+    for (let i = 0; i < str.length; i++) h = (h * 31 + str.charCodeAt(i)) >>> 0;
+    return h % mod;
+}
+
+export function ProjectCard({ project, featured = false, pastel = false }) {
+    if (pastel) {
+        const swatch = PASTEL_PALETTE[hashIndex(project.slug, PASTEL_PALETTE.length)];
+        return (
+            <article className={`group relative flex flex-col overflow-hidden rounded-2xl border border-border bg-card transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[0_24px_60px_-28px_oklch(0.28_0.06_155/0.25)] ${featured ? "" : ""}`}>
+                <Link to="/projects/$projectSlug" params={{ projectSlug: project.slug }} aria-label={`View ${project.title} case study`} className="absolute inset-0 z-0" />
+                <div
+                    className={`relative flex flex-col justify-between overflow-hidden ${featured ? "aspect-[16/10] p-8" : "aspect-[4/3] p-6"}`}
+                    style={{ backgroundColor: swatch.bg, color: swatch.ink }}
+                >
+                    <div className="flex items-start justify-between">
+                        <span className="text-[10px] font-semibold uppercase tracking-[0.18em] opacity-80">
+                            {project.platform || project.type}
+                        </span>
+                        <div className="relative z-10 flex items-center gap-1">
+                            {project.repoUrl && (<a href={project.repoUrl} target="_blank" rel="noreferrer" aria-label={`${project.title} repository`} className="rounded-md p-1.5 opacity-70 transition-opacity hover:opacity-100"><Github className="h-4 w-4" /></a>)}
+                            {project.demoUrl && (<a href={project.demoUrl} target="_blank" rel="noreferrer" aria-label={`${project.title} live site`} className="rounded-md p-1.5 opacity-70 transition-opacity hover:opacity-100"><ArrowUpRight className="h-4 w-4" /></a>)}
+                        </div>
+                    </div>
+                    <h3 className={`font-display font-bold tracking-tight ${featured ? "text-4xl sm:text-5xl" : "text-2xl sm:text-3xl"}`}>
+                        {project.title}
+                    </h3>
+                    {project.cover && project.coverMode === "logo" && (
+                        <img src={project.cover} alt="" loading="lazy" aria-hidden className="pointer-events-none absolute -bottom-6 -right-6 h-28 w-28 object-contain opacity-25 transition-transform duration-500 group-hover:scale-110" />
+                    )}
+                </div>
+                <div className={`flex flex-col gap-3 ${featured ? "p-7" : "p-5"}`}>
+                    <p className={`text-foreground ${featured ? "text-base" : "text-sm"}`}>{project.summary}</p>
+                    <div className="mt-auto flex flex-wrap items-center gap-x-3 gap-y-1.5 text-xs text-muted-foreground">
+                        {project.year && <span>{project.year}</span>}
+                        {project.tags?.slice(0, 3).map((tag) => (
+                            <span key={tag} className="rounded-full bg-muted px-2 py-0.5 text-[11px]">{tag}</span>
+                        ))}
+                    </div>
+                </div>
+            </article>
+        );
+    }
     return (<article className={`group relative flex flex-col overflow-hidden rounded-2xl border border-border bg-card transition-all duration-300 hover:-translate-y-0.5 hover:border-foreground/20 hover:shadow-[0_20px_50px_-28px_oklch(0.22_0.02_280/0.25)] ${featured ? "p-7" : "p-6"}`}>
       <Link to="/projects/$projectSlug" params={{ projectSlug: project.slug }} aria-label={`View ${project.title} case study`} className="absolute inset-0 z-0"/>
       {project.cover && (
