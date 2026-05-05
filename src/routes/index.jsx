@@ -28,7 +28,7 @@ function Index() {
             <TypeAnimation
               sequence={["Hi, i'm Michael."]}
               speed={70}
-              className="font-display text-4xl font-bold tracking-tight text-foreground sm:text-6xl lg:text-9xl mb-6"
+              className="font-display text-6xl font-bold tracking-tighter text-foreground sm:text-8xl lg:text-[10rem] leading-[0.95] mb-6"
               repeat={0}
             />
             
@@ -43,7 +43,7 @@ function Index() {
               ]}
               wrapper="span"
               speed={20}
-              className="block bg-gradient-to-r from-primary to-[oklch(0.78_0.20_300)] bg-clip-text text-transparent font-display text-4xl font-bold tracking-tight sm:text-6xl lg:text-7xl"
+              className="block text-primary font-display text-5xl font-bold tracking-tighter sm:text-7xl lg:text-9xl leading-[0.95]"
               repeat={Infinity}
             />
           </div>
