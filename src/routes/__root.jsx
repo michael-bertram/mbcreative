@@ -28,26 +28,25 @@ export const Route = createRootRoute({
                 name: "description",
                 content: "Portfolio of Michael Bertram, a Developer Advocate, Mentor and Content Creator",
             },
-            { property: "og:title", content: "Michael Bertram — Developer Advocate" },
-            {
-                property: "og:description",
-                content: "Portfolio of Michael Bertram, a Developer Advocate, Mentor and Content Creator",
-            },
-            { property: "og:type", content: "website" },
-            { name: "twitter:card", content: "summary" },
-            { name: "twitter:site", content: "@Lovable" },
+            // ... other meta tags
         ],
         links: [
             { rel: "icon", type: "image/png", href: "/favicon.png" },
-            {
-                rel: "stylesheet",
-                href: appCss,
+            { rel: "stylesheet", href: appCss },
+            
+            /* --- Google Fonts: Stack Sans Text --- */
+            { 
+                rel: "preconnect", 
+                href: "https://fonts.googleapis.com" 
             },
-            { rel: "preconnect", href: "https://fonts.googleapis.com" },
-            { rel: "preconnect", href: "https://fonts.gstatic.com", crossOrigin: "anonymous" },
+            { 
+                rel: "preconnect", 
+                href: "https://fonts.gstatic.com", 
+                crossOrigin: "anonymous" 
+            },
             {
                 rel: "stylesheet",
-                href: "https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap",
+                href: "https://fonts.googleapis.com/css2?family=Stack+Sans+Text:wght@200..700&display=swap",
             },
         ],
     }),

@@ -23,16 +23,12 @@ function Index() {
       {/* Hero */}
       <section className="relative overflow-hidden" style={{ backgroundImage: "var(--gradient-hero)" }}>
         <div className="mx-auto w-full max-w-6xl px-6 pb-24 pt-40 sm:pb-32 sm:pt-48 lg:pb-40 lg:pt-56">
-          <p className="mb-6 inline-flex items-center gap-2 rounded-full border border-border bg-secondary/40 px-3 py-1 text-xs text-muted-foreground">
-            <span className="h-1.5 w-1.5 rounded-full bg-primary"/>
-            Available for new projects
-          </p>
           <div>
             {/* Name Section */}
             <TypeAnimation
               sequence={["Hi, i'm Michael."]}
               speed={70}
-              className="font-display text-4xl font-bold tracking-tight text-foreground sm:text-6xl lg:text-7xl"
+              className="font-display text-4xl font-bold tracking-tight text-foreground sm:text-6xl lg:text-9xl mb-6"
               repeat={0}
             />
             
@@ -66,7 +62,7 @@ function Index() {
       </section>
 
       {/* Tech strip */}
-      <section className="border-y border-border bg-card/30">
+      {/* <section className="border-y border-border bg-card/30">
         <div className="mx-auto w-full max-w-6xl px-6 py-6">
           <div className="flex flex-wrap items-center justify-center gap-x-8 gap-y-2">
             {techStack.map((t) => (<span key={t} className="text-sm text-muted-foreground">
@@ -74,7 +70,7 @@ function Index() {
               </span>))}
           </div>
         </div>
-      </section>
+      </section> */}
 
       {/* Featured */}
       <FeaturedCategories projects={workProjects} />

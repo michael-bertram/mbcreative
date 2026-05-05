@@ -1,3 +1,13 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html, body {
+    /* This overrides the font for everything */
+    font-family: "Stack Sans Text", sans-serif !important;
+  }
+}
 @import "tailwindcss" source(none);
 @source "../src";
 @import "tw-animate-css";
@@ -64,7 +74,7 @@
 :root {
   --radius: 0.625rem;
   /* Light, paper-like developer portfolio theme — violet accent */
-  --background: oklch(0.99 0.005 280);
+  --background: oklch(94.354% 0.05293 208.183);
   --foreground: oklch(0.22 0.02 280);
   --card: oklch(1 0 0);
   --card-foreground: oklch(0.22 0.02 280);
@@ -102,7 +112,7 @@
 }
 
 .dark {
-  --background: oklch(0.129 0.042 264.695);
+  --background: oklch(0% 0 0);
   --foreground: oklch(0.984 0.003 247.858);
   --card: oklch(0.208 0.042 265.755);
   --card-foreground: oklch(0.984 0.003 247.858);
