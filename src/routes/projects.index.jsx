@@ -66,9 +66,9 @@ function Section({ section, items, onViewAll, sectionRef }) {
             </div>
             <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
                 <div className="md:col-span-2">
-                    <ProjectCard project={feature} featured />
+                    <ProjectCard project={feature} featured pastel />
                 </div>
-                {rest.map((p) => (<ProjectCard key={p.slug} project={p} />))}
+                {rest.map((p) => (<ProjectCard key={p.slug} project={p} pastel />))}
             </div>
         </section>
     );
@@ -98,7 +98,7 @@ function ProjectsPage() {
     return (<div className="mx-auto w-full max-w-6xl px-6 py-20 sm:py-24">
       <header className="mb-10 max-w-2xl">
         <p className="mb-3 text-xs font-semibold uppercase tracking-wider text-primary">Selected work</p>
-        <h1 className="font-display text-4xl font-bold tracking-tight text-foreground sm:text-5xl">
+        <h1 className="font-display text-6xl font-bold tracking-tight text-foreground sm:text-7xl lg:text-8xl">
           Work
         </h1>
         <p className="mt-4 text-lg text-muted-foreground">
