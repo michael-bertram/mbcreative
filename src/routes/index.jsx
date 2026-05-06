@@ -21,7 +21,7 @@ function Index() {
     const workProjects = projects.filter((p) => p.type !== "Learning Resource");
     return (<div>
       {/* Hero */}
-      <section className="relative overflow-hidden" style={{ backgroundImage: "var(--gradient-hero)" }}>
+      <section className="hero-animated relative overflow-hidden">
         <div className="mx-auto w-full max-w-6xl px-6 pb-24 pt-40 sm:pb-32 sm:pt-48 lg:pb-40 lg:pt-56">
           <div>
             {/* Name Section */}
