@@ -94,7 +94,7 @@
   --border: oklch(0.22 0.04 255 / 12%);
   --input: oklch(0.22 0.04 255 / 16%);
   --ring: #0087FF;
-  --gradient-hero: radial-gradient(circle at 15% 10%, oklch(0.82 0.18 250 / 0.85), transparent 55%), radial-gradient(circle at 85% 15%, oklch(0.86 0.16 220 / 0.75), transparent 55%), radial-gradient(circle at 50% 90%, oklch(0.84 0.17 265 / 0.65), transparent 60%);
+  --gradient-hero: radial-gradient(circle at 15% 10%, color-mix(in oklab, #0087FF 70%, white) 0%, transparent 55%), radial-gradient(circle at 85% 15%, color-mix(in oklab, #0087FF 55%, white) 0%, transparent 55%), radial-gradient(circle at 50% 90%, color-mix(in oklab, #0087FF 60%, white) 0%, transparent 60%);
   --shadow-elegant: 0 24px 60px -28px oklch(0.22 0.04 255 / 0.22);
   --chart-1: oklch(0.646 0.222 41.116);
   --chart-2: oklch(0.6 0.118 184.704);
