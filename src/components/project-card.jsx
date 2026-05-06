@@ -2,12 +2,12 @@ import { ArrowUpRight, BookOpen, Github } from "lucide-react";
 import { Link } from "@tanstack/react-router";
 
 const PASTEL_PALETTE = [
-    { bg: "oklch(0.86 0.10 320)", ink: "oklch(0.28 0.08 320)" }, // pink/violet
-    { bg: "oklch(0.86 0.09 180)", ink: "oklch(0.28 0.08 180)" }, // mint
-    { bg: "oklch(0.88 0.10 80)",  ink: "oklch(0.32 0.08 80)"  }, // sand
-    { bg: "oklch(0.84 0.10 240)", ink: "oklch(0.28 0.08 240)" }, // sky
-    { bg: "oklch(0.86 0.09 30)",  ink: "oklch(0.30 0.10 30)"  }, // peach
-    { bg: "oklch(0.86 0.10 145)", ink: "oklch(0.28 0.08 145)" }, // sage
+    { bg: "oklch(0.86 0.07 250)", ink: "oklch(0.26 0.08 255)" }, // soft blue
+    { bg: "oklch(0.88 0.04 240)", ink: "oklch(0.26 0.06 250)" }, // pale steel
+    { bg: "oklch(0.84 0.06 220)", ink: "oklch(0.24 0.07 230)" }, // cool sky
+    { bg: "oklch(0.90 0.02 250)", ink: "oklch(0.26 0.05 255)" }, // light grey
+    { bg: "oklch(0.85 0.06 270)", ink: "oklch(0.26 0.08 270)" }, // periwinkle
+    { bg: "oklch(0.82 0.08 255)", ink: "oklch(0.22 0.09 255)" }, // denim
 ];
 
 function hashIndex(str, mod) {
