@@ -40,7 +40,7 @@ function Index() {
               sequence={["Developer Advocate", 1000, "Mentor", 1000, "Teacher", 1000]}
               wrapper="span"
               speed={20}
-              className="block text-primary font-display text-4xl font-bold tracking-tighter sm:text-7xl lg:text-9xl leading-[0.95]"
+              className="block text-primary font-display text-4xl font-bold tracking-tighter sm:text-7xl lg:text-7xl leading-[0.95]"
               repeat={Infinity}
             />
           </div>
