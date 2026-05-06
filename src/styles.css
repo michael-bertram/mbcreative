@@ -80,7 +80,7 @@
   --card-foreground: oklch(0.22 0.04 255);
   --popover: oklch(0.99 0.004 250);
   --popover-foreground: oklch(0.22 0.04 255);
-  --primary: oklch(0.42 0.16 255);
+  --primary: oklch(0.62 0.14 250);
   --primary-foreground: oklch(0.985 0.004 250);
   --primary-glow: oklch(0.62 0.18 250);
   --secondary: oklch(0.93 0.008 250);
@@ -93,7 +93,7 @@
   --destructive-foreground: oklch(0.985 0.004 250);
   --border: oklch(0.22 0.04 255 / 12%);
   --input: oklch(0.22 0.04 255 / 16%);
-  --ring: oklch(0.42 0.16 255);
+  --ring: oklch(0.62 0.14 250);
   --gradient-hero: radial-gradient(circle at 15% 10%, oklch(0.90 0.06 250 / 0.85), transparent 55%), radial-gradient(circle at 85% 15%, oklch(0.92 0.04 220 / 0.7), transparent 55%), radial-gradient(circle at 50% 90%, oklch(0.92 0.05 270 / 0.6), transparent 60%);
   --shadow-elegant: 0 24px 60px -28px oklch(0.22 0.04 255 / 0.22);
   --chart-1: oklch(0.646 0.222 41.116);
