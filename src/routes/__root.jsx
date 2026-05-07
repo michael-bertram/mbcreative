@@ -2,6 +2,7 @@ import { Outlet, Link, createRootRoute, HeadContent, Scripts } from "@tanstack/r
 import appCss from "../styles.css?url";
 import { SiteHeader } from "../components/site-header";
 import { SiteFooter } from "../components/site-footer";
+import { CursorMesh } from "../components/cursor-mesh";
 function NotFoundComponent() {
     return (<div className="flex min-h-screen items-center justify-center bg-background px-4">
       <div className="max-w-md text-center">
@@ -67,6 +68,7 @@ function RootShell({ children }) {
 }
 function RootComponent() {
     return (<div className="page-mesh flex min-h-screen flex-col">
+      <CursorMesh />
       <SiteHeader />
       <main className="-mt-16 flex-1">
         <Outlet />
