@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { Search, X } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { profile } from "@/data/portfolio";
-import logo from "@/assets/mb-logo.png";
+import logo from "@/assets/mb-logo-blue.png";
 
 const navLinks = [
     { to: "/", label: "Home" },
