@@ -4,16 +4,16 @@ import { profile } from "@/data/portfolio";
 import logoMbCreative from "@/assets/mb-logo-white.png";
 
 export function SiteFooter() {
-    const iconClass = "rounded-md p-2 text-muted-foreground transition-colors hover:text-foreground";
-    return (<footer className="border-t border-border">
+    const iconClass = "rounded-md p-2 text-primary-foreground/70 transition-colors hover:text-primary-foreground";
+    return (<footer className="border-t border-border bg-primary text-primary-foreground">
       <div className="mx-auto flex w-full max-w-6xl flex-col items-center gap-8 px-6 py-16 text-center">
         <img src={logoMbCreative} alt="MB Creative" className="h-12 w-auto" />
 
         <div>
-          <h2 className="font-display text-2xl font-bold tracking-tight text-foreground sm:text-3xl">
+          <h2 className="font-display text-2xl font-bold tracking-tight text-primary-foreground sm:text-3xl">
             Got questions?
           </h2>
-          <Link to="/contact" className="mt-2 inline-block font-display text-2xl font-bold tracking-tight text-primary transition-opacity hover:opacity-80 sm:text-3xl">
+          <Link to="/contact" className="mt-2 inline-block font-display text-2xl font-bold tracking-tight text-primary-foreground/90 underline-offset-4 transition-opacity hover:opacity-80 hover:underline sm:text-3xl">
             Feel free to reach out.
           </Link>
         </div>
@@ -33,7 +33,7 @@ export function SiteFooter() {
           </a>
         </div>
 
-        <p className="text-sm text-muted-foreground">
+        <p className="text-sm text-primary-foreground/70">
           © {new Date().getFullYear()} {profile.name}. All rights reserved.
         </p>
       </div>
