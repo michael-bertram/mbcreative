@@ -19,8 +19,8 @@ export function CursorMesh() {
     setVars(currentX, currentY);
 
     const tick = () => {
-      currentX += (targetX - currentX) * 0.08;
-      currentY += (targetY - currentY) * 0.08;
+      currentX += (targetX - currentX) * 0.18;
+      currentY += (targetY - currentY) * 0.18;
       setVars(currentX, currentY);
       raf = requestAnimationFrame(tick);
     };
