@@ -1,25 +1,41 @@
 import { Github, Linkedin, Twitter, Mail } from "lucide-react";
+import { Link } from "@tanstack/react-router";
 import { profile } from "@/data/portfolio";
+import logoMbCreative from "@/assets/mb-logo-white.png";
+
 export function SiteFooter() {
+    const iconClass = "rounded-md p-2 text-muted-foreground transition-colors hover:text-foreground";
     return (<footer className="border-t border-border">
-      <div className="mx-auto flex w-full max-w-6xl flex-col items-center justify-between gap-4 px-6 py-8 sm:flex-row">
-        <p className="text-sm text-muted-foreground">
-          © {new Date().getFullYear()} {profile.name}.
-        </p>
-        <div className="flex items-center gap-2">
-          <a href={profile.socials.github} target="_blank" rel="noreferrer" aria-label="GitHub" className="rounded-md p-2 text-muted-foreground transition-colors hover:bg-secondary hover:text-foreground">
-            <Github className="h-4 w-4"/>
+      <div className="mx-auto flex w-full max-w-6xl flex-col items-center gap-8 px-6 py-16 text-center">
+        <img src={logoMbCreative} alt="MB Creative" className="h-12 w-auto" />
+
+        <div>
+          <h2 className="font-display text-2xl font-bold tracking-tight text-foreground sm:text-3xl">
+            Got questions?
+          </h2>
+          <Link to="/contact" className="mt-2 inline-block font-display text-2xl font-bold tracking-tight text-primary transition-opacity hover:opacity-80 sm:text-3xl">
+            Feel free to reach out.
+          </Link>
+        </div>
+
+        <div className="flex items-center gap-3">
+          <a href={profile.socials.linkedin} target="_blank" rel="noreferrer" aria-label="LinkedIn" className={iconClass}>
+            <Linkedin className="h-5 w-5" />
           </a>
-          <a href={profile.socials.linkedin} target="_blank" rel="noreferrer" aria-label="LinkedIn" className="rounded-md p-2 text-muted-foreground transition-colors hover:bg-secondary hover:text-foreground">
-            <Linkedin className="h-4 w-4"/>
+          <a href={profile.socials.github} target="_blank" rel="noreferrer" aria-label="GitHub" className={iconClass}>
+            <Github className="h-5 w-5" />
           </a>
-          <a href={profile.socials.x} target="_blank" rel="noreferrer" aria-label="X (Twitter)" className="rounded-md p-2 text-muted-foreground transition-colors hover:bg-secondary hover:text-foreground">
-            <Twitter className="h-4 w-4"/>
+          <a href={profile.socials.x} target="_blank" rel="noreferrer" aria-label="X (Twitter)" className={iconClass}>
+            <Twitter className="h-5 w-5" />
           </a>
-          <a href={`mailto:${profile.email}`} aria-label="Email" className="rounded-md p-2 text-muted-foreground transition-colors hover:bg-secondary hover:text-foreground">
-            <Mail className="h-4 w-4"/>
+          <a href={`mailto:${profile.email}`} aria-label="Email" className={iconClass}>
+            <Mail className="h-5 w-5" />
           </a>
         </div>
+
+        <p className="text-sm text-muted-foreground">
+          © {new Date().getFullYear()} {profile.name}. All rights reserved.
+        </p>
       </div>
     </footer>);
 }
