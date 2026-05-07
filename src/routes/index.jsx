@@ -99,28 +99,6 @@ function Index() {
         </div>
       </section>
 
-      {/* About teaser */}
-      <section className="border-t border-border">
-        <div className="mx-auto w-full max-w-6xl px-6 py-20">
-          <div className="grid gap-8 md:grid-cols-2 md:items-center">
-            <h2 className="font-display text-3xl font-bold tracking-tight text-foreground sm:text-4xl">
-              I care about craft, performance, and helping developers build better on WordPress.
-            </h2>
-            <div>
-              <p className="text-muted-foreground">
-                Based in the North East of England. Developer Advocate and former educator with experience in developer
-                tools, WordPress, and front-end development, focused on mentoring, content, and developer experience.
-              </p>
-              <Link
-                to="/about"
-                className="mt-6 inline-flex items-center gap-1 text-sm text-primary transition-colors hover:text-[oklch(0.78_0.20_300)]"
-              >
-                More about me <ArrowRight className="h-4 w-4" />
-              </Link>
-            </div>
-          </div>
-        </div>
-      </section>
     </div>
   );
 }
