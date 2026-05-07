@@ -186,8 +186,7 @@
 .page-mesh::before {
   content: "";
   position: fixed;
-  inset: 0 0 auto 0;
-  height: 70vh;
+  inset: 0;
   z-index: -1;
   pointer-events: none;
   background-color: transparent;
@@ -208,8 +207,6 @@
   background-repeat: no-repeat;
   filter: blur(80px) saturate(130%);
   transition: background-position 0.2s linear;
-  mask-image: linear-gradient(to bottom, black 0%, black 55%, transparent 100%);
-  -webkit-mask-image: linear-gradient(to bottom, black 0%, black 55%, transparent 100%);
 }
 
 .hero-animated { position: relative; }
