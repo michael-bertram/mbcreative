@@ -36,7 +36,7 @@ export const Route = createFileRoute("/resources")({
     component: ResourcesPage,
 });
 function ResourcesPage() {
-    return (<div className="mx-auto w-full max-w-6xl px-6 py-20 sm:py-24">
+    return (<div className="mx-auto w-full max-w-6xl px-6 pt-32 pb-20 sm:pt-40 sm:pb-24">
       <header className="mb-12 max-w-3xl">
         <p className="mb-4 inline-flex items-center gap-2 rounded-full border border-border bg-secondary/40 px-3 py-1 text-xs text-muted-foreground">
           <BookOpen className="h-3.5 w-3.5 text-primary"/> WordPress-powered soon

@@ -19,7 +19,7 @@ export const Route = createFileRoute("/about")({
     component: AboutPage,
 });
 function AboutPage() {
-    return (<div className="mx-auto w-full max-w-4xl px-6 py-20 sm:py-24">
+    return (<div className="mx-auto w-full max-w-4xl px-6 pt-32 pb-20 sm:pt-40 sm:pb-24">
       <header className="mb-12">
         <h1 className="font-display text-4xl font-bold tracking-tight text-foreground sm:text-5xl">
           About

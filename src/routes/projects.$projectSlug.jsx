@@ -38,7 +38,7 @@ function ProjectDetail() {
     const bgClass = project.coverBg === "dark" ? "bg-[oklch(0.14_0.02_280)]" : "bg-white";
 
     return (
-        <article className="mx-auto w-full max-w-4xl px-6 py-20 sm:py-24">
+        <article className="mx-auto w-full max-w-4xl px-6 pt-32 pb-20 sm:pt-40 sm:pb-24">
             <Link
                 to="/projects"
                 className="inline-flex items-center gap-1.5 text-sm text-muted-foreground transition-colors hover:text-foreground"
