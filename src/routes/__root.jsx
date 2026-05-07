@@ -66,7 +66,7 @@ function RootShell({ children }) {
     </html>);
 }
 function RootComponent() {
-    return (<div className="flex min-h-screen flex-col">
+    return (<div className="page-mesh flex min-h-screen flex-col">
       <SiteHeader />
       <main className="-mt-16 flex-1">
         <Outlet />

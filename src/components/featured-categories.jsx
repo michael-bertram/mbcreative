@@ -210,16 +210,7 @@ export function FeaturedCategories({ projects }) {
   ];
 
   return (
-    <section className="relative overflow-hidden border-y border-border bg-secondary/40">
-      <div
-        aria-hidden
-        className="pointer-events-none absolute inset-0"
-        style={{
-          background:
-            "radial-gradient(circle at 18% 22%, oklch(0.55 0.27 280 / 0.10), transparent 55%), radial-gradient(circle at 82% 78%, oklch(0.50 0.22 265 / 0.08), transparent 55%)",
-        }}
-      />
-
+    <section className="relative">
       <div className="relative mx-auto w-full max-w-6xl px-6 py-24 sm:py-32">
         <div className="mb-10 max-w-2xl sm:mb-14">
           <p className="mb-3 inline-flex items-center gap-2 text-xs font-medium uppercase tracking-wider text-primary">
