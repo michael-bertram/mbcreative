@@ -73,6 +73,8 @@
 
 :root {
   --radius: 0.625rem;
+  --cursor-x: 50%;
+  --cursor-y: 25%;
   /* Warm cream backdrop, deep navy/blue accent */
   --background: oklch(0.975 0.018 85);
   --foreground: oklch(0.22 0.04 255);
@@ -190,22 +192,22 @@
   pointer-events: none;
   background-color: transparent;
   background-image:
-    radial-gradient(circle at 50% 50%, color-mix(in oklab, #0087FF 45%, transparent) 0%, transparent 60%),
-    radial-gradient(circle at 50% 50%, color-mix(in oklab, #66B8FF 50%, transparent) 0%, transparent 60%),
-    radial-gradient(circle at 50% 50%, color-mix(in oklab, #B8DCFF 60%, transparent) 0%, transparent 60%),
-    radial-gradient(circle at 50% 50%, color-mix(in oklab, #7AA8FF 40%, transparent) 0%, transparent 60%),
-    radial-gradient(circle at 50% 50%, color-mix(in oklab, #A0CBFF 55%, transparent) 0%, transparent 60%),
-    radial-gradient(circle at 50% 50%, color-mix(in oklab, #C8B8FF 35%, transparent) 0%, transparent 60%);
+    radial-gradient(circle at calc(var(--cursor-x) - 12%) calc(var(--cursor-y) - 8%),  color-mix(in oklab, #0087FF 50%, transparent) 0%, transparent 55%),
+    radial-gradient(circle at calc(var(--cursor-x) + 14%) calc(var(--cursor-y) + 6%),  color-mix(in oklab, #66B8FF 50%, transparent) 0%, transparent 55%),
+    radial-gradient(circle at calc(var(--cursor-x) + 4%)  calc(var(--cursor-y) - 14%), color-mix(in oklab, #B8DCFF 60%, transparent) 0%, transparent 55%),
+    radial-gradient(circle at calc(var(--cursor-x) - 18%) calc(var(--cursor-y) + 10%), color-mix(in oklab, #7AA8FF 45%, transparent) 0%, transparent 55%),
+    radial-gradient(circle at calc(var(--cursor-x) + 20%) calc(var(--cursor-y) - 4%),  color-mix(in oklab, #A0CBFF 55%, transparent) 0%, transparent 55%),
+    radial-gradient(circle at calc(var(--cursor-x) - 6%)  calc(var(--cursor-y) + 16%), color-mix(in oklab, #C8B8FF 40%, transparent) 0%, transparent 55%);
   background-size:
-    75% 90%,
-    70% 85%,
-    80% 95%,
-    65% 80%,
-    85% 100%,
-    70% 85%;
+    60% 70%,
+    55% 65%,
+    65% 75%,
+    50% 60%,
+    70% 80%,
+    55% 65%;
   background-repeat: no-repeat;
   filter: blur(80px) saturate(130%);
-  animation: mesh-drift 22s ease-in-out infinite;
+  transition: background-position 0.2s linear;
   mask-image: linear-gradient(to bottom, black 0%, black 55%, transparent 100%);
   -webkit-mask-image: linear-gradient(to bottom, black 0%, black 55%, transparent 100%);
 }
