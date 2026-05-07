@@ -22,7 +22,7 @@ function Index() {
   return (
     <div>
       {/* Hero */}
-      <section className="hero-animated relative overflow-hidden">
+      <section className="hero-animated relative">
         <div className="mx-auto w-full max-w-6xl px-6 pb-24 pt-40 sm:pb-32 sm:pt-48 lg:pb-40 lg:pt-56">
           <div>
             {/* Name Section */}

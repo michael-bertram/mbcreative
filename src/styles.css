@@ -73,28 +73,31 @@
 
 :root {
   --radius: 0.625rem;
-  /* Cool light grey backdrop, deep navy/blue accent */
-  --background: oklch(0.965 0.006 250);
+  /* Warm cream backdrop, deep navy/blue accent */
+  --background: oklch(0.975 0.018 85);
   --foreground: oklch(0.22 0.04 255);
-  --card: oklch(0.99 0.004 250);
+  --card: oklch(0.985 0.012 85);
   --card-foreground: oklch(0.22 0.04 255);
-  --popover: oklch(0.99 0.004 250);
+  --popover: oklch(0.985 0.012 85);
   --popover-foreground: oklch(0.22 0.04 255);
   --primary: #0087FF;
   --primary-foreground: oklch(0.985 0.004 250);
   --primary-glow: oklch(0.72 0.18 250);
-  --secondary: oklch(0.93 0.008 250);
+  --secondary: oklch(0.945 0.018 85);
   --secondary-foreground: oklch(0.22 0.04 255);
-  --muted: oklch(0.93 0.008 250);
+  --muted: oklch(0.945 0.018 85);
   --muted-foreground: oklch(0.44 0.03 255);
-  --accent: oklch(0.90 0.03 240);
+  --accent: oklch(0.92 0.025 85);
   --accent-foreground: oklch(0.22 0.04 255);
   --destructive: oklch(0.60 0.22 25);
   --destructive-foreground: oklch(0.985 0.004 250);
   --border: oklch(0.22 0.04 255 / 12%);
   --input: oklch(0.22 0.04 255 / 16%);
   --ring: #0087FF;
-  --gradient-hero: radial-gradient(circle at 15% 10%, color-mix(in oklab, #0087FF 28%, white) 0%, transparent 55%), radial-gradient(circle at 85% 15%, color-mix(in oklab, #0087FF 22%, white) 0%, transparent 55%), radial-gradient(circle at 50% 90%, color-mix(in oklab, #0087FF 25%, white) 0%, transparent 60%);
+  --gradient-hero:
+    radial-gradient(ellipse 70% 60% at 20% -10%, color-mix(in oklab, #0087FF 45%, transparent) 0%, transparent 70%),
+    radial-gradient(ellipse 60% 55% at 80% -5%, color-mix(in oklab, #0087FF 35%, transparent) 0%, transparent 70%),
+    radial-gradient(ellipse 80% 50% at 50% 0%, color-mix(in oklab, #0087FF 25%, transparent) 0%, transparent 75%);
   --shadow-elegant: 0 24px 60px -28px oklch(0.22 0.04 255 / 0.22);
   --chart-1: oklch(0.646 0.222 41.116);
   --chart-2: oklch(0.6 0.118 184.704);
@@ -167,20 +170,32 @@
 }
 
 @keyframes hero-drift {
-  0%   { background-position: 0% 0%, 100% 0%, 50% 100%; }
-  50%  { background-position: 25% 15%, 75% 25%, 40% 80%; }
-  100% { background-position: 0% 0%, 100% 0%, 50% 100%; }
+  0%   { background-position:   0% 0%, 100% 0%,  50% 0%; }
+  50%  { background-position: 100% 0%,   0% 0%,  20% 0%; }
+  100% { background-position:   0% 0%, 100% 0%,  50% 0%; }
 }
 
 .hero-animated {
-  background-image: var(--gradient-hero);
-  background-size: 140% 140%, 140% 140%, 140% 140%;
-  background-repeat: no-repeat;
-  animation: hero-drift 18s ease-in-out infinite;
+  position: relative;
 }
+.hero-animated::before {
+  content: "";
+  position: absolute;
+  inset: 0 0 auto 0;
+  height: 120%;
+  pointer-events: none;
+  background-image: var(--gradient-hero);
+  background-size: 160% 100%, 160% 100%, 160% 100%;
+  background-repeat: no-repeat;
+  animation: hero-drift 22s ease-in-out infinite;
+  -webkit-mask-image: linear-gradient(to bottom, black 0%, black 55%, transparent 100%);
+          mask-image: linear-gradient(to bottom, black 0%, black 55%, transparent 100%);
+  z-index: 0;
+}
+.hero-animated > * { position: relative; z-index: 1; }
 
 @media (prefers-reduced-motion: reduce) {
-  .hero-animated { animation: none; }
+  .hero-animated::before { animation: none; }
 }
 
 .bento-reveal {

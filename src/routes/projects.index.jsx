@@ -95,7 +95,7 @@ function ProjectsPage() {
     const visibleSections = activeFilter === "All"
         ? SECTIONS
         : SECTIONS.filter((s) => s.type === activeFilter);
-    return (<div className="mx-auto w-full max-w-6xl px-6 py-20 sm:py-24">
+    return (<div className="mx-auto w-full max-w-6xl px-6 pt-32 pb-20 sm:pt-40 sm:pb-24">
       <header className="mb-10 max-w-2xl">
         <p className="mb-3 text-xs font-semibold uppercase tracking-wider text-primary">Selected work</p>
         <h1 className="font-display text-6xl font-bold tracking-tight text-foreground sm:text-7xl lg:text-8xl">

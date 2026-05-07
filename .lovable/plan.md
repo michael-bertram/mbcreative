@@ -1,46 +1,36 @@
-# Footer redesign + home page banner cleanup
-
-## Reference
-The uploaded screenshot shows a centered footer with:
-- Logo
-- "Got questions?" heading
-- "Feel free to reach out." accent line (will use the new primary blue `#0087FF` instead of purple)
-- A row of social icons
-- Copyright line
+## Goals
+1. Switch the site background to a warm cream tone.
+2. Replace the contained hero gradient with a full-width animated blue gradient that sits behind the page top, fades into the cream background, and removes the visible seam between the hero and the Featured Work section.
+3. Give interior pages (About, Resources, Contact, Projects, Project detail) enough top padding so the fixed header (h-20 / h-16 when scrolled) never overlaps content.
 
 ## Changes
 
-### 1. Rebuild `src/components/site-footer.jsx`
-Replace the current left/right split layout with a centered stacked layout:
+### `src/styles.css`
+- Update `--background` to a cream tone (warm off-white, e.g. `oklch(0.975 0.018 85)`) and adjust `--card` / `--secondary` / `--muted` slightly warmer to harmonise.
+- Replace `--gradient-hero` with a top-anchored blue band that fades to transparent before reaching the bottom, so the cream background shows through and the hero blends seamlessly into Featured Work. Approx:
+  ```
+  --gradient-hero:
+    radial-gradient(ellipse 90% 70% at 20% -10%, color-mix(in oklab, #0087FF 40%, white) 0%, transparent 70%),
+    radial-gradient(ellipse 80% 60% at 80% -5%, color-mix(in oklab, #0087FF 30%, white) 0%, transparent 65%),
+    linear-gradient(to bottom, color-mix(in oklab, #0087FF 18%, transparent) 0%, transparent 60%);
+  ```
+- Rework the `hero-drift` keyframes to translate the blue blobs horizontally across the top of the page (sweep left↔right rather than the current diagonal drift), with a slow ~20s loop.
+- Update `.hero-animated` so the gradient sits at the top, doesn't repeat, and the section's own background colour is transparent (lets cream show at the bottom edge for a soft fade).
+- Keep `prefers-reduced-motion` override.
 
-```text
-        [ MB Creative logo ]
+### `src/routes/index.jsx`
+- Remove the bottom border / background on the Featured Work wrapper section if needed so the hero fades directly into it (the hero already has no bottom divider; just confirm no `border-y` on the next section creates a hard line). The "Developer learning resources" band keeps its `border-y` since it's intentionally a banded CTA.
+- Reduce hero bottom padding slightly so the gradient tail overlaps the next section visually.
 
-         Got questions?
-       Feel free to reach out.   ← link to /contact, primary blue
+### Interior pages — top padding fix
+The fixed header is 80px (h-20) tall and the root `<main>` uses `-mt-16`. Interior pages currently use `py-20 sm:py-24` which still gets clipped. Bump top padding so content starts well below the header:
+- `src/routes/about.jsx` — change wrapper to `pt-32 sm:pt-40 pb-20`.
+- `src/routes/resources.jsx` — same: `pt-32 sm:pt-40 pb-20 sm:pb-24`.
+- `src/routes/contact.jsx` — same treatment on its top-level wrapper.
+- `src/routes/projects.index.jsx` and `src/routes/projects.$projectSlug.jsx` — apply the same top padding adjustment to their top-level wrappers.
+- Home page is unchanged (the hero already has `pt-40 sm:pt-48`).
 
-      [LinkedIn] [GitHub] [X] [Email]
-
-        © 2026 Michael Bertram
-```
-
-Details:
-- Use existing `logoMbCreative` asset (`@/assets/mb-logo-white.png`) — sized ~40–48px tall, centered.
-- "Feel free to reach out." wraps the text in a `Link` to `/contact`, styled with `text-primary` and a subtle hover.
-- Icons row: `Linkedin`, `Github`, `Twitter` (X), `Mail` from `lucide-react`, pulling URLs from `profile.socials` and `profile.email` (already imported). Drop the existing icon-button background style in favor of plain centered icons matching the reference.
-- Copyright line below icons, muted text.
-- Container: `max-w-6xl`, vertical padding ~`py-16`, all items center-aligned with `flex flex-col items-center gap-y-*`.
-- Keep top border (`border-t border-border`) for separation.
-
-### 2. Home page "About teaser" banner (currently above the footer)
-The section starting "I care about craft, performance…" in `src/routes/index.jsx` duplicates content that already lives on `/about`. Recommendation:
-
-- **Remove it from the home page** — the home already ends strongly with the Resources CTA, and About is one click away in the nav.
-- **Do not duplicate it elsewhere** — `/about` already covers this material. If on inspection `/about` is light, we can fold the teaser copy into the top of that page instead. I'll check `src/routes/about.jsx` during implementation and only move content over if it actually adds something new; otherwise just delete the section.
-
-No other pages need the banner — it's a personal intro, which only makes sense on About.
-
-## Files touched
-- `src/components/site-footer.jsx` — rewritten
-- `src/routes/index.jsx` — remove the About teaser `<section>`
-- `src/routes/about.jsx` — only if the teaser copy adds value there
+## Visual outcome
+- Cream page background throughout.
+- A soft blue light glows from the top of the home hero, animates by drifting horizontally, and dissolves smoothly into the cream — no hard line before Featured Work.
+- About/Resources/Contact/Projects headings sit comfortably below the floating header at all scroll positions and breakpoints.
