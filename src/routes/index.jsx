@@ -76,7 +76,7 @@ function Index() {
       {/* Featured */}
       <FeaturedCategories projects={workProjects} />
 
-      <section className="border-y border-border bg-secondary/20">
+      <section className="">
         <div className="mx-auto grid w-full max-w-6xl gap-6 px-6 py-14 md:grid-cols-[1fr_auto] md:items-center">
           <div>
             <p className="mb-3 inline-flex items-center gap-2 text-sm font-medium text-primary">
