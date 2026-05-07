@@ -37,7 +37,11 @@ export function SiteHeader() {
                 </Link>
 
                 {/* Morphing Desktop/Mobile Menu */}
-                <div className="flex items-center">
+                <div
+                    className="flex items-center"
+                    onMouseEnter={() => setOpen(true)}
+                    onMouseLeave={() => setOpen(false)}
+                >
                     <nav className={cn(
                         "flex items-center gap-3 rounded-full border border-border bg-background/50 px-2 shadow-sm transition-all duration-500 ease-in-out",
                         open ? "max-w-[600px] px-3 py-1 opacity-100" : "max-w-[44px] overflow-hidden"
@@ -46,6 +50,7 @@ export function SiteHeader() {
                         {/* The Trigger Icon */}
                         <button 
                             onClick={() => setOpen(!open)}
+                            onFocus={() => setOpen(true)}
                             className={cn(
                                 "flex h-9 w-9 items-center justify-center rounded-full transition-colors hover:bg-secondary",
                                 open ? "bg-secondary" : "bg-transparent hover:bg-secondary"
