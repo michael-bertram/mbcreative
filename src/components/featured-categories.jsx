@@ -211,8 +211,8 @@ export function FeaturedCategories({ projects }) {
 
   return (
     <section className="relative">
-      <div className="relative mx-auto w-full max-w-6xl px-6 py-24 sm:py-32">
-        <div className="mb-10 max-w-2xl sm:mb-14">
+      <div className="relative mx-auto w-full max-w-6xl px-6 py-14 sm:py-20">
+        <div className="mb-8 max-w-2xl sm:mb-10">
           <p className="mb-3 inline-flex items-center gap-2 text-xs font-medium uppercase tracking-wider text-primary">
             <span className="h-1.5 w-1.5 rounded-full bg-primary" />
             Featured work
@@ -296,7 +296,7 @@ export function FeaturedCategories({ projects }) {
           ))}
         </div>
 
-        <div className="mt-12 flex justify-center">
+        <div className="mt-8 flex justify-center">
           <Link
             to="/projects"
             className="inline-flex items-center gap-2 rounded-md border border-border bg-card/60 px-5 py-2.5 text-sm font-medium text-foreground backdrop-blur transition-colors hover:border-primary/40 hover:bg-secondary"
