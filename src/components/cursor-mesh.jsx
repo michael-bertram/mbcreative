@@ -13,8 +13,14 @@ export function CursorMesh() {
 
     const root = document.documentElement;
     const setVars = (x, y) => {
-      root.style.setProperty("--cursor-x", `${(x / window.innerWidth) * 100}%`);
-      root.style.setProperty("--cursor-y", `${(y / window.innerHeight) * 100}%`);
+      // Clamp so the radial-gradient cluster (which extends ±~20% around the
+      // cursor) always reaches the viewport edges instead of drifting offscreen.
+      const px = (x / window.innerWidth) * 100;
+      const py = (y / window.innerHeight) * 100;
+      const cx = Math.max(20, Math.min(80, px));
+      const cy = Math.max(15, Math.min(85, py));
+      root.style.setProperty("--cursor-x", `${cx}%`);
+      root.style.setProperty("--cursor-y", `${cy}%`);
     };
     setVars(currentX, currentY);
 
