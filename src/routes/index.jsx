@@ -3,6 +3,7 @@ import { ArrowRight, BookOpen } from "lucide-react";
 import { FeaturedCategories } from "@/components/featured-categories";
 import { profile, projects, techStack } from "@/data/portfolio";
 import { TypeAnimation } from "react-type-animation";
+import michaelPortrait from "@/assets/michael-portrait.png";
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
@@ -24,24 +25,33 @@ function Index() {
       {/* Hero */}
       <section className="hero-animated relative">
         <div className="mx-auto w-full max-w-6xl px-6 pb-16 pt-40 sm:pb-20 sm:pt-48 lg:pb-24 lg:pt-56">
-          <div>
-            {/* Name Section */}
-            <TypeAnimation
-              sequence={["Hi, i'm Michael."]}
-              speed={70}
-              className="font-display text-6xl font-bold tracking-tighter text-foreground sm:text-8xl lg:text-[10rem] leading-[0.95] mb-6"
-              repeat={0}
-            />
+          <div className="flex flex-col items-start gap-6 lg:flex-row lg:items-center lg:gap-10">
+            <div className="flex-1 min-w-0">
+              {/* Name Section */}
+              <TypeAnimation
+                sequence={["Hi, i'm Michael."]}
+                speed={70}
+                className="font-display text-6xl font-bold tracking-tighter text-foreground sm:text-8xl lg:text-[9rem] leading-[0.95] mb-6"
+                repeat={0}
+              />
 
-            <br />
+              <br />
 
-            {/* Role Section */}
-            <TypeAnimation
-              sequence={["Developer Advocate", 1000, "Mentor", 1000, "Teacher", 1000]}
-              wrapper="span"
-              speed={20}
-              className="block text-primary font-display text-4xl font-bold tracking-tighter sm:text-7xl lg:text-7xl leading-[0.95]"
-              repeat={Infinity}
+              {/* Role Section */}
+              <TypeAnimation
+                sequence={["Developer Advocate", 1000, "Mentor", 1000, "Teacher", 1000]}
+                wrapper="span"
+                speed={20}
+                className="block text-primary font-display text-4xl font-bold tracking-tighter sm:text-7xl lg:text-7xl leading-[0.95]"
+                repeat={Infinity}
+              />
+            </div>
+
+            <img
+              src={michaelPortrait}
+              alt="Illustrated portrait of Michael Bertram"
+              className="w-40 shrink-0 sm:w-56 lg:w-72 xl:w-80 select-none drop-shadow-xl"
+              draggable={false}
             />
           </div>
           <p className="mt-6 max-w-2xl text-lg text-muted-foreground sm:text-xl">{profile.tagline}</p>
