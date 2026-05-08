@@ -1,36 +1,41 @@
 ## Goals
-1. Switch the site background to a warm cream tone.
-2. Replace the contained hero gradient with a full-width animated blue gradient that sits behind the page top, fades into the cream background, and removes the visible seam between the hero and the Featured Work section.
-3. Give interior pages (About, Resources, Contact, Projects, Project detail) enough top padding so the fixed header (h-20 / h-16 when scrolled) never overlaps content.
+1. Replace the three Featured Work cover images with new ones in the cream + blue palette.
+2. Re-style the Learning Resources band as a high-contrast dark navy panel so it stands out against the cream page.
+3. Tighten vertical spacing between homepage sections.
+4. Keep the cursor-following blob mesh exactly as it is.
 
 ## Changes
 
-### `src/styles.css`
-- Update `--background` to a cream tone (warm off-white, e.g. `oklch(0.975 0.018 85)`) and adjust `--card` / `--secondary` / `--muted` slightly warmer to harmonise.
-- Replace `--gradient-hero` with a top-anchored blue band that fades to transparent before reaching the bottom, so the cream background shows through and the hero blends seamlessly into Featured Work. Approx:
-  ```
-  --gradient-hero:
-    radial-gradient(ellipse 90% 70% at 20% -10%, color-mix(in oklab, #0087FF 40%, white) 0%, transparent 70%),
-    radial-gradient(ellipse 80% 60% at 80% -5%, color-mix(in oklab, #0087FF 30%, white) 0%, transparent 65%),
-    linear-gradient(to bottom, color-mix(in oklab, #0087FF 18%, transparent) 0%, transparent 60%);
-  ```
-- Rework the `hero-drift` keyframes to translate the blue blobs horizontally across the top of the page (sweep left↔right rather than the current diagonal drift), with a slow ~20s loop.
-- Update `.hero-animated` so the gradient sits at the top, doesn't repeat, and the section's own background colour is transparent (lets cream show at the bottom edge for a soft fade).
-- Keep `prefers-reduced-motion` override.
+### New cover images (cream + blue themed)
+Regenerate three covers via image generation, saving to `src/assets/`:
+- `cover-website-builds.jpg` — abstract composition suggesting browser windows / structured layouts, cream background with deep blue (#0087FF) accents and soft glow.
+- `cover-apps.jpg` — abstract app/UI motif (cards, dashboards, motion), same cream + blue palette.
+- `cover-design.jpg` — abstract typographic / geometric brand-mark composition in the same palette.
 
-### `src/routes/index.jsx`
-- Remove the bottom border / background on the Featured Work wrapper section if needed so the hero fades directly into it (the hero already has no bottom divider; just confirm no `border-y` on the next section creates a hard line). The "Developer learning resources" band keeps its `border-y` since it's intentionally a banded CTA.
-- Reduce hero bottom padding slightly so the gradient tail overlaps the next section visually.
+All three share a consistent treatment: cream/off-white base, layered blue gradients, soft grain, no people, editorial and minimal — so they read as a set against the cream site background. Existing imports in `src/components/featured-categories.jsx` keep working since filenames are reused.
 
-### Interior pages — top padding fix
-The fixed header is 80px (h-20) tall and the root `<main>` uses `-mt-16`. Interior pages currently use `py-20 sm:py-24` which still gets clipped. Bump top padding so content starts well below the header:
-- `src/routes/about.jsx` — change wrapper to `pt-32 sm:pt-40 pb-20`.
-- `src/routes/resources.jsx` — same: `pt-32 sm:pt-40 pb-20 sm:pb-24`.
-- `src/routes/contact.jsx` — same treatment on its top-level wrapper.
-- `src/routes/projects.index.jsx` and `src/routes/projects.$projectSlug.jsx` — apply the same top padding adjustment to their top-level wrappers.
-- Home page is unchanged (the hero already has `pt-40 sm:pt-48`).
+### Learning Resources panel — dark navy
+In `src/routes/index.jsx`, restyle the resources CTA section:
+- Wrap the current grid in an inner container with a dark navy background (`bg-[oklch(0.18_0.04_255)]` or a new `--surface-dark` token), rounded-2xl, generous padding, soft shadow.
+- Heading and body text switch to light foreground (`text-white`, `text-white/70`).
+- The eyebrow with `BookOpen` icon stays primary blue but brighter on dark.
+- The CTA button becomes a solid white pill with navy text (or `bg-primary` with white text) — high contrast against the panel.
+- Outer `<section>` keeps the cream page background; only the inner card is dark, giving editorial contrast similar to the footer.
+
+### Tighten section spacing (homepage only)
+- Hero (`src/routes/index.jsx`): reduce `pb-24 sm:pb-32 lg:pb-40` → `pb-16 sm:pb-20 lg:pb-24`. Top padding unchanged (header clearance).
+- Featured Work (`src/components/featured-categories.jsx`): reduce wrapper `py-24 sm:py-32` → `py-14 sm:py-20`, and `mb-10 sm:mb-14` header block → `mb-8 sm:mb-10`. Reduce `mt-12` on the "View all work" button → `mt-8`.
+- Learning Resources section: keep `py-14` outer, but the new dark panel uses tighter internal padding (`p-8 sm:p-10`) so the whole band feels more compact.
+
+### Optional token (only if needed)
+If reused elsewhere, add `--surface-dark: oklch(0.18 0.04 255);` to `:root` in `src/styles.css` and reference via an arbitrary value or a new `bg-surface-dark` mapping. Otherwise inline the oklch value — single use is fine.
+
+## Out of scope
+- Cursor mesh / page-mesh blobs (kept as-is per user).
+- Footer, header, About/Resources/Contact/Projects routes.
+- Hero typography and animation.
 
 ## Visual outcome
-- Cream page background throughout.
-- A soft blue light glows from the top of the home hero, animates by drifting horizontally, and dissolves smoothly into the cream — no hard line before Featured Work.
-- About/Resources/Contact/Projects headings sit comfortably below the floating header at all scroll positions and breakpoints.
+- Featured Work tiles feel native to the cream + blue theme instead of clashing photographic covers.
+- Learning Resources reads as a deliberate, premium dark band — clear visual stop on the page.
+- Homepage flows tighter top-to-bottom without losing breathing room inside each section.
