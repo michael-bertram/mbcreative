@@ -1,9 +1,9 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useLayoutEffect, useRef, useState } from "react";
 
 export function ScrollTimeline({ items }) {
   const containerRef = useRef(null);
   const itemRefs = useRef([]);
-  const [progress, setProgress] = useState(0);
+  const [fillHeight, setFillHeight] = useState(0);
   const [activeSet, setActiveSet] = useState(() => new Set());
   const [openSet, setOpenSet] = useState(() => new Set());
 
@@ -16,44 +16,50 @@ export function ScrollTimeline({ items }) {
     });
   };
 
+  // Recalculate the fill height so the line stops at the deepest active node.
+  useLayoutEffect(() => {
+    const container = containerRef.current;
+    if (!container) return;
+    if (activeSet.size === 0) {
+      setFillHeight(0);
+      return;
+    }
+    const lastActive = Math.max(...activeSet);
+    const node = itemRefs.current[lastActive];
+    if (!node) return;
+    const cRect = container.getBoundingClientRect();
+    const nRect = node.getBoundingClientRect();
+    // Stop the fill at the node's center (top: 0.5rem + half node size ≈ 14px in)
+    const target = nRect.top - cRect.top + 14;
+    setFillHeight(Math.max(0, target));
+  }, [activeSet, openSet]);
+
+  // Keep height in sync when layout shifts (resize, font load, etc.).
   useEffect(() => {
     let rafId = 0;
     let ticking = false;
-    let lastP = -1;
-
-    const compute = () => {
+    const recompute = () => {
       ticking = false;
-      const el = containerRef.current;
-      if (!el) return;
-      const rect = el.getBoundingClientRect();
-      const vh = window.innerHeight;
-      // start filling when top reaches 70% of viewport, finish when bottom reaches 40%
-      const start = vh * 0.7;
-      const end = vh * 0.4;
-      const total = rect.height + (start - end);
-      const traveled = start - rect.top;
-      const p = Math.max(0, Math.min(1, traveled / total));
-      // skip tiny deltas (sub-pixel) to avoid wasted renders
-      if (Math.abs(p - lastP) < 0.001) return;
-      lastP = p;
-      setProgress(p);
+      const container = containerRef.current;
+      if (!container || activeSet.size === 0) return;
+      const lastActive = Math.max(...activeSet);
+      const node = itemRefs.current[lastActive];
+      if (!node) return;
+      const cRect = container.getBoundingClientRect();
+      const nRect = node.getBoundingClientRect();
+      setFillHeight(Math.max(0, nRect.top - cRect.top + 14));
     };
-
     const schedule = () => {
       if (ticking) return;
       ticking = true;
-      rafId = window.requestAnimationFrame(compute);
+      rafId = window.requestAnimationFrame(recompute);
     };
-
-    schedule();
-    window.addEventListener("scroll", schedule, { passive: true });
     window.addEventListener("resize", schedule);
     return () => {
-      window.removeEventListener("scroll", schedule);
       window.removeEventListener("resize", schedule);
       window.cancelAnimationFrame(rafId);
     };
-  }, []);
+  }, [activeSet]);
 
   useEffect(() => {
     const io = new IntersectionObserver(
@@ -85,12 +91,14 @@ export function ScrollTimeline({ items }) {
         aria-hidden
         className="pointer-events-none absolute left-3 top-0 w-[2px] -translate-x-[0.5px] sm:left-4 origin-top"
         style={{
-          height: `${progress * 100}%`,
+          height: `${fillHeight}px`,
           background:
             "linear-gradient(to bottom, color-mix(in oklab, var(--primary) 0%, transparent), var(--primary) 30%, var(--primary))",
           boxShadow:
             "0 0 18px color-mix(in oklab, var(--primary) 60%, transparent)",
           willChange: "height",
+          transition:
+            "height 600ms cubic-bezier(0.22,1,0.36,1)",
         }}
       />
 
