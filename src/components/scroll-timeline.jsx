@@ -3,9 +3,50 @@ import { useEffect, useLayoutEffect, useRef, useState } from "react";
 export function ScrollTimeline({ items }) {
   const containerRef = useRef(null);
   const itemRefs = useRef([]);
-  const [fillHeight, setFillHeight] = useState(0);
+  const [targetHeight, setTargetHeight] = useState(0);
+  const [displayHeight, setDisplayHeight] = useState(0);
   const [activeSet, setActiveSet] = useState(() => new Set());
   const [openSet, setOpenSet] = useState(() => new Set());
+
+  // Spring animation: smoothly drives displayHeight toward targetHeight.
+  const springRef = useRef({ pos: 0, vel: 0, raf: 0 });
+  useEffect(() => {
+    const spring = springRef.current;
+    const stiffness = 110; // higher = snappier
+    const damping = 18; // higher = less oscillation
+    const mass = 1;
+    let last = performance.now();
+
+    const tick = (now) => {
+      const dt = Math.min(0.05, (now - last) / 1000); // clamp dt for stability
+      last = now;
+      const force = -stiffness * (spring.pos - targetHeight);
+      const damp = -damping * spring.vel;
+      const accel = (force + damp) / mass;
+      spring.vel += accel * dt;
+      spring.pos += spring.vel * dt;
+
+      const settled =
+        Math.abs(spring.vel) < 0.5 && Math.abs(spring.pos - targetHeight) < 0.5;
+      if (settled) {
+        spring.pos = targetHeight;
+        spring.vel = 0;
+        setDisplayHeight(targetHeight);
+        spring.raf = 0;
+        return;
+      }
+      setDisplayHeight(spring.pos);
+      spring.raf = requestAnimationFrame(tick);
+    };
+
+    if (spring.raf) cancelAnimationFrame(spring.raf);
+    last = performance.now();
+    spring.raf = requestAnimationFrame(tick);
+    return () => {
+      if (spring.raf) cancelAnimationFrame(spring.raf);
+      spring.raf = 0;
+    };
+  }, [targetHeight]);
 
   const toggle = (idx) => {
     setOpenSet((prev) => {
@@ -21,7 +62,7 @@ export function ScrollTimeline({ items }) {
     const container = containerRef.current;
     if (!container) return;
     if (activeSet.size === 0) {
-      setFillHeight(0);
+      setTargetHeight(0);
       return;
     }
     const lastActive = Math.max(...activeSet);
@@ -31,7 +72,7 @@ export function ScrollTimeline({ items }) {
     const nRect = node.getBoundingClientRect();
     // Stop the fill at the node's center (top: 0.5rem + half node size ≈ 14px in)
     const target = nRect.top - cRect.top + 14;
-    setFillHeight(Math.max(0, target));
+    setTargetHeight(Math.max(0, target));
   }, [activeSet, openSet]);
 
   // Keep height in sync when layout shifts (resize, font load, etc.).
@@ -47,7 +88,7 @@ export function ScrollTimeline({ items }) {
       if (!node) return;
       const cRect = container.getBoundingClientRect();
       const nRect = node.getBoundingClientRect();
-      setFillHeight(Math.max(0, nRect.top - cRect.top + 14));
+      setTargetHeight(Math.max(0, nRect.top - cRect.top + 14));
     };
     const schedule = () => {
       if (ticking) return;
@@ -91,14 +132,12 @@ export function ScrollTimeline({ items }) {
         aria-hidden
         className="pointer-events-none absolute left-3 top-0 w-[2px] -translate-x-[0.5px] sm:left-4 origin-top"
         style={{
-          height: `${fillHeight}px`,
+          height: `${displayHeight}px`,
           background:
             "linear-gradient(to bottom, color-mix(in oklab, var(--primary) 0%, transparent), var(--primary) 30%, var(--primary))",
           boxShadow:
             "0 0 18px color-mix(in oklab, var(--primary) 60%, transparent)",
           willChange: "height",
-          transition:
-            "height 600ms cubic-bezier(0.22,1,0.36,1)",
         }}
       />
 
@@ -106,6 +145,14 @@ export function ScrollTimeline({ items }) {
         {items.map((item, idx) => {
           const active = activeSet.has(idx);
           const open = openSet.has(idx);
+          // "Reached" = the animated fill front has actually arrived at this dot.
+          const node = itemRefs.current[idx];
+          let reached = false;
+          if (node && containerRef.current) {
+            const cTop = containerRef.current.getBoundingClientRect().top;
+            const nTop = node.getBoundingClientRect().top;
+            reached = displayHeight >= nTop - cTop + 6;
+          }
           const fromLeft = idx % 2 === 0;
           return (
             <li
@@ -132,19 +179,23 @@ export function ScrollTimeline({ items }) {
                 onClick={() => toggle(idx)}
                 className="absolute left-3 top-2 -translate-x-1/2 sm:left-4 rounded-full focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-background"
                 style={{
-                  width: open ? 18 : active ? 14 : 10,
-                  height: open ? 18 : active ? 14 : 10,
-                  background: open || active ? "var(--primary)" : "var(--background)",
-                  border: `2px solid var(--primary)`,
-                  boxShadow:
-                    open
-                      ? "0 0 0 8px color-mix(in oklab, var(--primary) 22%, transparent), 0 0 28px color-mix(in oklab, var(--primary) 80%, transparent)"
-                      : active
-                        ? "0 0 0 6px color-mix(in oklab, var(--primary) 18%, transparent), 0 0 22px color-mix(in oklab, var(--primary) 70%, transparent)"
-                        : "0 0 0 0 transparent",
+                  width: open ? 18 : reached ? 14 : 8,
+                  height: open ? 18 : reached ? 14 : 8,
+                  background: reached
+                    ? "var(--primary)"
+                    : "var(--background)",
+                  border: reached
+                    ? "2px solid var(--primary)"
+                    : "1px dashed color-mix(in oklab, var(--muted-foreground) 55%, transparent)",
+                  boxShadow: open
+                    ? "0 0 0 8px color-mix(in oklab, var(--primary) 22%, transparent), 0 0 28px color-mix(in oklab, var(--primary) 80%, transparent)"
+                    : reached
+                      ? "0 0 0 6px color-mix(in oklab, var(--primary) 18%, transparent), 0 0 22px color-mix(in oklab, var(--primary) 70%, transparent)"
+                      : "0 0 0 0 transparent",
+                  opacity: reached ? 1 : 0.55,
                   cursor: "pointer",
                   transition:
-                    "width 250ms ease, height 250ms ease, background 250ms ease, box-shadow 350ms ease",
+                    "width 280ms ease, height 280ms ease, background 280ms ease, border-color 280ms ease, box-shadow 380ms ease, opacity 280ms ease",
                 }}
               >
                 <span className="sr-only">
