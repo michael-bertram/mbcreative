@@ -5,6 +5,16 @@ export function ScrollTimeline({ items }) {
   const itemRefs = useRef([]);
   const [progress, setProgress] = useState(0);
   const [activeSet, setActiveSet] = useState(() => new Set());
+  const [openSet, setOpenSet] = useState(() => new Set());
+
+  const toggle = (idx) => {
+    setOpenSet((prev) => {
+      const next = new Set(prev);
+      if (next.has(idx)) next.delete(idx);
+      else next.add(idx);
+      return next;
+    });
+  };
 
   useEffect(() => {
     let rafId = 0;
@@ -87,6 +97,7 @@ export function ScrollTimeline({ items }) {
       <ol className="space-y-10 sm:space-y-14">
         {items.map((item, idx) => {
           const active = activeSet.has(idx);
+          const open = openSet.has(idx);
           const fromLeft = idx % 2 === 0;
           return (
             <li
@@ -105,33 +116,75 @@ export function ScrollTimeline({ items }) {
                 transitionDelay: `${active ? Math.min(idx * 60, 240) : 0}ms`,
               }}
             >
-              {/* Node */}
-              <span
-                aria-hidden
-                className="absolute left-3 top-2 -translate-x-1/2 sm:left-4"
+              {/* Clickable node */}
+              <button
+                type="button"
+                aria-expanded={open}
+                aria-controls={`timeline-panel-${idx}`}
+                onClick={() => toggle(idx)}
+                className="absolute left-3 top-2 -translate-x-1/2 sm:left-4 rounded-full focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-background"
                 style={{
-                  width: active ? 14 : 10,
-                  height: active ? 14 : 10,
-                  borderRadius: 999,
-                  background: active ? "var(--primary)" : "var(--background)",
+                  width: open ? 18 : active ? 14 : 10,
+                  height: open ? 18 : active ? 14 : 10,
+                  background: open || active ? "var(--primary)" : "var(--background)",
                   border: `2px solid var(--primary)`,
-                  boxShadow: active
-                    ? "0 0 0 6px color-mix(in oklab, var(--primary) 18%, transparent), 0 0 22px color-mix(in oklab, var(--primary) 70%, transparent)"
-                    : "0 0 0 0 transparent",
+                  boxShadow:
+                    open
+                      ? "0 0 0 8px color-mix(in oklab, var(--primary) 22%, transparent), 0 0 28px color-mix(in oklab, var(--primary) 80%, transparent)"
+                      : active
+                        ? "0 0 0 6px color-mix(in oklab, var(--primary) 18%, transparent), 0 0 22px color-mix(in oklab, var(--primary) 70%, transparent)"
+                        : "0 0 0 0 transparent",
+                  cursor: "pointer",
                   transition:
-                    "width 300ms ease, height 300ms ease, background 300ms ease, box-shadow 400ms ease",
+                    "width 250ms ease, height 250ms ease, background 250ms ease, box-shadow 350ms ease",
                 }}
-              />
-              <p className="text-xs uppercase tracking-wide text-muted-foreground">
-                {item.period}
-              </p>
-              <h3 className="mt-1 font-display text-lg font-semibold text-foreground">
-                {item.role} ·{" "}
-                <span className="text-primary">{item.company}</span>
-              </h3>
-              <p className="mt-1 text-sm text-muted-foreground">
-                {item.description}
-              </p>
+              >
+                <span className="sr-only">
+                  {open ? "Collapse" : "Expand"} {item.role} at {item.company}
+                </span>
+              </button>
+
+              <button
+                type="button"
+                onClick={() => toggle(idx)}
+                aria-expanded={open}
+                aria-controls={`timeline-panel-${idx}`}
+                className="group block w-full text-left cursor-pointer"
+              >
+                <p className="text-xs uppercase tracking-wide text-muted-foreground">
+                  {item.period}
+                </p>
+                <h3 className="mt-1 font-display text-lg font-semibold text-foreground transition-colors group-hover:text-primary">
+                  {item.role} ·{" "}
+                  <span className="text-primary">{item.company}</span>
+                  <span
+                    aria-hidden
+                    className="ml-2 inline-block text-xs text-muted-foreground transition-transform"
+                    style={{
+                      transform: open ? "rotate(90deg)" : "rotate(0deg)",
+                    }}
+                  >
+                    ▸
+                  </span>
+                </h3>
+              </button>
+              <div
+                id={`timeline-panel-${idx}`}
+                role="region"
+                className="grid overflow-hidden"
+                style={{
+                  gridTemplateRows: open ? "1fr" : "0fr",
+                  transition:
+                    "grid-template-rows 350ms cubic-bezier(0.22,1,0.36,1), opacity 300ms ease",
+                  opacity: open ? 1 : 0,
+                }}
+              >
+                <div className="min-h-0">
+                  <p className="mt-2 text-sm text-muted-foreground">
+                    {item.description}
+                  </p>
+                </div>
+              </div>
             </li>
           );
         })}
