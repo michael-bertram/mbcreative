@@ -7,7 +7,12 @@ export function ScrollTimeline({ items }) {
   const [activeSet, setActiveSet] = useState(() => new Set());
 
   useEffect(() => {
-    const onScroll = () => {
+    let rafId = 0;
+    let ticking = false;
+    let lastP = -1;
+
+    const compute = () => {
+      ticking = false;
       const el = containerRef.current;
       if (!el) return;
       const rect = el.getBoundingClientRect();
@@ -18,14 +23,25 @@ export function ScrollTimeline({ items }) {
       const total = rect.height + (start - end);
       const traveled = start - rect.top;
       const p = Math.max(0, Math.min(1, traveled / total));
+      // skip tiny deltas (sub-pixel) to avoid wasted renders
+      if (Math.abs(p - lastP) < 0.001) return;
+      lastP = p;
       setProgress(p);
     };
-    onScroll();
-    window.addEventListener("scroll", onScroll, { passive: true });
-    window.addEventListener("resize", onScroll);
+
+    const schedule = () => {
+      if (ticking) return;
+      ticking = true;
+      rafId = window.requestAnimationFrame(compute);
+    };
+
+    schedule();
+    window.addEventListener("scroll", schedule, { passive: true });
+    window.addEventListener("resize", schedule);
     return () => {
-      window.removeEventListener("scroll", onScroll);
-      window.removeEventListener("resize", onScroll);
+      window.removeEventListener("scroll", schedule);
+      window.removeEventListener("resize", schedule);
+      window.cancelAnimationFrame(rafId);
     };
   }, []);
 
@@ -64,7 +80,7 @@ export function ScrollTimeline({ items }) {
             "linear-gradient(to bottom, color-mix(in oklab, var(--primary) 0%, transparent), var(--primary) 30%, var(--primary))",
           boxShadow:
             "0 0 18px color-mix(in oklab, var(--primary) 60%, transparent)",
-          transition: "height 120ms linear",
+          willChange: "height",
         }}
       />
 
