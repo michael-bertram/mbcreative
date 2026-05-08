@@ -25,7 +25,7 @@ function Index() {
       {/* Hero */}
       <section className="hero-animated relative">
         <div className="mx-auto w-full max-w-6xl px-6 pb-16 pt-40 sm:pb-20 sm:pt-48 lg:pb-24 lg:pt-56">
-          <div className="flex flex-col items-start gap-6 lg:flex-row lg:items-center lg:gap-10">
+          <div className="flex flex-col-reverse items-start gap-4 sm:flex-row sm:items-center sm:gap-6 lg:gap-10">
             <div className="flex-1 min-w-0">
               {/* Name Section */}
               <TypeAnimation
@@ -50,7 +50,7 @@ function Index() {
             <img
               src={michaelPortrait}
               alt="Illustrated portrait of Michael Bertram"
-              className="w-40 shrink-0 sm:w-56 lg:w-72 xl:w-80 select-none drop-shadow-xl"
+              className="w-32 shrink-0 self-center sm:w-44 lg:w-60 xl:w-72 select-none bg-transparent"
               draggable={false}
             />
           </div>
