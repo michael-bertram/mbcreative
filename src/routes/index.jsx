@@ -23,7 +23,7 @@ function Index() {
     <div>
       {/* Hero */}
       <section className="hero-animated relative">
-        <div className="mx-auto w-full max-w-6xl px-6 pb-24 pt-40 sm:pb-32 sm:pt-48 lg:pb-40 lg:pt-56">
+        <div className="mx-auto w-full max-w-6xl px-6 pb-16 pt-40 sm:pb-20 sm:pt-48 lg:pb-24 lg:pt-56">
           <div>
             {/* Name Section */}
             <TypeAnimation
@@ -77,25 +77,37 @@ function Index() {
       <FeaturedCategories projects={workProjects} />
 
       <section className="">
-        <div className="mx-auto grid w-full max-w-6xl gap-6 px-6 py-14 md:grid-cols-[1fr_auto] md:items-center">
-          <div>
-            <p className="mb-3 inline-flex items-center gap-2 text-sm font-medium text-primary">
-              <BookOpen className="h-4 w-4" /> Developer learning resources
-            </p>
-            <h2 className="font-display text-3xl font-bold tracking-tight text-foreground">
-              Tutorials, workshops, and resources for a developer audience.
-            </h2>
-            <p className="mt-3 max-w-2xl text-muted-foreground">
-              Separate from project work, this space focuses on the learning material I create as a Developer Advocate:
-              WordPress guidance, front-end demos, workshops, and mentoring resources.
-            </p>
-          </div>
-          <Link
-            to="/resources"
-            className="inline-flex items-center justify-center gap-2 rounded-md border border-border bg-card px-5 py-2.5 text-sm font-medium text-foreground transition-colors hover:border-primary/40 hover:bg-secondary"
+        <div className="mx-auto w-full max-w-6xl px-6 py-10 sm:py-14">
+          <div
+            className="relative overflow-hidden rounded-2xl p-8 sm:p-10 shadow-[0_24px_60px_-28px_rgba(10,16,40,0.45)]"
+            style={{ backgroundColor: "oklch(0.18 0.04 255)" }}
           >
-            Explore resources <ArrowRight className="h-4 w-4" />
-          </Link>
+            <div
+              aria-hidden
+              className="pointer-events-none absolute -right-24 -top-24 h-72 w-72 rounded-full"
+              style={{ background: "radial-gradient(circle, color-mix(in oklab, #0087FF 55%, transparent) 0%, transparent 70%)" }}
+            />
+            <div className="relative grid gap-6 md:grid-cols-[1fr_auto] md:items-center">
+              <div>
+                <p className="mb-3 inline-flex items-center gap-2 text-sm font-medium text-[color:var(--primary)]">
+                  <BookOpen className="h-4 w-4" /> Developer learning resources
+                </p>
+                <h2 className="font-display text-3xl font-bold tracking-tight text-white sm:text-4xl">
+                  Tutorials, workshops, and resources for a developer audience.
+                </h2>
+                <p className="mt-3 max-w-2xl text-white/70">
+                  Separate from project work, this space focuses on the learning material I create as a Developer Advocate:
+                  WordPress guidance, front-end demos, workshops, and mentoring resources.
+                </p>
+              </div>
+              <Link
+                to="/resources"
+                className="inline-flex items-center justify-center gap-2 rounded-md bg-white px-5 py-2.5 text-sm font-medium text-[oklch(0.18_0.04_255)] transition-transform hover:-translate-y-0.5"
+              >
+                Explore resources <ArrowRight className="h-4 w-4" />
+              </Link>
+            </div>
+          </div>
         </div>
       </section>
 
