@@ -82,20 +82,6 @@ function CategoryTile({ category, slotClass, index, featured, reduced, isCoarse 
         transition: "transform 400ms cubic-bezier(0.22, 1, 0.36, 1)",
       }}
     >
-      {featured && !reduced && (
-        <span
-          aria-hidden
-          className="pointer-events-none absolute -inset-px rounded-2xl"
-          style={{
-            background:
-              "conic-gradient(from 0deg, oklch(0.55 0.27 280), oklch(0.78 0.20 300), oklch(0.55 0.27 280))",
-            animation: "bento-border-spin 6s linear infinite",
-            filter: "blur(8px)",
-            opacity: 0.55,
-            zIndex: 0,
-          }}
-        />
-      )}
       <Link
         to="/projects"
         search={{ filter: category.type }}
