@@ -1,6 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { Download } from "lucide-react";
 import { profile, skills, timeline } from "@/data/portfolio";
+import { ScrollTimeline } from "@/components/scroll-timeline";
 export const Route = createFileRoute("/about")({
     head: () => ({
         meta: [
@@ -43,18 +44,7 @@ function AboutPage() {
         <h2 className="font-display text-2xl font-semibold tracking-tight text-foreground">
           Experience
         </h2>
-        <ol className="mt-6 space-y-6 border-l border-border">
-          {timeline.map((item) => (<li key={item.role + item.company} className="relative pl-6">
-              <span className="absolute left-0 top-2 -translate-x-1/2 rounded-full bg-primary p-1"/>
-              <p className="text-xs uppercase tracking-wide text-muted-foreground">
-                {item.period}
-              </p>
-              <h3 className="mt-1 font-display text-lg font-semibold text-foreground">
-                {item.role} · <span className="text-primary">{item.company}</span>
-              </h3>
-              <p className="mt-1 text-sm text-muted-foreground">{item.description}</p>
-            </li>))}
-        </ol>
+        <ScrollTimeline items={timeline} />
       </section>
 
       <section>
