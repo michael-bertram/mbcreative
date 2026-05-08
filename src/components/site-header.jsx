@@ -6,7 +6,6 @@ import { profile } from "@/data/portfolio";
 import logo from "@/assets/mb-logo-blue.png";
 
 const navLinks = [
-    { to: "/", label: "Home" },
     { to: "/projects", label: "Work" },
     { to: "/resources", label: "Resources" },
     { to: "/about", label: "About" },

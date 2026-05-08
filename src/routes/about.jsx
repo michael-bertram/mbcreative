@@ -26,17 +26,13 @@ function AboutPage() {
           About
         </h1>
         <p className="mt-6 text-lg text-muted-foreground">
-          I&apos;m {profile.name}, a {profile.role.toLowerCase()} based in {profile.location}. I
-          like building products that feel fast, look clean, and respect the people using them.
-          Most of my work lives at the intersection of design systems, developer tooling, and
-          frontend infrastructure.
+          I&apos;m {profile.name}, a {profile.role.toLowerCase()} based in {profile.location}. I build products that feel fast, look clean, and respect the people using them. My work lives at the intersection of design systems, developer tooling, and frontend infrastructure. Beyond the codebase, I am deeply passionate about distilling complex concepts into accessible resources, fostering a culture of continuous learning through documentation and mentorship.
         </p>
         <p className="mt-4 text-muted-foreground">
-          Outside of code, I&apos;m usually reading sci-fi, brewing coffee, or wandering around
-          looking at architecture.
+          Outside of working hours, I&apos;m usually spending time with family
         </p>
         <a href={profile.resumeUrl} className="mt-8 inline-flex items-center gap-2 rounded-md border border-border bg-secondary/40 px-4 py-2 text-sm font-medium text-foreground transition-colors hover:bg-secondary">
-          <Download className="h-4 w-4"/> Download résumé
+          <Download className="h-4 w-4"/> Download CV
         </a>
       </header>
 
