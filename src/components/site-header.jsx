@@ -4,6 +4,7 @@ import { Search, X } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { profile } from "@/data/portfolio";
 import logo from "@/assets/mb-logo-blue.png";
+import { ThemeToggle } from "./theme-toggle";
 
 const navLinks = [
     { to: "/projects", label: "Work" },
@@ -36,6 +37,7 @@ export function SiteHeader() {
                 </Link>
 
                 {/* Morphing Desktop/Mobile Menu */}
+                <div className="flex items-center gap-2">
                 <div
                     className="flex items-center"
                     onMouseEnter={() => setOpen(true)}
@@ -76,6 +78,8 @@ export function SiteHeader() {
                             ))}
                         </div>
                     </nav>
+                </div>
+                <ThemeToggle />
                 </div>
             </div>
         </header>
