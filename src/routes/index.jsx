@@ -50,7 +50,7 @@ function Index() {
             <img
               src={michaelPortrait}
               alt="Illustrated portrait of Michael Bertram"
-              className="w-32 shrink-0 self-center sm:w-44 lg:w-60 xl:w-72 select-none bg-transparent"
+              className="hidden w-32 shrink-0 self-center lg:block lg:w-60 xl:w-72 select-none bg-transparent"
               draggable={false}
             />
           </div>
