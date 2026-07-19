@@ -1,16 +1,16 @@
 import { Link } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
-import { Search, X } from "lucide-react";
+import { Search, X, Briefcase, BookOpen, User, Mail } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { profile } from "@/data/portfolio";
 import logo from "@/assets/mb-logo-blue.png";
 import { ThemeToggle } from "./theme-toggle";
 
 const navLinks = [
-    { to: "/projects", label: "Work" },
-    { to: "/resources", label: "Resources" },
-    { to: "/about", label: "About" },
-    { to: "/contact", label: "Contact" },
+    { to: "/projects", label: "Work", icon: Briefcase },
+    { to: "/resources", label: "Resources", icon: BookOpen },
+    { to: "/about", label: "About", icon: User },
+    { to: "/contact", label: "Contact", icon: Mail },
 ];
 
 export function SiteHeader() {
