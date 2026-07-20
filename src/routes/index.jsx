@@ -25,7 +25,7 @@ function Index() {
       {/* Hero */}
       <section className="hero-animated relative">
         <div className="mx-auto w-full max-w-6xl px-6 pb-16 pt-40 sm:pb-20 sm:pt-48 lg:pb-24 lg:pt-56">
-          <div className="grid grid-cols-1 items-end gap-8 lg:grid-cols-[1fr_auto] lg:gap-12">
+          <div className="grid grid-cols-1 items-end gap-8 lg:grid-cols-2 lg:gap-12">
             <div className="min-w-0">
               {/* Name Section */}
               <TypeAnimation
