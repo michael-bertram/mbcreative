@@ -31,7 +31,7 @@ function Index() {
               <TypeAnimation
                 sequence={["Hi, i'm Michael."]}
                 speed={70}
-                className="font-display text-6xl font-bold tracking-tighter text-foreground sm:text-8xl lg:text-[9rem] leading-[0.95] mb-6"
+                className="font-display text-5xl font-bold tracking-tighter text-foreground sm:text-7xl lg:text-[7rem] leading-[0.95] mb-6"
                 repeat={0}
               />
 
@@ -42,7 +42,7 @@ function Index() {
                 sequence={["Developer Advocate", 1000, "Mentor", 1000, "Teacher", 1000]}
                 wrapper="span"
                 speed={20}
-                className="block text-primary font-display text-4xl font-bold tracking-tighter sm:text-7xl lg:text-7xl leading-[0.95]"
+                className="block text-primary font-display text-3xl font-bold tracking-tighter sm:text-5xl lg:text-6xl leading-[0.95] whitespace-nowrap"
                 repeat={Infinity}
               />
 
