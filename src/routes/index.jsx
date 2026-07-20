@@ -25,8 +25,8 @@ function Index() {
       {/* Hero */}
       <section className="hero-animated relative">
         <div className="mx-auto w-full max-w-6xl px-6 pb-16 pt-40 sm:pb-20 sm:pt-48 lg:pb-24 lg:pt-56">
-          <div className="flex flex-col-reverse items-start gap-4 sm:flex-row sm:items-center sm:gap-6 lg:gap-10">
-            <div className="flex-1 min-w-0">
+          <div className="grid grid-cols-1 items-center gap-8 lg:grid-cols-[1fr_auto] lg:gap-12">
+            <div className="min-w-0">
               {/* Name Section */}
               <TypeAnimation
                 sequence={["Hi, i'm Michael."]}
@@ -45,29 +45,30 @@ function Index() {
                 className="block text-primary font-display text-4xl font-bold tracking-tighter sm:text-7xl lg:text-7xl leading-[0.95]"
                 repeat={Infinity}
               />
+
+              <p className="mt-6 max-w-2xl text-lg text-muted-foreground sm:text-xl">{profile.tagline}</p>
+              <div className="mt-10 flex flex-wrap items-center gap-3">
+                <Link
+                  to="/projects"
+                  className="inline-flex items-center gap-2 rounded-md bg-primary px-5 py-2.5 text-sm font-medium text-primary-foreground transition-transform hover:-translate-y-0.5"
+                >
+                  View work <ArrowRight className="h-4 w-4" />
+                </Link>
+                <Link
+                  to="/contact"
+                  className="inline-flex items-center gap-2 rounded-md border border-border bg-transparent px-5 py-2.5 text-sm font-medium text-foreground transition-colors hover:bg-secondary"
+                >
+                  Get in touch
+                </Link>
+              </div>
             </div>
 
             <img
               src={michaelPortrait}
               alt="Illustrated portrait of Michael Bertram"
-              className="hidden w-32 shrink-0 self-center lg:block lg:w-60 xl:w-72 select-none bg-transparent"
+              className="hidden w-40 shrink-0 self-center lg:block lg:w-60 xl:w-72 select-none bg-transparent"
               draggable={false}
             />
-          </div>
-          <p className="mt-6 max-w-2xl text-lg text-muted-foreground sm:text-xl">{profile.tagline}</p>
-          <div className="mt-10 flex flex-wrap items-center gap-3">
-            <Link
-              to="/projects"
-              className="inline-flex items-center gap-2 rounded-md bg-primary px-5 py-2.5 text-sm font-medium text-primary-foreground transition-transform hover:-translate-y-0.5"
-            >
-              View work <ArrowRight className="h-4 w-4" />
-            </Link>
-            <Link
-              to="/contact"
-              className="inline-flex items-center gap-2 rounded-md border border-border bg-transparent px-5 py-2.5 text-sm font-medium text-foreground transition-colors hover:bg-secondary"
-            >
-              Get in touch
-            </Link>
           </div>
         </div>
       </section>
