@@ -66,7 +66,7 @@ function Index() {
             <img
               src={michaelPortrait}
               alt="Illustrated portrait of Michael Bertram"
-              className="hidden w-48 shrink-0 self-end lg:block lg:w-80 xl:w-96 select-none bg-transparent"
+              className="hidden shrink-0 self-end lg:block lg:w-full select-none bg-transparent"
               draggable={false}
             />
           </div>
