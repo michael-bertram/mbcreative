@@ -32,7 +32,10 @@ export function SiteHeader() {
             <div className="mx-auto flex h-full w-full max-w-6xl items-center justify-between px-6">
                 
                 {/* Logo */}
-                <Link to="/" className="flex items-center gap-2">
+                <Link to="/" className={cn(
+                    "flex items-center gap-2 transition-all duration-300",
+                    open ? "pointer-events-none opacity-0 sm:pointer-events-auto sm:opacity-100" : "opacity-100"
+                )}>
                     <img src={logo} alt="Logo" className="h-12 w-15 object-contain"/>
                 </Link>
 
