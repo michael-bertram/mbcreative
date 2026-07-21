@@ -71,9 +71,9 @@ function Index() {
                 draggable={false}
                 style={{
                   WebkitMaskImage:
-                    "linear-gradient(to bottom, black 65%, transparent 100%)",
+                    "linear-gradient(to bottom, black 40%, rgba(0,0,0,0.5) 75%, transparent 100%)",
                   maskImage:
-                    "linear-gradient(to bottom, black 65%, transparent 100%)",
+                    "linear-gradient(to bottom, black 40%, rgba(0,0,0,0.5) 75%, transparent 100%)",
                 }}
               />
             </div>
