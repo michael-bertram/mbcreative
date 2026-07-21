@@ -63,12 +63,18 @@ function Index() {
               </div>
             </div>
 
-            <img
-              src={michaelPortrait}
-              alt="Illustrated portrait of Michael Bertram"
-              className="hidden shrink-0 self-end justify-self-end lg:block lg:w-[85%] select-none bg-transparent"
-              draggable={false}
-            />
+            <div className="relative hidden shrink-0 self-end justify-self-end lg:block lg:w-[85%]">
+              <img
+                src={michaelPortrait}
+                alt="Illustrated portrait of Michael Bertram"
+                className="w-full select-none bg-transparent"
+                draggable={false}
+              />
+              <div
+                aria-hidden
+                className="pointer-events-none absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-background via-background/80 to-transparent"
+              />
+            </div>
           </div>
         </div>
       </section>
