@@ -69,6 +69,12 @@ function Index() {
                 alt="Illustrated portrait of Michael Bertram"
                 className="w-full select-none bg-transparent"
                 draggable={false}
+                style={{
+                  WebkitMaskImage:
+                    "linear-gradient(to bottom, black 65%, transparent 100%)",
+                  maskImage:
+                    "linear-gradient(to bottom, black 65%, transparent 100%)",
+                }}
               />
             </div>
           </div>
