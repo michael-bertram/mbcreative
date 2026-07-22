@@ -25,13 +25,13 @@ function Index() {
       {/* Hero */}
       <section className="hero-animated relative">
         <div className="mx-auto w-full max-w-6xl px-6 pb-16 pt-40 sm:pb-20 sm:pt-48 lg:pb-24 lg:pt-56">
-          <div className="flex flex-col-reverse items-start gap-4 sm:flex-row sm:items-center sm:gap-6 lg:gap-10">
-            <div className="flex-1 min-w-0">
+          <div className="grid grid-cols-1 items-end gap-8 lg:grid-cols-2 lg:gap-6">
+            <div className="min-w-0">
               {/* Name Section */}
               <TypeAnimation
                 sequence={["Hi, i'm Michael."]}
                 speed={70}
-                className="font-display text-6xl font-bold tracking-tighter text-foreground sm:text-8xl lg:text-[9rem] leading-[0.95] mb-6"
+                className="font-display text-5xl font-bold tracking-tighter text-foreground sm:text-7xl lg:text-[6rem] leading-[0.95] mb-6"
                 repeat={0}
               />
 
@@ -42,32 +42,41 @@ function Index() {
                 sequence={["Developer Advocate", 1000, "Mentor", 1000, "Teacher", 1000]}
                 wrapper="span"
                 speed={20}
-                className="block text-primary font-display text-4xl font-bold tracking-tighter sm:text-7xl lg:text-7xl leading-[0.95]"
+                className="block text-primary font-display text-3xl font-bold tracking-tighter sm:text-5xl lg:text-[2.75rem] xl:text-5xl leading-[0.95] whitespace-nowrap"
                 repeat={Infinity}
               />
+
+              <p className="mt-6 max-w-2xl text-lg text-muted-foreground sm:text-xl">{profile.tagline}</p>
+              <div className="mt-10 flex flex-wrap items-center gap-3">
+                <Link
+                  to="/projects"
+                  className="inline-flex items-center gap-2 rounded-md bg-primary px-5 py-2.5 text-sm font-medium text-primary-foreground transition-transform hover:-translate-y-0.5"
+                >
+                  View work <ArrowRight className="h-4 w-4" />
+                </Link>
+                <Link
+                  to="/contact"
+                  className="inline-flex items-center gap-2 rounded-md border border-border bg-transparent px-5 py-2.5 text-sm font-medium text-foreground transition-colors hover:bg-secondary"
+                >
+                  Get in touch
+                </Link>
+              </div>
             </div>
 
-            <img
-              src={michaelPortrait}
-              alt="Illustrated portrait of Michael Bertram"
-              className="w-32 shrink-0 self-center sm:w-44 lg:w-60 xl:w-72 select-none bg-transparent"
-              draggable={false}
-            />
-          </div>
-          <p className="mt-6 max-w-2xl text-lg text-muted-foreground sm:text-xl">{profile.tagline}</p>
-          <div className="mt-10 flex flex-wrap items-center gap-3">
-            <Link
-              to="/projects"
-              className="inline-flex items-center gap-2 rounded-md bg-primary px-5 py-2.5 text-sm font-medium text-primary-foreground transition-transform hover:-translate-y-0.5"
-            >
-              View work <ArrowRight className="h-4 w-4" />
-            </Link>
-            <Link
-              to="/contact"
-              className="inline-flex items-center gap-2 rounded-md border border-border bg-transparent px-5 py-2.5 text-sm font-medium text-foreground transition-colors hover:bg-secondary"
-            >
-              Get in touch
-            </Link>
+            <div className="relative hidden shrink-0 self-end justify-self-end lg:block lg:w-[85%]">
+              <img
+                src={michaelPortrait}
+                alt="Illustrated portrait of Michael Bertram"
+                className="w-full select-none bg-transparent"
+                draggable={false}
+                style={{
+                  WebkitMaskImage:
+                    "linear-gradient(to bottom, black 40%, rgba(0,0,0,0.5) 75%, transparent 100%)",
+                  maskImage:
+                    "linear-gradient(to bottom, black 40%, rgba(0,0,0,0.5) 75%, transparent 100%)",
+                }}
+              />
+            </div>
           </div>
         </div>
       </section>

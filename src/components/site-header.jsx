@@ -1,15 +1,16 @@
 import { Link } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
-import { Search, X } from "lucide-react";
+import { Search, X, Briefcase, BookOpen, User, Mail } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { profile } from "@/data/portfolio";
 import logo from "@/assets/mb-logo-blue.png";
+import { ThemeToggle } from "./theme-toggle";
 
 const navLinks = [
-    { to: "/projects", label: "Work" },
-    { to: "/resources", label: "Resources" },
-    { to: "/about", label: "About" },
-    { to: "/contact", label: "Contact" },
+    { to: "/projects", label: "Work", icon: Briefcase },
+    { to: "/resources", label: "Resources", icon: BookOpen },
+    { to: "/about", label: "About", icon: User },
+    { to: "/contact", label: "Contact", icon: Mail },
 ];
 
 export function SiteHeader() {
@@ -31,11 +32,15 @@ export function SiteHeader() {
             <div className="mx-auto flex h-full w-full max-w-6xl items-center justify-between px-6">
                 
                 {/* Logo */}
-                <Link to="/" className="flex items-center gap-2">
+                <Link to="/" className={cn(
+                    "flex items-center gap-2 transition-all duration-300",
+                    open ? "pointer-events-none opacity-0 sm:pointer-events-auto sm:opacity-100" : "opacity-100"
+                )}>
                     <img src={logo} alt="Logo" className="h-12 w-15 object-contain"/>
                 </Link>
 
                 {/* Morphing Desktop/Mobile Menu */}
+                <div className="flex items-center gap-2">
                 <div
                     className="flex items-center"
                     onMouseEnter={() => setOpen(true)}
@@ -63,19 +68,26 @@ export function SiteHeader() {
                             "flex items-center gap-1 transition-all duration-1500 ease-in-out",
                             open ? "translate-x-0 opacity-100" : "pointer-events-none -translate-x-4 opacity-0"
                         )}>
-                            {navLinks.map((link) => (
-                                <Link 
-                                    key={link.to} 
-                                    to={link.to} 
-                                    activeOptions={{ exact: link.to === "/" }}
-                                    onClick={() => setOpen(false)}
-                                    className="whitespace-nowrap rounded-full px-4 py-1.5 text-sm font-medium text-muted-foreground transition-all hover:bg-secondary hover:text-foreground data-[status=active]:bg-primary data-[status=active]:text-primary-foreground"
-                                >
-                                    {link.label}
-                                </Link>
-                            ))}
+                            {navLinks.map((link) => {
+                                const Icon = link.icon;
+                                return (
+                                    <Link
+                                        key={link.to}
+                                        to={link.to}
+                                        activeOptions={{ exact: link.to === "/" }}
+                                        onClick={() => setOpen(false)}
+                                        className="flex items-center justify-center gap-2 whitespace-nowrap rounded-full px-3 py-1.5 text-sm font-medium text-muted-foreground transition-all hover:bg-secondary hover:text-foreground data-[status=active]:bg-primary data-[status=active]:text-primary-foreground sm:px-4"
+                                        aria-label={link.label}
+                                    >
+                                        <Icon className="h-4 w-4 sm:hidden" aria-hidden="true" />
+                                        <span className="hidden sm:inline">{link.label}</span>
+                                    </Link>
+                                );
+                            })}
                         </div>
                     </nav>
+                </div>
+                <ThemeToggle />
                 </div>
             </div>
         </header>
