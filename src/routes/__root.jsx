@@ -3,6 +3,7 @@ import appCss from "../styles.css?url";
 import { SiteHeader } from "../components/site-header";
 import { SiteFooter } from "../components/site-footer";
 import { CursorMesh } from "../components/cursor-mesh";
+import { AiChatWidget } from "../components/ai-chat-widget";
 function NotFoundComponent() {
     return (<div className="flex min-h-screen items-center justify-center bg-background px-4">
       <div className="max-w-md text-center">
@@ -79,5 +80,6 @@ function RootComponent() {
         <Outlet />
       </main>
       <SiteFooter />
+      <AiChatWidget />
     </div>);
 }

@@ -14,6 +14,9 @@ export const profile = {
     location: "Stockton-on-Tees, UK",
     email: "michael.bertram@wpengine.com",
     resumeUrl: "/resume.pdf",
+    // Number used for the "chat on WhatsApp" link in the site assistant.
+    // International format, digits only (no + or spaces).
+    whatsapp: "447000000000",
     socials: {
         github: "https://github.com/michael-bertram",
         linkedin: "https://www.linkedin.com/in/michael-bertram-3b335b290/",
