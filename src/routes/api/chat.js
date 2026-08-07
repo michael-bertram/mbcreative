@@ -39,15 +39,16 @@ export const Route = createFileRoute("/api/chat")({
         const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
 
         // Ensure a conversation row exists.
+        let exists = false;
         if (conversationId) {
           const { data } = await supabaseAdmin
             .from("chat_conversations")
             .select("id")
             .eq("id", conversationId)
             .maybeSingle();
-          if (!data) conversationId = null;
+          exists = Boolean(data);
         }
-        {
+        if (!exists) {
           const insertRow = { started_path: startedPath };
           if (conversationId) insertRow.id = conversationId;
           const { data, error } = await supabaseAdmin
