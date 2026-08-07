@@ -47,10 +47,12 @@ export const Route = createFileRoute("/api/chat")({
             .maybeSingle();
           if (!data) conversationId = null;
         }
-        if (!conversationId) {
+        {
+          const insertRow = { started_path: startedPath };
+          if (conversationId) insertRow.id = conversationId;
           const { data, error } = await supabaseAdmin
             .from("chat_conversations")
-            .insert({ started_path: startedPath })
+            .insert(insertRow)
             .select("id")
             .single();
           if (error) {
