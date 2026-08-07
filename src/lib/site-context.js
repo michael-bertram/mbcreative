@@ -26,13 +26,11 @@ export function buildSiteContext() {
     "SITE PAGES: / (home), /projects (work), /resources (learning resources), /about, /contact",
     "",
     "SKILLS:",
-    (skills ?? [])
-      .map((s) => (typeof s === "string" ? `- ${s}` : `- ${s.title ?? s.name}: ${(s.items ?? []).join(", ")}`))
-      .join("\n"),
+    (skills ?? []).map((s) => `- ${s.group}: ${(s.items ?? []).join(", ")}`).join("\n"),
     "",
     "CAREER TIMELINE:",
     (timeline ?? [])
-      .map((t) => `- ${t.period ?? t.year ?? ""} ${t.title ?? ""}${t.org ? ` @ ${t.org}` : ""}: ${t.description ?? ""}`)
+      .map((t) => `- ${t.period} — ${t.role} @ ${t.company}: ${t.description}`)
       .join("\n"),
     "",
     "PROJECTS AND WORK:",
