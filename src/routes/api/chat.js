@@ -36,39 +36,50 @@ export const Route = createFileRoute("/api/chat")({
         const key = process.env["LOVABLE_API_KEY"];
         if (!key) return new Response("Missing LOVABLE_API_KEY", { status: 500 });
 
-        const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
-
-        // Ensure a conversation row exists.
-        let exists = false;
-        if (conversationId) {
-          const { data } = await supabaseAdmin
-            .from("chat_conversations")
-            .select("id")
-            .eq("id", conversationId)
-            .maybeSingle();
-          exists = Boolean(data);
+        // Persistence is best-effort: chat must still work if the database is unavailable.
+        let supabaseAdmin = null;
+        try {
+          ({ supabaseAdmin } = await import("@/integrations/supabase/client.server"));
+        } catch (err) {
+          console.error("chat: supabase admin unavailable", err);
         }
-        if (!exists) {
-          const insertRow = { started_path: startedPath };
-          if (conversationId) insertRow.id = conversationId;
-          const { data, error } = await supabaseAdmin
-            .from("chat_conversations")
-            .insert(insertRow)
-            .select("id")
-            .single();
-          if (error) {
-            console.error("chat: failed to create conversation", error);
-            return new Response("Could not start conversation", { status: 500 });
+
+        let persist = Boolean(supabaseAdmin);
+
+        if (persist) {
+          try {
+            let exists = false;
+            if (conversationId) {
+              const { data } = await supabaseAdmin
+                .from("chat_conversations")
+                .select("id")
+                .eq("id", conversationId)
+                .maybeSingle();
+              exists = Boolean(data);
+            }
+            if (!exists) {
+              const insertRow = { started_path: startedPath };
+              if (conversationId) insertRow.id = conversationId;
+              const { data, error } = await supabaseAdmin
+                .from("chat_conversations")
+                .insert(insertRow)
+                .select("id")
+                .single();
+              if (error) throw error;
+              conversationId = data.id;
+            }
+
+            const lastUserText = textOf(messages[messages.length - 1]);
+            if (lastUserText) {
+              const { error } = await supabaseAdmin
+                .from("chat_messages")
+                .insert({ conversation_id: conversationId, role: "user", content: lastUserText });
+              if (error) console.error("chat: failed to save user message", error);
+            }
+          } catch (err) {
+            console.error("chat: persistence disabled for this request", err);
+            persist = false;
           }
-          conversationId = data.id;
-        }
-
-        const lastUserText = textOf(messages[messages.length - 1]);
-        if (lastUserText) {
-          const { error } = await supabaseAdmin
-            .from("chat_messages")
-            .insert({ conversation_id: conversationId, role: "user", content: lastUserText });
-          if (error) console.error("chat: failed to save user message", error);
         }
 
         const initialRunId = getLovableAiGatewayRunId(request);
@@ -101,16 +112,22 @@ export const Route = createFileRoute("/api/chat")({
                 topic: z.string().describe("Short summary of what they want to discuss"),
               }),
               execute: async ({ name, email, topic }) => {
-                const { error } = await supabaseAdmin
-                  .from("chat_conversations")
-                  .update({
-                    wants_contact: true,
-                    visitor_name: name,
-                    visitor_email: email,
-                    updated_at: new Date().toISOString(),
-                  })
-                  .eq("id", conversationId);
-                if (error) console.error("chat: failed to flag contact request", error);
+                if (persist && conversationId) {
+                  try {
+                    const { error } = await supabaseAdmin
+                      .from("chat_conversations")
+                      .update({
+                        wants_contact: true,
+                        visitor_name: name,
+                        visitor_email: email,
+                        updated_at: new Date().toISOString(),
+                      })
+                      .eq("id", conversationId);
+                    if (error) console.error("chat: failed to flag contact request", error);
+                  } catch (err) {
+                    console.error("chat: failed to flag contact request", err);
+                  }
+                }
                 return {
                   whatsappUrl: whatsappLink(
                     `Hi Michael — I was on your website and wanted to ask about: ${topic}`,
@@ -126,22 +143,27 @@ export const Route = createFileRoute("/api/chat")({
 
         return result.toUIMessageStreamResponse({
           originalMessages: messages,
-          headers: { "X-Conversation-Id": conversationId },
+          headers: conversationId ? { "X-Conversation-Id": conversationId } : undefined,
           onFinish: async ({ responseMessage }) => {
+            if (!persist || !conversationId) return;
             const assistantText = textOf(responseMessage);
             if (!assistantText) return;
-            const { error } = await supabaseAdmin
-              .from("chat_messages")
-              .insert({
-                conversation_id: conversationId,
-                role: "assistant",
-                content: assistantText,
-              });
-            if (error) console.error("chat: failed to save assistant message", error);
-            await supabaseAdmin
-              .from("chat_conversations")
-              .update({ updated_at: new Date().toISOString() })
-              .eq("id", conversationId);
+            try {
+              const { error } = await supabaseAdmin
+                .from("chat_messages")
+                .insert({
+                  conversation_id: conversationId,
+                  role: "assistant",
+                  content: assistantText,
+                });
+              if (error) console.error("chat: failed to save assistant message", error);
+              await supabaseAdmin
+                .from("chat_conversations")
+                .update({ updated_at: new Date().toISOString() })
+                .eq("id", conversationId);
+            } catch (err) {
+              console.error("chat: failed to save assistant message", err);
+            }
           },
         });
       },
