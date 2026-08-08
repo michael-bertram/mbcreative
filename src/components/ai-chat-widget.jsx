@@ -86,10 +86,7 @@ export function AiChatWidget() {
         {open ? (
           <X className="h-6 w-6" />
         ) : (
-          <div className="relative flex h-12 w-12 items-center justify-center rounded-full bg-primary-foreground text-primary transition-transform duration-300 group-hover:scale-110">
-            <MessageCircle className="h-6 w-6" fill="currentColor" />
-            <span className="sr-only">Open chat</span>
-          </div>
+          <MessageCircle className="relative h-7 w-7" fill="currentColor" />
         )}
       </button>
 
