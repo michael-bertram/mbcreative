@@ -1,14 +1,13 @@
 import { useEffect, useRef, useState } from "react";
 import { useChat } from "@ai-sdk/react";
 import { DefaultChatTransport } from "ai";
-import { X } from "lucide-react";
+import { X, MessageCircle } from "lucide-react";
 import { Conversation, ConversationContent, ConversationScrollButton } from "@/components/ai-elements/conversation";
 import { Message, MessageContent, MessageResponse } from "@/components/ai-elements/message";
 import { PromptInput, PromptInputTextarea, PromptInputFooter, PromptInputSubmit } from "@/components/ai-elements/prompt-input";
 import { Shimmer } from "@/components/ai-elements/shimmer";
 import { profile } from "@/data/portfolio";
 import logo from "@/assets/mb-logo-blue.png";
-import avatar from "@/assets/michael-avatar.png";
 
 const STORAGE_KEY = "mb-chat-conversation-id";
 
@@ -86,11 +85,7 @@ export function AiChatWidget() {
         {open ? (
           <X className="h-6 w-6" />
         ) : (
-          <img
-            src={avatar}
-            alt=""
-            className="relative h-14 w-14 rounded-full object-cover object-top ring-2 ring-primary-foreground/70 transition-transform duration-300 group-hover:scale-110"
-          />
+          <MessageCircle className="relative h-7 w-7" fill="currentColor" />
         )}
       </button>
 
