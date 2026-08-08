@@ -8,7 +8,7 @@ import { PromptInput, PromptInputTextarea, PromptInputFooter, PromptInputSubmit 
 import { Shimmer } from "@/components/ai-elements/shimmer";
 import { profile } from "@/data/portfolio";
 import logo from "@/assets/mb-logo-blue.png";
-import avatar from "@/assets/michael-avatar.png";
+
 
 const STORAGE_KEY = "mb-chat-conversation-id";
 
