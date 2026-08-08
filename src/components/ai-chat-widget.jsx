@@ -1,13 +1,14 @@
 import { useEffect, useRef, useState } from "react";
 import { useChat } from "@ai-sdk/react";
 import { DefaultChatTransport } from "ai";
-import { MessageCircle, X } from "lucide-react";
+import { X } from "lucide-react";
 import { Conversation, ConversationContent, ConversationScrollButton } from "@/components/ai-elements/conversation";
 import { Message, MessageContent, MessageResponse } from "@/components/ai-elements/message";
 import { PromptInput, PromptInputTextarea, PromptInputFooter, PromptInputSubmit } from "@/components/ai-elements/prompt-input";
 import { Shimmer } from "@/components/ai-elements/shimmer";
 import { profile } from "@/data/portfolio";
 import logo from "@/assets/mb-logo-blue.png";
+import avatar from "@/assets/michael-avatar.png";
 
 const STORAGE_KEY = "mb-chat-conversation-id";
 
@@ -77,9 +78,20 @@ export function AiChatWidget() {
         type="button"
         onClick={() => setOpen((v) => !v)}
         aria-label={open ? "Close chat" : `Chat with ${profile.name}'s site assistant`}
-        className="fixed bottom-5 right-5 z-[60] flex h-14 w-14 items-center justify-center rounded-full bg-primary text-primary-foreground shadow-lg shadow-primary/30 transition-transform hover:-translate-y-0.5"
+        className="group fixed bottom-5 right-5 z-[60] flex h-14 w-14 items-center justify-center rounded-full bg-primary text-primary-foreground shadow-lg shadow-primary/30 transition-transform duration-300 hover:scale-105 motion-safe:animate-[chat-bob_3.2s_ease-in-out_infinite]"
       >
-        {open ? <X className="h-6 w-6" /> : <MessageCircle className="h-6 w-6" />}
+        {!open && (
+          <span className="pointer-events-none absolute inset-0 rounded-full bg-primary/40 motion-safe:animate-ping" />
+        )}
+        {open ? (
+          <X className="h-6 w-6" />
+        ) : (
+          <img
+            src={avatar}
+            alt=""
+            className="relative h-14 w-14 rounded-full object-cover object-top ring-2 ring-primary-foreground/70 transition-transform duration-300 group-hover:scale-110"
+          />
+        )}
       </button>
 
       {open && (
