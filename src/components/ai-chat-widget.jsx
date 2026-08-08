@@ -9,7 +9,6 @@ import { Shimmer } from "@/components/ai-elements/shimmer";
 import { profile } from "@/data/portfolio";
 import logo from "@/assets/mb-logo-blue.png";
 
-
 const STORAGE_KEY = "mb-chat-conversation-id";
 
 function getConversationId() {
