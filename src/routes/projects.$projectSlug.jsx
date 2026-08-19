@@ -38,7 +38,7 @@ function ProjectDetail() {
     const bgClass = project.coverBg === "dark" ? "bg-[oklch(0.14_0.02_280)]" : "bg-white";
 
     return (
-        <article className="mx-auto w-full max-w-4xl px-6 pt-32 pb-20 sm:pt-40 sm:pb-24">
+        <article className="mx-auto w-full max-w-6xl px-6 pt-32 pb-20 sm:pt-40 sm:pb-24">
             <Link
                 to="/projects"
                 className="inline-flex items-center gap-1.5 text-sm text-muted-foreground transition-colors hover:text-foreground"
@@ -46,101 +46,190 @@ function ProjectDetail() {
                 <ArrowLeft className="h-4 w-4" /> All work
             </Link>
 
-            <header className="mt-8">
-                <div className="flex flex-wrap items-center gap-3 text-xs">
-                    <span className="rounded-full border border-primary/40 bg-primary/10 px-2.5 py-0.5 font-medium text-primary">
-                        {project.type}
-                    </span>
-                    {project.platform && (
-                        <span className="text-muted-foreground">{project.platform}</span>
-                    )}
-                    {project.year && (
-                        <span className="inline-flex items-center gap-1 text-muted-foreground">
-                            <Calendar className="h-3 w-3" /> {project.year}
+            {/* Hero */}
+            <header className="mt-8 grid items-center gap-8 lg:grid-cols-[1.15fr_1fr]">
+                <div>
+                    <div className="flex flex-wrap items-center gap-3 text-xs">
+                        <span className="rounded-full border border-primary/40 bg-primary/10 px-2.5 py-0.5 font-medium text-primary">
+                            {project.type}
                         </span>
+                        {project.platform && (
+                            <span className="text-muted-foreground">{project.platform}</span>
+                        )}
+                        {project.year && (
+                            <span className="inline-flex items-center gap-1 text-muted-foreground">
+                                <Calendar className="h-3 w-3" /> {project.year}
+                            </span>
+                        )}
+                    </div>
+                    <h1 className="mt-4 font-display text-4xl font-bold tracking-tight text-foreground sm:text-6xl">
+                        {project.title}
+                    </h1>
+                    <p className="mt-5 max-w-xl text-xl leading-relaxed text-foreground/80">
+                        {project.summary}
+                    </p>
+                    {project.demoUrl && (
+                        <a
+                            href={project.demoUrl}
+                            target="_blank"
+                            rel="noreferrer"
+                            className="mt-7 inline-flex items-center gap-2 rounded-full bg-primary px-5 py-2.5 text-sm font-medium text-primary-foreground shadow-lg shadow-primary/25 transition-transform hover:-translate-y-0.5"
+                        >
+                            Visit live site <ArrowUpRight className="h-4 w-4" />
+                        </a>
                     )}
                 </div>
-                <h1 className="mt-4 font-display text-4xl font-bold tracking-tight text-foreground sm:text-5xl">
-                    {project.title}
-                </h1>
-                <p className="mt-4 max-w-2xl text-lg text-muted-foreground">{project.summary}</p>
 
-                {project.demoUrl && (
-                    <a
-                        href={project.demoUrl}
-                        target="_blank"
-                        rel="noreferrer"
-                        className="mt-6 inline-flex items-center gap-2 rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground transition-transform hover:-translate-y-0.5"
-                    >
-                        Visit live site <ArrowUpRight className="h-4 w-4" />
-                    </a>
+                {project.cover && (
+                    <div className="relative">
+                        <div
+                            aria-hidden
+                            className="absolute -inset-6 rounded-[2rem] bg-primary/10 blur-2xl"
+                        />
+                        <div className="relative overflow-hidden rounded-2xl border border-border shadow-xl shadow-foreground/5">
+                            {isLogo ? (
+                                <div className={`flex aspect-[4/3] w-full items-center justify-center p-12 ${bgClass}`}>
+                                    <img
+                                        src={project.cover}
+                                        alt={`${project.title} logo`}
+                                        className="max-h-[70%] max-w-[70%] object-contain"
+                                    />
+                                </div>
+                            ) : (
+                                <img src={project.cover} alt="" className="aspect-[4/3] w-full object-cover" />
+                            )}
+                        </div>
+                    </div>
                 )}
             </header>
 
-            {project.cover && (
-                <div className="mt-10 overflow-hidden rounded-2xl border border-border">
-                    {isLogo ? (
-                        <div className={`flex aspect-[16/9] w-full items-center justify-center p-12 ${bgClass}`}>
-                            <img
-                                src={project.cover}
-                                alt={`${project.title} logo`}
-                                className="max-h-[70%] max-w-[70%] object-contain"
-                            />
+            {/* Body + sticky meta rail */}
+            <div className="mt-16 grid gap-12 lg:grid-cols-[1fr_260px]">
+                <div className="min-w-0">
+                    {project.description && (
+                        <p className="border-l-2 border-primary pl-5 text-lg leading-relaxed text-foreground/85">
+                            {project.description}
+                        </p>
+                    )}
+
+                    <div className="mt-10 space-y-5">
+                        {project.sections?.map((section, i) => (
+                            <section
+                                key={section.heading}
+                                className="group rounded-2xl border border-border bg-card/70 p-6 backdrop-blur-sm transition-all hover:-translate-y-0.5 hover:border-primary/40 hover:shadow-lg hover:shadow-primary/10 sm:p-7"
+                            >
+                                <div className="flex items-baseline gap-4">
+                                    <span className="font-display text-sm font-semibold tabular-nums text-primary/70">
+                                        {String(i + 1).padStart(2, "0")}
+                                    </span>
+                                    <h2 className="font-display text-xl font-semibold tracking-tight text-foreground">
+                                        {section.heading}
+                                    </h2>
+                                </div>
+                                <p className="mt-3 pl-0 leading-relaxed text-muted-foreground sm:pl-10">
+                                    {section.body}
+                                </p>
+                            </section>
+                        ))}
+                    </div>
+
+                    {project.gallery?.length > 0 && (
+                        <div className="mt-12">
+                            <h2 className="font-display text-sm font-semibold uppercase tracking-[0.16em] text-muted-foreground">
+                                Gallery
+                            </h2>
+                            <div
+                                className={`mt-5 grid gap-5 ${
+                                    project.gallery.length === 1 ? "" : "sm:grid-cols-2"
+                                }`}
+                            >
+                                {project.gallery.map((g) => {
+                                    const asImage = g.mode === "image";
+                                    return (
+                                        <figure
+                                            key={g.label}
+                                            className="overflow-hidden rounded-2xl border border-border shadow-md shadow-foreground/5 transition-transform hover:-translate-y-0.5"
+                                        >
+                                            {asImage ? (
+                                                <img
+                                                    src={g.src}
+                                                    alt={g.label}
+                                                    loading="lazy"
+                                                    className="w-full object-cover"
+                                                />
+                                            ) : (
+                                                <div className={`flex aspect-square items-center justify-center p-8 ${bgClass}`}>
+                                                    <img
+                                                        src={g.src}
+                                                        alt={g.label}
+                                                        loading="lazy"
+                                                        className="max-h-[80%] max-w-[80%] object-contain"
+                                                    />
+                                                </div>
+                                            )}
+                                            <figcaption className="border-t border-border bg-card px-4 py-2.5 text-xs text-muted-foreground">
+                                                {g.label}
+                                            </figcaption>
+                                        </figure>
+                                    );
+                                })}
+                            </div>
                         </div>
-                    ) : (
-                        <img
-                            src={project.cover}
-                            alt=""
-                            className="aspect-[16/9] w-full object-cover"
-                        />
                     )}
                 </div>
-            )}
 
-            {project.gallery && project.gallery.length > 0 && (
-                <div className="mt-6 grid gap-4 sm:grid-cols-3">
-                    {project.gallery.map((g) => (
-                        <figure key={g.label} className="overflow-hidden rounded-xl border border-border">
-                            <div className={`flex aspect-square items-center justify-center p-6 ${bgClass}`}>
-                                <img src={g.src} alt={g.label} className="max-h-[80%] max-w-[80%] object-contain" />
+                <aside className="lg:sticky lg:top-32 lg:self-start">
+                    <div className="rounded-2xl border border-border bg-card/70 p-6 backdrop-blur-sm">
+                        <dl className="space-y-4 text-sm">
+                            <div>
+                                <dt className="text-xs uppercase tracking-[0.14em] text-muted-foreground">Type</dt>
+                                <dd className="mt-1 font-medium text-foreground">{project.type}</dd>
                             </div>
-                            <figcaption className="border-t border-border bg-card px-3 py-2 text-xs text-muted-foreground">
-                                {g.label}
-                            </figcaption>
-                        </figure>
-                    ))}
-                </div>
-            )}
+                            {project.platform && (
+                                <div>
+                                    <dt className="text-xs uppercase tracking-[0.14em] text-muted-foreground">Platform</dt>
+                                    <dd className="mt-1 font-medium text-foreground">{project.platform}</dd>
+                                </div>
+                            )}
+                            {project.year && (
+                                <div>
+                                    <dt className="text-xs uppercase tracking-[0.14em] text-muted-foreground">Year</dt>
+                                    <dd className="mt-1 font-medium text-foreground">{project.year}</dd>
+                                </div>
+                            )}
+                        </dl>
 
-            <div className="mt-10 space-y-8">
-                {project.description && (
-                    <p className="text-base leading-relaxed text-muted-foreground">
-                        {project.description}
-                    </p>
-                )}
-                {project.sections?.map((section) => (
-                    <section key={section.heading}>
-                        <h2 className="font-display text-xl font-semibold tracking-tight text-foreground">
-                            {section.heading}
-                        </h2>
-                        <p className="mt-2 leading-relaxed text-muted-foreground">{section.body}</p>
-                    </section>
-                ))}
+                        {project.tags?.length > 0 && (
+                            <div className="mt-6 border-t border-border pt-5">
+                                <div className="flex items-center gap-1.5 text-xs uppercase tracking-[0.14em] text-muted-foreground">
+                                    <Tag className="h-3.5 w-3.5" /> Tags
+                                </div>
+                                <div className="mt-3 flex flex-wrap gap-2">
+                                    {project.tags.map((t) => (
+                                        <span
+                                            key={t}
+                                            className="rounded-full border border-border bg-secondary/50 px-2.5 py-0.5 text-xs text-muted-foreground"
+                                        >
+                                            {t}
+                                        </span>
+                                    ))}
+                                </div>
+                            </div>
+                        )}
+
+                        {project.demoUrl && (
+                            <a
+                                href={project.demoUrl}
+                                target="_blank"
+                                rel="noreferrer"
+                                className="mt-6 inline-flex w-full items-center justify-center gap-2 rounded-full border border-primary/40 bg-primary/10 px-4 py-2 text-sm font-medium text-primary transition-colors hover:bg-primary/20"
+                            >
+                                Live site <ArrowUpRight className="h-4 w-4" />
+                            </a>
+                        )}
+                    </div>
+                </aside>
             </div>
-
-            {project.tags?.length > 0 && (
-                <div className="mt-12 flex flex-wrap items-center gap-2 border-t border-border pt-8">
-                    <Tag className="h-4 w-4 text-muted-foreground" />
-                    {project.tags.map((t) => (
-                        <span
-                            key={t}
-                            className="rounded-full border border-border bg-secondary/50 px-2.5 py-0.5 text-xs text-muted-foreground"
-                        >
-                            {t}
-                        </span>
-                    ))}
-                </div>
-            )}
         </article>
     );
 }
