@@ -151,6 +151,26 @@ export const projects = [
 
     // ===== Identity & Brand Design =====
     {
+        slug: "syync",
+        title: "Syync",
+        type: "Code",
+        platform: "Lovable (AI-Powered Development)",
+        summary: "A focused execution layer that unifies your Asana queue, side tasks, and an AI notebook.",
+        description: "Syync pulls your Asana queue into a single workspace, lets you add the work the board never sees, and turns raw meeting notes into actionable tasks with an AI copilot.",
+        tags: ["SaaS", "AI", "Productivity", "Lovable"],
+        year: 2026,
+        demoUrl: "https://syync.lovable.app/",
+        cover: logoSyync,
+        coverMode: "logo",
+        coverBg: "light",
+        gallery: [{ src: shotSyync, label: "Syync landing page", mode: "image" }],
+        sections: [
+            { heading: "The Project", body: "An execution layer for daily work — your Asana queue, the tasks Asana never sees, and a notebook that summarises itself into action." },
+            { heading: "Functionality", body: "Sync the Asana queue, group work into focus modes (Code & Dev, Content & Docs, Quick Hits), and let a copilot draft outlines, code snippets, and status comments you can push back to Asana. Notes can be published as read-only shareable links." },
+            { heading: "Branding", body: "A bold serpentine 'S' formed from two opposing arrows — a direct visual for syncing work back and forth between tools." },
+        ],
+    },
+    {
         slug: "norton-sports-charity-brand",
         title: "Norton Sports Charity & NS&LP",
         type: "Design",
