@@ -4,6 +4,8 @@ import logoNortonComplex from "@/assets/logos/norton-sports-complex.png";
 import logoNslp from "@/assets/logos/nslp.png";
 import logoGather from "@/assets/logos/gather.png";
 import logoTraqr from "@/assets/logos/traqr.png";
+import logoSyync from "@/assets/logos/syync.png";
+import shotSyync from "@/assets/screenshots/syync-home.png";
 import logoLearnJs from "@/assets/logos/mb-creative.webp";
 import logoMbCreative from "@/assets/mb-logo-white.png";
 export const profile = {
